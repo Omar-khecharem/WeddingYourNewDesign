@@ -29,11 +29,62 @@ class AuthController extends Controller
     /**
      * Show login form
      */
+    /**
+     * Show admin login form (at /13091998)
+     */
+    public function adminLoginForm(Request $request, Response $response): string
+    {
+        if ($this->viewData['isLoggedIn'] && ($_SESSION['user']['role'] ?? '') === 'admin') {
+            $this->redirect(url('13091998/dashboard'));
+        }
+        return $this->partial('auth.admin-login');
+    }
+
+    /**
+     * Process admin login
+     */
+    public function adminLogin(Request $request, Response $response): void
+    {
+        $email = Security::sanitizeEmail($request->input('email', ''));
+        $password = $request->input('password', '');
+
+        if (empty($email) || empty($password)) {
+            \App\Helpers\Session::set('old', ['email' => $email]);
+            $this->flash('error', 'Please enter email and password.');
+            $this->redirect(url('13091998'));
+            return;
+        }
+
+        $result = $this->authService->login($email, $password, true);
+
+        if ($result['success']) {
+            $role = $result['user']['role'] ?? '';
+            if ($role !== 'admin') {
+                $this->authService->logout();
+                $this->flash('error', 'Access denied. Admin credentials required.');
+                $this->redirect(url('13091998'));
+                return;
+            }
+
+            $cartService = new \App\Services\CartService();
+            $cartService->mergeCartOnLogin($result['user']['id']);
+
+            $this->flash('success', 'Welcome back, ' . $result['user']['name'] . '!');
+            $this->redirect(url('13091998/dashboard'));
+        } else {
+            $this->flash('error', $result['message']);
+            $this->redirect(url('13091998'));
+        }
+    }
+
+    /**
+     * Show login form
+     */
     public function loginForm(Request $request, Response $response): string
     {
         if ($this->viewData['isLoggedIn']) {
             $role = $_SESSION['user']['role'] ?? '';
-            $this->redirect($role === 'admin' ? url('admin') : url('account'));
+            $this->redirect($role === 'admin' ? url('13091998/dashboard') : url('account'));
         }
 
         $this->setMeta('Login');
@@ -66,7 +117,7 @@ class AuthController extends Controller
             $cartService->mergeCartOnLogin($result['user']['id']);
 
             $isAdmin = ($_SESSION['user']['role'] ?? '') === 'admin';
-            $redirect = $isAdmin ? url('admin') : ($_SESSION['redirect_after_login'] ?? url('account'));
+            $redirect = $isAdmin ? url('13091998/dashboard') : ($_SESSION['redirect_after_login'] ?? url('account'));
             unset($_SESSION['redirect_after_login']);
             $this->redirect($redirect);
         } else {
@@ -82,7 +133,7 @@ class AuthController extends Controller
     {
         if ($this->viewData['isLoggedIn']) {
             $role = $_SESSION['user']['role'] ?? '';
-            $this->redirect($role === 'admin' ? url('admin') : url('account'));
+            $this->redirect($role === 'admin' ? url('13091998/dashboard') : url('account'));
         }
 
         $this->setMeta('Create Account');

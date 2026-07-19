@@ -139,7 +139,7 @@ class ProductController extends BaseAdminController
             Product::savePincodes($product->id, $pincodes);
         }
 
-        $this->success('Product created successfully.', url('admin/products'));
+        $this->success('Product created successfully.', url('13091998/products'));
     }
 
     public function edit(Request $request, Response $response): string
@@ -176,6 +176,7 @@ class ProductController extends BaseAdminController
             'slug' => slugify($request->input('slug', $request->input('name', ''))),
             'short_description' => Security::sanitize($request->input('short_description', '')),
             'description' => $request->input('description', ''),
+            'sku' => strtoupper($request->input('sku', '')),
             'regular_price' => (float)$request->input('regular_price', 0),
             'sale_price' => $request->input('sale_price') ? (float)$request->input('sale_price') : null,
             'stock_quantity' => (int)$request->input('stock_quantity', 0),
@@ -202,7 +203,7 @@ class ProductController extends BaseAdminController
             Product::savePincodes($id, $pincodes);
         }
 
-        $this->success('Product updated successfully.', url('admin/products'));
+        $this->success('Product updated successfully.', url('13091998/products'));
     }
 
     private function handleImages(int $productId, Request $request, bool $isNew = false): void
@@ -231,7 +232,7 @@ class ProductController extends BaseAdminController
             $errors = Image::validate($file);
             if (!empty($errors)) continue;
 
-            $filename = Image::upload($file, PRODUCT_IMAGES_DIR, 'product_' . $productId);
+            $filename = Image::upload($file, PRODUCT_IMAGES_DIR, 'product_' . $productId . '_' . uniqid());
             if (!$filename) continue;
 
             $isPrimary = ($isNew || !$hasPrimary) && $i === 0 ? 1 : 0;
@@ -268,7 +269,7 @@ class ProductController extends BaseAdminController
 
         clearSiteCache();
         $this->flash('success', 'Primary image updated.');
-        $this->redirect(url('admin/products/edit/' . $productId));
+        $this->redirect(url('13091998/products/edit/' . $productId));
     }
 
     public function deleteImage(Request $request, Response $response): void
@@ -283,7 +284,7 @@ class ProductController extends BaseAdminController
             if (file_exists($path)) @unlink($path);
         }
         $pdo->prepare("DELETE FROM sg_product_images WHERE id = :id")->execute([':id' => $id]);
-        $this->success('Image deleted.', url('admin/products/edit/' . $request->input('product_id')));
+        $this->success('Image deleted.', url('13091998/products/edit/' . $request->input('product_id')));
     }
 
     public function destroy(Request $request, Response $response): void
@@ -299,6 +300,6 @@ class ProductController extends BaseAdminController
             $this->flash('error', 'Product not found.');
         }
 
-        $this->redirect(url('admin/products'));
+        $this->redirect(url('13091998/products'));
     }
 }

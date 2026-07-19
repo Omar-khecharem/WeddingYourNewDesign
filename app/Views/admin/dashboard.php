@@ -12,7 +12,7 @@ $greeting = date('H') < 12 ? 'Good morning' : (date('H') < 18 ? 'Good afternoon'
         <a href="<?= url('') ?>" target="_blank" class="inline-flex items-center gap-1.5 border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 hover:text-gray-800 transition-all">
             <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i> Visit Site
         </a>
-        <a href="<?= url('admin/clear-cache') ?>" class="inline-flex items-center gap-1.5 bg-primary-red text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-all shadow-sm shadow-red-200">
+        <a href="<?= url('13091998/clear-cache') ?>" class="inline-flex items-center gap-1.5 bg-primary-red text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-all shadow-sm shadow-red-200">
             <i class="fa-solid fa-rotate text-xs"></i> Clear Cache
         </a>
     </div>
@@ -48,7 +48,7 @@ $greeting = date('H') < 12 ? 'Good morning' : (date('H') < 18 ? 'Good afternoon'
                 <h2 class="text-base md:text-lg font-bold text-gray-800">Recent Orders</h2>
                 <p class="text-xs text-gray-400 mt-0.5">Latest 5 transactions</p>
             </div>
-            <a href="<?= url('admin/orders') ?>" class="text-sm text-primary-red font-medium hover:underline whitespace-nowrap">View All <i class="fa-solid fa-arrow-right ml-1 text-xs"></i></a>
+            <a href="<?= url('13091998/orders') ?>" class="text-sm text-primary-red font-medium hover:underline whitespace-nowrap">View All <i class="fa-solid fa-arrow-right ml-1 text-xs"></i></a>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
@@ -68,7 +68,7 @@ $greeting = date('H') < 12 ? 'Good morning' : (date('H') < 18 ? 'Good afternoon'
                     <?php foreach ($recentOrders as $order): ?>
                     <tr class="hover:bg-gray-50/50 transition-colors">
                         <td class="px-4 md:px-5 py-3">
-                            <a href="<?= url('admin/orders/' . e($order['id'])) ?>" class="font-semibold text-primary-red hover:underline text-xs md:text-sm">#<?= e($order['order_number'] ?? $order['id']) ?></a>
+                            <a href="<?= url('13091998/orders/' . e($order['id'])) ?>" class="font-semibold text-primary-red hover:underline text-xs md:text-sm">#<?= e($order['order_number'] ?? $order['id']) ?></a>
                         </td>
                         <td class="px-4 md:px-5 py-3 text-gray-700 hidden sm:table-cell text-xs md:text-sm"><?= e($order['customer_name'] ?? $order['billing_name'] ?? 'N/A') ?></td>
                         <td class="px-4 md:px-5 py-3 text-gray-500 hidden md:table-cell text-xs"><?= formatDate($order['created_at'] ?? '') ?></td>
@@ -92,11 +92,11 @@ $greeting = date('H') < 12 ? 'Good morning' : (date('H') < 18 ? 'Good afternoon'
         <div class="space-y-2">
             <?php
             $actions = [
-                ['url' => url('admin/products/create'), 'icon' => 'fa-plus', 'icBg' => 'bg-emerald-100', 'icColor' => 'text-emerald-600', 'title' => 'Add Product', 'desc' => 'New catalog item'],
-                ['url' => url('admin/orders'), 'icon' => 'fa-truck', 'icBg' => 'bg-blue-100', 'icColor' => 'text-blue-600', 'title' => 'View Orders', 'desc' => 'Manage transactions'],
-                ['url' => url('admin/coupons?action=create'), 'icon' => 'fa-tag', 'icBg' => 'bg-amber-100', 'icColor' => 'text-amber-600', 'title' => 'Create Coupon', 'desc' => 'New promotion'],
-                ['url' => url('admin/banners'), 'icon' => 'fa-images', 'icBg' => 'bg-violet-100', 'icColor' => 'text-violet-600', 'title' => 'Manage Banners', 'desc' => 'Homepage slides'],
-                ['url' => url('admin/settings'), 'icon' => 'fa-gear', 'icBg' => 'bg-gray-200', 'icColor' => 'text-gray-600', 'title' => 'Settings', 'desc' => 'Site configuration'],
+                ['url' => url('13091998/products/create'), 'icon' => 'fa-plus', 'icBg' => 'bg-emerald-100', 'icColor' => 'text-emerald-600', 'title' => 'Add Product', 'desc' => 'New catalog item'],
+                ['url' => url('13091998/orders'), 'icon' => 'fa-truck', 'icBg' => 'bg-blue-100', 'icColor' => 'text-blue-600', 'title' => 'View Orders', 'desc' => 'Manage transactions'],
+                ['url' => url('13091998/coupons?action=create'), 'icon' => 'fa-tag', 'icBg' => 'bg-amber-100', 'icColor' => 'text-amber-600', 'title' => 'Create Coupon', 'desc' => 'New promotion'],
+                ['url' => url('13091998/banners'), 'icon' => 'fa-images', 'icBg' => 'bg-violet-100', 'icColor' => 'text-violet-600', 'title' => 'Manage Banners', 'desc' => 'Homepage slides'],
+                ['url' => url('13091998/settings'), 'icon' => 'fa-gear', 'icBg' => 'bg-gray-200', 'icColor' => 'text-gray-600', 'title' => 'Settings', 'desc' => 'Site configuration'],
             ];
             ?>
             <?php foreach ($actions as $a): ?>

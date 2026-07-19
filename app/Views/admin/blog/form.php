@@ -1,11 +1,11 @@
 <?php $post = $post ?? null; $isEdit = !empty($post); $categoryName = old('category_name', $post['category_name'] ?? ''); ?>
 <div class="flex items-center justify-between mb-6">
     <div>
-        <a href="<?= url('admin/blog') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Blog</a>
+        <a href="<?= url('13091998/blog') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Blog</a>
         <h1 class="text-2xl font-bold text-gray-800"><?= $isEdit ? 'Edit Post' : 'Add Post' ?></h1>
     </div>
 </div>
-<form method="POST" action="<?= $isEdit ? url('admin/blog/update/' . $post['id']) : url('admin/blog') ?>" class="max-w-4xl" enctype="multipart/form-data">
+<form method="POST" action="<?= $isEdit ? url('13091998/blog/update/' . $post['id']) : url('13091998/blog') ?>" class="max-w-4xl" enctype="multipart/form-data">
     <?= \App\Helpers\Security::csrfField() ?>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
@@ -74,6 +74,6 @@
     </div>
     <div class="mt-6 flex items-center gap-3">
         <button type="submit" class="bg-primary-red text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-all"><i class="fa-solid fa-floppy-disk mr-1.5"></i> <?= $isEdit ? 'Update' : 'Create' ?></button>
-        <a href="<?= url('admin/blog') ?>" class="px-6 py-2.5 border border-gray-300 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors">Cancel</a>
+        <a href="<?= url('13091998/blog') ?>" class="px-6 py-2.5 border border-gray-300 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors">Cancel</a>
     </div>
 </form>

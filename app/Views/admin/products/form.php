@@ -6,14 +6,14 @@ $p = $isEdit ? $product : null;
 ?>
 <div class="flex items-center justify-between mb-6">
     <div>
-        <a href="<?= url('admin/products') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Products</a>
+        <a href="<?= url('13091998/products') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Products</a>
         <h1 class="text-2xl font-bold text-gray-800"><?= $isEdit ? 'Edit Product' : 'Add Product' ?></h1>
     </div>
     <?php if ($isEdit): ?>
     <a href="<?= url('product/' . e($p->slug ?? $p->id)) ?>" target="_blank" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"><i class="fa-solid fa-external-link mr-1.5"></i> View on Site</a>
     <?php endif; ?>
 </div>
-<form method="POST" action="<?= $isEdit ? url('admin/products/update/' . e($p->id)) : url('admin/products') ?>" enctype="multipart/form-data" class="max-w-4xl">
+<form method="POST" action="<?= $isEdit ? url('13091998/products/update/' . e($p->id)) : url('13091998/products') ?>" enctype="multipart/form-data" class="max-w-4xl">
     <?= \App\Helpers\Security::csrfField() ?>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
@@ -198,7 +198,7 @@ $p = $isEdit ? $product : null;
         <div class="flex items-center justify-between bg-white rounded-xl border border-gray-200 p-4 shadow-lg">
             <p class="text-xs text-gray-400"><i class="fa-solid fa-rotate mr-1"></i> Cache auto-cleared on save</p>
             <div class="flex gap-2">
-                <a href="<?= url('admin/products') ?>" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Cancel</a>
+                <a href="<?= url('13091998/products') ?>" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Cancel</a>
                 <button type="submit" class="bg-primary-red text-white px-6 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2 shadow-sm shadow-red-200">
                     <i class="fa-solid fa-save"></i> <?= $isEdit ? 'Update Product' : 'Create Product' ?>
                 </button>
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
         subcatSelect.innerHTML = '<option value="">Loading...</option>';
         subcatSelect.disabled = true;
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', '<?= url('admin/subcategories/by-category') ?>?category_id=' + categoryId, true);
+        xhr.open('GET', '<?= url('13091998/subcategories/by-category') ?>?category_id=' + categoryId, true);
         xhr.onload = function() {
             subcatSelect.innerHTML = '<option value="">Select Subcategory</option>';
             subcatSelect.disabled = false;
@@ -261,10 +261,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (initialCat && initialSubcat) {
         loadSubcategories(initialCat, initialSubcat);
     } else if (initialCat) {
-        loadSubcategories(initialCat);
+                loadSubcategories(initialCat);
     }
 });
-</script>
+
 // Auto-slug
 document.getElementById('product-name')?.addEventListener('input', function() {
     const slug = this.value.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_]+/g, '-').replace(/^-+|-+$/g, '');
@@ -299,7 +299,7 @@ document.getElementById('imageInput')?.addEventListener('change', function() {
 function deleteProductImage(id){
   if(!confirm('Delete this image?')) return;
   var f=document.createElement('form'); f.method='POST';
-  f.action='<?= url('admin/products/delete-image') ?>';
+  f.action='<?= url('13091998/products/delete-image') ?>';
   f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';
   var inp=document.createElement('input'); inp.type='hidden'; inp.name='id'; inp.value=id;
   f.appendChild(inp);
@@ -312,7 +312,7 @@ function deleteProductImage(id){
 function setPrimaryImage(id) {
   if(!confirm('Set this image as the primary thumbnail?')) return;
   var f=document.createElement('form'); f.method='POST';
-  f.action='<?= url('admin/products/set-primary-image') ?>';
+  f.action='<?= url('13091998/products/set-primary-image') ?>';
   f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';
   var inp=document.createElement('input'); inp.type='hidden'; inp.name='id'; inp.value=id;
   f.appendChild(inp);

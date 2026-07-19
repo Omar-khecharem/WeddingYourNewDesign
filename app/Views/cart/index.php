@@ -33,7 +33,7 @@
                         <tr class="cart-item" data-item-id="<?= $item['id'] ?>">
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-4">
-                                    <img src="<?= $item['image'] ?>" alt="<?= $item['name'] ?>" class="w-20 h-20 object-cover rounded-lg">
+                                    <img src="<?= $item['image'] ?: asset('images/placeholder.png') ?>" alt="<?= $item['name'] ?>" class="w-20 h-20 object-cover rounded-lg" onerror="this.src='<?= asset('images/placeholder.png') ?>'">
                                     <div>
                                         <a href="<?= url('product/' . $item['slug']) ?>" class="font-medium text-gray-900 hover:text-gray-600 transition">
                                             <?= $item['name'] ?>

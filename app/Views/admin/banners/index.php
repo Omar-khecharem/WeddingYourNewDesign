@@ -4,7 +4,7 @@
         <h1 class="text-2xl font-bold text-gray-800">Banners</h1>
         <p class="text-sm text-gray-500">Manage promotional banners and carousel images</p>
     </div>
-    <a href="<?= url('admin/banners/create') ?>" class="bg-primary-red text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2">
+    <a href="<?= url('13091998/banners/create') ?>" class="bg-primary-red text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2">
         <i class="fa-solid fa-plus"></i> Add Banner
     </a>
 </div>
@@ -53,7 +53,7 @@
                     </td>
                     <td class="px-5 py-3">
                         <div class="flex items-center gap-1">
-                            <a href="<?= url('admin/banners/edit/' . $b['id']) ?>" class="p-1.5 text-gray-400 hover:text-primary-red" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                            <a href="<?= url('13091998/banners/edit/' . $b['id']) ?>" class="p-1.5 text-gray-400 hover:text-primary-red" title="Edit"><i class="fa-solid fa-pen"></i></a>
                             <button onclick="confirmDelete(<?= $b['id'] ?>)" class="p-1.5 text-gray-400 hover:text-red-600" title="Delete"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </td>
@@ -65,5 +65,5 @@
     </div>
 </div>
 <?php startSection('scripts') ?>
-<script>function confirmDelete(id){if(confirm('Delete this banner?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('admin/banners/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}</script>
+<script>function confirmDelete(id){if(confirm('Delete this banner?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('13091998/banners/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}</script>
 <?php endSection() ?>

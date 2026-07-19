@@ -17,6 +17,8 @@ class ContactController extends BaseAdminController
         $status = $request->query('status', '');
         $result = ContactMessage::getAll($page, PAGINATION_ADMIN_PER_PAGE, $search, $status);
 
+        \App\Helpers\Session::set('contacts_viewed_at', time());
+
         return $this->view('admin.contacts.index', [
             'messages' => $result['items'],
             'pagination' => $result,
@@ -32,7 +34,7 @@ class ContactController extends BaseAdminController
 
         if (!$message) {
             $this->flash('error', 'Message not found.');
-            $this->redirect(url('admin/contacts'));
+            $this->redirect(url('13091998/contacts'));
             return '';
         }
 
@@ -49,7 +51,7 @@ class ContactController extends BaseAdminController
 
         if (!$message) {
             $this->flash('error', 'Message not found.');
-            $this->redirect(url('admin/contacts'));
+            $this->redirect(url('13091998/contacts'));
             return;
         }
 
@@ -82,7 +84,7 @@ class ContactController extends BaseAdminController
             $this->flash('error', 'Failed to send email. Please try again.');
         }
 
-        $this->redirect(url('admin/contacts/' . $id));
+        $this->redirect(url('13091998/contacts/' . $id));
     }
 
     public function destroy(Request $request, Response $response): void
@@ -97,6 +99,6 @@ class ContactController extends BaseAdminController
             $this->flash('error', 'Message not found.');
         }
 
-        $this->redirect(url('admin/contacts'));
+        $this->redirect(url('13091998/contacts'));
     }
 }

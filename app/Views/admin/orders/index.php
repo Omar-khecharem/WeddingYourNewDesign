@@ -15,7 +15,7 @@ $dateTo = $_GET['date_to'] ?? '';
                 <span class="text-sm text-gray-500 bg-white px-4 py-2 rounded-lg border border-gray-200"><?= $pagination['totalItems'] ?? count($orders) ?> orders</span>
             </div>
             <div class="bg-white rounded-xl border border-gray-200 p-4 mb-6">
-                <form method="GET" action="<?= url('admin/orders') ?>" class="flex flex-wrap items-end gap-3">
+                <form method="GET" action="<?= url('13091998/orders') ?>" class="flex flex-wrap items-end gap-3">
                     <div>
                         <label class="block text-xs font-medium text-gray-500 mb-1">Status</label>
                         <select name="status" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-primary-red/20 focus:border-primary-red outline-none">
@@ -43,7 +43,7 @@ $dateTo = $_GET['date_to'] ?? '';
                         </div>
                     </div>
                     <button type="submit" class="bg-primary-red text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-all">Filter</button>
-                    <a href="<?= url('admin/orders') ?>" class="border border-gray-300 text-gray-600 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Reset</a>
+                    <a href="<?= url('13091998/orders') ?>" class="border border-gray-300 text-gray-600 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Reset</a>
                 </form>
             </div>
             <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -72,7 +72,7 @@ $dateTo = $_GET['date_to'] ?? '';
                             <?php foreach ($orders as $order): ?>
                             <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="px-5 py-3">
-                                    <a href="<?= url('admin/orders/' . e($order['id'])) ?>" class="font-medium text-primary-red hover:underline">#<?= e($order['order_number'] ?? $order['id']) ?></a>
+                                    <a href="<?= url('13091998/orders/' . e($order['id'])) ?>" class="font-medium text-primary-red hover:underline">#<?= e($order['order_number'] ?? $order['id']) ?></a>
                                 </td>
                                 <td class="px-5 py-3">
                                     <div class="text-gray-800 font-medium"><?= e($order['billing_name'] ?? $order['customer_name'] ?? 'N/A') ?></div>
@@ -112,8 +112,8 @@ $dateTo = $_GET['date_to'] ?? '';
                                 </td>
                                 <td class="px-5 py-3">
                                     <div class="flex items-center gap-1">
-                                        <a href="<?= url('admin/orders/' . e($order['id'])) ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="View"><i class="fa-solid fa-eye"></i></a>
-                                        <a href="<?= url('admin/orders/' . e($order['id'])) ?>" class="p-1.5 text-gray-400 hover:text-blue-600 transition-colors" title="View Details"><i class="fa-solid fa-pen"></i></a>
+                                        <a href="<?= url('13091998/orders/' . e($order['id'])) ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="View"><i class="fa-solid fa-eye"></i></a>
+                                        <a href="<?= url('13091998/orders/' . e($order['id'])) ?>" class="p-1.5 text-gray-400 hover:text-blue-600 transition-colors" title="View Details"><i class="fa-solid fa-pen"></i></a>
                                         <button onclick="confirmDelete(<?= e($order['id']) ?>)" class="p-1.5 text-gray-400 hover:text-red-600 transition-colors" title="Delete"><i class="fa-solid fa-trash"></i></button>
                                     </div>
                                 </td>
@@ -127,10 +127,10 @@ $dateTo = $_GET['date_to'] ?? '';
             <?= \App\Core\View::component('Pagination', [
                 'currentPage' => $pagination['currentPage'],
                 'totalPages' => $pagination['totalPages'],
-                'baseUrl' => url('admin/orders?') . ($statusFilter ? 'status=' . e($statusFilter) . '&' : '') . ($search ? 'search=' . e($search) . '&' : '') . ($dateFrom ? 'date_from=' . e($dateFrom) . '&' : '') . ($dateTo ? 'date_to=' . e($dateTo) . '&' : ''),
+                'baseUrl' => url('13091998/orders?') . ($statusFilter ? 'status=' . e($statusFilter) . '&' : '') . ($search ? 'search=' . e($search) . '&' : '') . ($dateFrom ? 'date_from=' . e($dateFrom) . '&' : '') . ($dateTo ? 'date_to=' . e($dateTo) . '&' : ''),
             ]) ?>
 <?php startSection('scripts') ?>
 <script>
-function confirmDelete(id){if(confirm('Are you sure you want to delete this order?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('admin/orders/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}
+function confirmDelete(id){if(confirm('Are you sure you want to delete this order?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('13091998/orders/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}
 </script>
 <?php endSection() ?>

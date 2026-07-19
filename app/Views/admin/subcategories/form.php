@@ -1,11 +1,11 @@
 <?php $subcategory = $subcategory ?? null; $category = $category ?? null; $categories = $categories ?? []; $isEdit = !empty($subcategory); ?>
 <div class="flex items-center justify-between mb-6">
     <div>
-        <a href="<?= url('admin/categories') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Categories</a>
+        <a href="<?= url('13091998/categories') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Categories</a>
         <h1 class="text-2xl font-bold text-gray-800"><?= $isEdit ? 'Edit Subcategory' : 'Add Subcategory' ?></h1>
     </div>
 </div>
-<form method="POST" action="<?= $isEdit ? url('admin/subcategories/update/' . $subcategory['id']) : url('admin/subcategories') ?>" enctype="multipart/form-data" class="max-w-4xl">
+<form method="POST" action="<?= $isEdit ? url('13091998/subcategories/update/' . $subcategory['id']) : url('13091998/subcategories') ?>" enctype="multipart/form-data" class="max-w-4xl">
     <?= \App\Helpers\Security::csrfField() ?>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
@@ -63,7 +63,7 @@
                     </select>
                 </div>
                 <button type="submit" class="w-full bg-primary-red text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all"><i class="fa-solid fa-save mr-1.5"></i> <?= $isEdit ? 'Update Subcategory' : 'Create Subcategory' ?></button>
-                <a href="<?= url('admin/categories') ?>" class="block text-center border border-gray-300 text-gray-600 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Cancel</a>
+                <a href="<?= url('13091998/categories') ?>" class="block text-center border border-gray-300 text-gray-600 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Cancel</a>
             </div>
         </div>
     </div>

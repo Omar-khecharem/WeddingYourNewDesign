@@ -32,7 +32,7 @@ class AccountController extends Controller
 
         // Admin users should not access customer account pages
         if (($this->viewData['authUser']['role'] ?? '') === 'admin') {
-            header('Location: ' . APP_URL . '/admin');
+            header('Location: ' . APP_URL . '/13091998/dashboard');
             exit;
         }
 

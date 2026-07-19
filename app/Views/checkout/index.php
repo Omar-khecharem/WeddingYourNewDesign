@@ -185,13 +185,15 @@
 
                 <div class="space-y-4 mb-6">
                     <?php foreach ($cart['items'] as $item): ?>
-                    <div class="flex items-start gap-3">
-                        <img src="<?= $item['image'] ?>" alt="<?= $item['name'] ?>" class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
+                     <div class="flex items-start gap-3">
+                        <a href="<?= url('product/' . $item['slug']) ?>">
+                            <img src="<?= $item['image'] ?: asset('images/placeholder.png') ?>" alt="<?= $item['name'] ?>" class="w-16 h-16 object-cover rounded-lg flex-shrink-0" onerror="this.src='<?= asset('images/placeholder.png') ?>'">
+                        </a>
                         <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium text-gray-900 truncate"><?= $item['name'] ?></p>
+                            <a href="<?= url('product/' . $item['slug']) ?>" class="text-sm font-medium text-gray-900 hover:text-premium-crimson truncate block"><?= $item['name'] ?></a>
                             <p class="text-xs text-gray-500">Qty : <?= $item['quantity'] ?></p>
                         </div>
-                        <span class="text-sm font-medium text-gray-900 whitespace-nowrap"><?= number_format($item['line_total'] ?? ($item['unit_price'] * $item['quantity']), 2) ?> <?= APP_CURRENCY ?></span>
+                        <span class="text-sm font-medium text-gray-900 whitespace-nowrap"><?= number_format($item['total'] ?? ($item['unit_price'] * $item['quantity']), 2) ?> <?= APP_CURRENCY ?></span>
                     </div>
                     <?php endforeach; ?>
                 </div>

@@ -1,11 +1,11 @@
 <?php $item = $item ?? null; $isEdit = !empty($item); ?>
 <div class="flex items-center justify-between gap-4 mb-6">
     <div>
-        <a href="<?= url('admin/gallery') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Gallery</a>
+        <a href="<?= url('13091998/gallery') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Gallery</a>
         <h1 class="text-2xl font-bold text-gray-800"><?= $isEdit ? 'Edit Gallery Image' : 'Add Gallery Image' ?></h1>
     </div>
 </div>
-<form method="POST" action="<?= $isEdit ? url('admin/gallery/update/' . $item['id']) : url('admin/gallery') ?>" enctype="multipart/form-data" class="max-w-2xl">
+<form method="POST" action="<?= $isEdit ? url('13091998/gallery/update/' . $item['id']) : url('13091998/gallery') ?>" enctype="multipart/form-data" class="max-w-2xl">
     <?= \App\Helpers\Security::csrfField() ?>
     <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-6">
         <div class="space-y-4">
@@ -23,7 +23,7 @@
         <div class="flex items-center justify-between pt-4 border-t border-gray-100">
             <p class="text-xs text-gray-400"><i class="fa-solid fa-rotate mr-1"></i> Cache auto-cleared on save</p>
             <div class="flex gap-2">
-                <a href="<?= url('admin/gallery') ?>" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Cancel</a>
+                <a href="<?= url('13091998/gallery') ?>" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Cancel</a>
                 <button type="submit" class="bg-primary-red text-white px-6 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2 shadow-sm shadow-red-200">
                     <i class="fa-solid fa-save"></i> <?= $isEdit ? 'Update' : 'Upload' ?>
                 </button>

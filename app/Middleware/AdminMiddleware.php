@@ -23,7 +23,7 @@ class AdminMiddleware
 
         if (!$user) {
             Session::flash('warning', 'Please login as admin to access this page.');
-            header('Location: ' . APP_URL . '/login');
+            header('Location: ' . APP_URL . '/13091998');
             exit;
         }
 

@@ -17,10 +17,15 @@ use App\Controllers\Admin\ContactController;
 use App\Controllers\Admin\HomePageController;
 use App\Middleware\AdminMiddleware;
 
-Router::group('/admin', ['middleware' => [AdminMiddleware::class]], function () {
+// Admin login (outside middleware group - no auth required)
+Router::get('/13091998', [\App\Controllers\AuthController::class, 'adminLoginForm']);
+Router::post('/13091998', [\App\Controllers\AuthController::class, 'adminLogin']);
+
+// Admin protected routes
+Router::group('/13091998', ['middleware' => [AdminMiddleware::class]], function () {
 
     // Dashboard
-    Router::get('', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Router::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Router::get('/clear-cache', [DashboardController::class, 'clearCache'])->name('admin.cache');
     Router::get('/logs', [DashboardController::class, 'logs'])->name('admin.logs');
     Router::post('/logs/clean', [DashboardController::class, 'cleanLogs'])->name('admin.logs.clean');
@@ -89,7 +94,7 @@ Router::group('/admin', ['middleware' => [AdminMiddleware::class]], function () 
         }
 
         \App\Helpers\Session::flash('success', 'Order status updated.');
-        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? url('admin/orders')));
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? url('13091998/orders')));
         exit;
     })->name('admin.orders.status');
 
@@ -121,7 +126,7 @@ Router::group('/admin', ['middleware' => [AdminMiddleware::class]], function () 
             $pdo->prepare("DELETE FROM sg_orders WHERE id = :id")->execute([':id' => $orderId]);
             \App\Helpers\Session::flash('success', 'Order deleted successfully.');
         }
-        header('Location: ' . url('admin/orders'));
+        header('Location: ' . url('13091998/orders'));
         exit;
     })->name('admin.orders.delete');
 
@@ -226,7 +231,7 @@ Router::group('/admin', ['middleware' => [AdminMiddleware::class]], function () 
         }
 
         \App\Helpers\Session::flash('success', 'User updated successfully.');
-        header('Location: ' . url('admin/users'));
+        header('Location: ' . url('13091998/users'));
         exit;
     })->name('admin.users.update');
 
@@ -245,7 +250,7 @@ Router::group('/admin', ['middleware' => [AdminMiddleware::class]], function () 
             $pdo->prepare("UPDATE sg_users SET status = 1 WHERE id = :id")->execute([':id' => $id]);
             \App\Helpers\Session::flash('success', 'User unbanned successfully.');
         }
-        header('Location: ' . url('admin/users'));
+        header('Location: ' . url('13091998/users'));
         exit;
     })->name('admin.users.ban');
 
@@ -258,23 +263,52 @@ Router::group('/admin', ['middleware' => [AdminMiddleware::class]], function () 
     Router::get('/reviews/{id}/approve', function ($params) {
         \App\Models\Review::approve((int)($params['id'] ?? 0));
         \App\Helpers\Session::flash('success', 'Review approved.');
-        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? url('admin/reviews')));
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? url('13091998/reviews')));
         exit;
     })->name('admin.reviews.approve');
 
     Router::get('/reviews/{id}/reject', function ($params) {
         \App\Models\Review::reject((int)($params['id'] ?? 0));
         \App\Helpers\Session::flash('success', 'Review rejected.');
-        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? url('admin/reviews')));
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? url('13091998/reviews')));
         exit;
     })->name('admin.reviews.reject');
 
     Router::get('/reviews/{id}/delete', function ($params) {
         \App\Models\Review::deleteReview((int)($params['id'] ?? 0));
         \App\Helpers\Session::flash('success', 'Review deleted.');
-        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? url('admin/reviews')));
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? url('13091998/reviews')));
         exit;
     })->name('admin.reviews.delete');
+
+    // Password Reset Requests
+    Router::get('/forgot-password-requests', function () {
+        $pdo = \App\Core\Database::getInstance()->getConnection();
+        $stmt = $pdo->prepare("
+            SELECT pr.*, u.id AS user_id, u.name AS user_name, u.status AS user_status
+            FROM sg_password_resets pr
+            LEFT JOIN sg_users u ON u.email = pr.email
+            WHERE pr.admin_request = 1 AND pr.used = 0
+            ORDER BY pr.created_at DESC
+        ");
+        $stmt->execute();
+        $requests = $stmt->fetchAll();
+
+        // Mark as viewed: store current timestamp so badge only shows NEW requests
+        \App\Helpers\Session::set('forgot_requests_viewed_at', time());
+
+        return \App\Core\View::render('admin.forgot-password-requests.index', ['requests' => $requests], 'admin');
+    })->name('admin.forgot-password-requests');
+
+    Router::post('/forgot-password-requests/{id}/handle', function ($params) {
+        $pdo = \App\Core\Database::getInstance()->getConnection();
+        $id = (int)$params['id'];
+        $stmt = $pdo->prepare("UPDATE sg_password_resets SET used = 1 WHERE id = :id AND admin_request = 1");
+        $stmt->execute([':id' => $id]);
+        \App\Helpers\Session::flash('success', 'Password reset request marked as handled.');
+        header('Location: ' . url('13091998/forgot-password-requests'));
+        exit;
+    })->name('admin.forgot-password-requests.handle');
 
     // Settings
     Router::get('/settings', [SettingController::class, 'index'])->name('admin.settings');

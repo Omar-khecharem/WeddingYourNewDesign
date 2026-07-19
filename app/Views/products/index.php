@@ -208,7 +208,7 @@ $end = min($page * $perPage, $total);
           $rAvg = $productRatings[$pId]['average'] ?? 0;
           $rTot = $productRatings[$pId]['total'] ?? 0;
         ?>
-        <div class="bg-white border border-premium-warm-gray rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow flex flex-col group/card">
+        <div class="bg-white border border-premium-warm-gray rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow flex flex-col group/card product-card">
           <div class="relative overflow-hidden bg-premium-ivory">
             <?php if ($pDiscount > 0): ?>
             <span class="absolute top-2 left-2 bg-premium-burgundy text-white text-[10px] font-black px-2 py-0.5 rounded-md z-10">-<?= $pDiscount ?>%</span>
@@ -217,7 +217,7 @@ $end = min($page * $perPage, $total);
               <img src="<?= e($pImg) ?>" alt="<?= e($pName) ?>" class="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500" loading="lazy">
             </a>
             <!-- Hover overlay buttons -->
-            <div class="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1.5 p-2 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300">
+            <div class="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1.5 p-2 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 product-card-actions">
               <button onclick="addToCart(<?= $pId ?>, 1)" class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-premium-mink hover:bg-premium-crimson hover:text-white transition-colors shadow" title="Cart">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
               </button>
@@ -252,6 +252,7 @@ $end = min($page * $perPage, $total);
               <span class="text-[10px] text-premium-stone line-through">₹<?= number_format($pRegular, 2) ?></span>
               <?php endif; ?>
             </div>
+            <button onclick="addToCart(<?= $pId ?>, 1);setTimeout(function(){window.location.href='<?= url('checkout') ?>'},500)" class="hidden mt-2 w-full bg-premium-burgundy hover:bg-premium-cabernet text-white text-xs font-bold py-2 rounded-lg transition-colors product-card-buy">Buy Now</button>
           </div>
         </div>
         <?php endforeach; ?>
@@ -282,6 +283,21 @@ $end = min($page * $perPage, $total);
   </div>
 </div>
 
+<style>
+.product-card.list-view-card { flex-direction: row !important; }
+.product-card.list-view-card > .relative { width: 220px; min-width: 220px; height: 220px; flex-shrink: 0; }
+.product-card.list-view-card > .relative .product-card-actions { opacity: 1 !important; background: linear-gradient(to top, rgba(0,0,0,0.6), transparent) !important; padding: 10px !important; gap: 8px !important; }
+.product-card.list-view-card > .relative .product-card-actions button { width: 32px; height: 32px; }
+.product-card.list-view-card > div:last-child { flex: 1; display: flex; flex-direction: column; padding: 16px 20px; }
+.product-card.list-view-card h3 { font-size: 14px; }
+.product-card.list-view-card p { font-size: 12px; }
+.product-card.list-view-card .text-sm { font-size: 16px; }
+.product-card.list-view-card .product-card-buy { display: block !important; }
+@media (max-width: 640px) {
+  .product-card.list-view-card { flex-direction: column !important; }
+  .product-card.list-view-card > .relative { width: 100%; min-width: 100%; height: auto; }
+}
+</style>
 <script>
 /* Category step carousel */
 (function() {
@@ -357,14 +373,17 @@ function applyView(mode) {
   document.getElementById('view-list')?.classList.toggle('text-white', mode === 'list');
   document.getElementById('view-list')?.classList.toggle('bg-white', mode !== 'list');
   document.getElementById('view-list')?.classList.toggle('text-premium-mink', mode !== 'list');
+  var cards = grid.querySelectorAll('.product-card');
   if (mode === 'list') {
-    grid.className = 'grid grid-cols-1 md:grid-cols-2 gap-4';
-    grid.style.maxWidth = '900px';
-    grid.style.margin = '0 auto';
+    grid.className = 'grid grid-cols-1 gap-4';
+    grid.style.maxWidth = '';
+    grid.style.margin = '';
+    cards.forEach(function(c) { c.classList.add('list-view-card'); });
   } else {
     grid.className = 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4';
     grid.style.maxWidth = '';
     grid.style.margin = '';
+    cards.forEach(function(c) { c.classList.remove('list-view-card'); });
   }
 }
 (function() {

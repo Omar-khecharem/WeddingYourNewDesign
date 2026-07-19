@@ -16,12 +16,12 @@ $categories = $categories ?? [];
         <h1 class="text-2xl font-bold text-gray-800">Products</h1>
         <p class="text-sm text-gray-500">Manage your product catalog</p>
     </div>
-    <a href="<?= url('admin/products/create') ?>" class="bg-primary-red text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2">
+    <a href="<?= url('13091998/products/create') ?>" class="bg-primary-red text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2">
         <i class="fa-solid fa-plus"></i> Add Product
     </a>
 </div>
 <div class="bg-white rounded-xl border border-gray-200 p-4 mb-6">
-    <form method="GET" action="<?= url('admin/products') ?>" class="flex flex-wrap items-end gap-3">
+    <form method="GET" action="<?= url('13091998/products') ?>" class="flex flex-wrap items-end gap-3">
         <div class="flex-1 min-w-[200px]">
             <label class="block text-xs font-medium text-gray-500 mb-1">Search</label>
             <div class="relative">
@@ -47,7 +47,7 @@ $categories = $categories ?? [];
             </select>
         </div>
         <button type="submit" class="bg-primary-red text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-all">Filter</button>
-        <a href="<?= url('admin/products') ?>" class="border border-gray-300 text-gray-600 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Reset</a>
+        <a href="<?= url('13091998/products') ?>" class="border border-gray-300 text-gray-600 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Reset</a>
     </form>
 </div>
 <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -82,7 +82,7 @@ $categories = $categories ?? [];
                         <?php endif; ?>
                     </td>
                     <td class="px-5 py-3">
-                        <a href="<?= url('admin/products/edit/' . $product->id) ?>" class="font-medium text-gray-800 hover:text-primary-red transition-colors"><?= e($product->name) ?></a>
+                        <a href="<?= url('13091998/products/edit/' . $product->id) ?>" class="font-medium text-gray-800 hover:text-primary-red transition-colors"><?= e($product->name) ?></a>
                     </td>
                     <td class="px-5 py-3 text-gray-500 font-mono text-xs"><?= e($product->sku ?? 'N/A') ?></td>
                     <td class="px-5 py-3 text-gray-500"><?= e($product->category_name ?? '-') ?></td>
@@ -110,7 +110,7 @@ $categories = $categories ?? [];
                     </td>
                     <td class="px-5 py-3">
                         <div class="flex items-center gap-1">
-                            <a href="<?= url('admin/products/edit/' . $product->id) ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                            <a href="<?= url('13091998/products/edit/' . $product->id) ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="Edit"><i class="fa-solid fa-pen"></i></a>
                             <button onclick="confirmDelete(<?= $product->id ?>)" class="p-1.5 text-gray-400 hover:text-red-600 transition-colors" title="Delete"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </td>
@@ -122,7 +122,7 @@ $categories = $categories ?? [];
     </div>
 </div>
 <?php if ($tp > 1): ?>
-<?php $baseUrl = url('admin/products?') . ($search ? 'search=' . e($search) . '&' : '') . ($categoryFilter ? 'category=' . e($categoryFilter) . '&' : '') . ($statusFilter !== '' ? 'status=' . e($statusFilter) . '&' : ''); ?>
+<?php $baseUrl = url('13091998/products?') . ($search ? 'search=' . e($search) . '&' : '') . ($categoryFilter ? 'category=' . e($categoryFilter) . '&' : '') . ($statusFilter !== '' ? 'status=' . e($statusFilter) . '&' : ''); ?>
 <div class="flex items-center justify-between mt-4">
     <p class="text-sm text-gray-500">Page <?= $cp ?> / <?= $tp ?></p>
     <div class="flex gap-2">
@@ -136,5 +136,5 @@ $categories = $categories ?? [];
 </div>
 <?php endif; ?>
 <?php startSection('scripts') ?>
-<script>function confirmDelete(id){if(confirm('Delete this product?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('admin/products/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}</script>
+<script>function confirmDelete(id){if(confirm('Delete this product?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('13091998/products/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}</script>
 <?php endSection() ?>

@@ -48,7 +48,7 @@ class HomePageController extends BaseAdminController
     public function toggleFeatured(Request $request, Response $response): void
     {
         $id = (int)$request->input('id');
-        $redirect = $request->input('redirect', url('admin/homepage'));
+        $redirect = $request->input('redirect', url('13091998/homepage'));
         $product = Product::find($id);
         if ($product) {
             $wasFeatured = (bool)$product->is_featured;
@@ -62,7 +62,7 @@ class HomePageController extends BaseAdminController
     public function toggleTrending(Request $request, Response $response): void
     {
         $id = (int)$request->input('id');
-        $redirect = $request->input('redirect', url('admin/homepage'));
+        $redirect = $request->input('redirect', url('13091998/homepage'));
         $product = Product::find($id);
         if ($product) {
             $wasTrending = (bool)$product->is_trending;
@@ -95,6 +95,6 @@ class HomePageController extends BaseAdminController
 
         clearSiteCache();
         $this->flash('success', 'Homepage settings saved.');
-        $this->redirect(url('admin/homepage'));
+        $this->redirect(url('13091998/homepage'));
     }
 }

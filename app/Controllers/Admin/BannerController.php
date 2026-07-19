@@ -51,7 +51,7 @@ class BannerController extends BaseAdminController
         $stmt = $pdo->prepare("INSERT INTO sg_banners (name, title, description, image, link, position, sort_order, is_active, created_at) VALUES (:name, :title, :description, :image, :link, :position, :sort_order, :is_active, NOW())");
         $stmt->execute($data);
 
-        $this->success('Banner created.', url('admin/banners'));
+        $this->success('Banner created.', url('13091998/banners'));
     }
 
     public function edit(Request $request, Response $response): string
@@ -64,7 +64,7 @@ class BannerController extends BaseAdminController
 
         if (!$banner) {
             $this->flash('error', 'Banner not found.');
-            $this->redirect(url('admin/banners'));
+            $this->redirect(url('13091998/banners'));
         }
 
         $this->setMeta('Edit Banner');
@@ -103,7 +103,7 @@ class BannerController extends BaseAdminController
         $stmt = $pdo->prepare("UPDATE sg_banners SET name = :name, title = :title, description = :description, link = :link, position = :position, sort_order = :sort_order, is_active = :is_active WHERE id = :id");
         $stmt->execute($data);
 
-        $this->success('Banner updated.', url('admin/banners'));
+        $this->success('Banner updated.', url('13091998/banners'));
     }
 
     public function destroy(Request $request, Response $response): void
@@ -111,6 +111,6 @@ class BannerController extends BaseAdminController
         $id = (int)$request->input('id');
         $pdo = \App\Core\Database::getInstance()->getConnection();
         $pdo->prepare("DELETE FROM sg_banners WHERE id = :id")->execute([':id' => $id]);
-        $this->success('Banner deleted.', url('admin/banners'));
+        $this->success('Banner deleted.', url('13091998/banners'));
     }
 }

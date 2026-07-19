@@ -4,7 +4,7 @@
         <h1 class="text-2xl font-bold text-gray-800">Menu Items</h1>
         <p class="text-sm text-gray-500">Manage navigation menu items</p>
     </div>
-    <a href="<?= url('admin/menus/create?menu_id=' . $currentMenuId) ?>" class="bg-primary-red text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2">
+    <a href="<?= url('13091998/menus/create?menu_id=' . $currentMenuId) ?>" class="bg-primary-red text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2">
         <i class="fa-solid fa-plus"></i> Add Menu Item
     </a>
 </div>
@@ -13,7 +13,7 @@
 <?php if (!empty($menus)): ?>
 <div class="flex gap-2 mb-5 overflow-x-auto">
     <?php foreach ($menus as $menu): ?>
-    <a href="<?= url('admin/menus?menu_id=' . $menu['id']) ?>" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors <?= $currentMenuId == $menu['id'] ? 'bg-primary-red text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50' ?>">
+    <a href="<?= url('13091998/menus?menu_id=' . $menu['id']) ?>" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors <?= $currentMenuId == $menu['id'] ? 'bg-primary-red text-white' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50' ?>">
         <?= e($menu['name']) ?>
     </a>
     <?php endforeach; ?>
@@ -57,7 +57,7 @@
                     </td>
                     <td class="px-5 py-3">
                         <div class="flex items-center gap-1">
-                            <a href="<?= url('admin/menus/edit/' . $item['id']) ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                            <a href="<?= url('13091998/menus/edit/' . $item['id']) ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="Edit"><i class="fa-solid fa-pen"></i></a>
                             <button onclick="confirmDelete(<?= $item['id'] ?>)" class="p-1.5 text-gray-400 hover:text-red-600 transition-colors" title="Delete"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </td>
@@ -69,5 +69,5 @@
     </div>
 </div>
 <?php startSection('scripts') ?>
-<script>function confirmDelete(id){if(confirm('Delete this menu item?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('admin/menus/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}</script>
+<script>function confirmDelete(id){if(confirm('Delete this menu item?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('13091998/menus/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}</script>
 <?php endSection() ?>

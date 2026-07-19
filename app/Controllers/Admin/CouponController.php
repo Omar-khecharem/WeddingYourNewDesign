@@ -53,11 +53,11 @@ class CouponController extends BaseAdminController
             } else {
                 $this->flash('error', $result['message'] ?? 'Failed to create coupon.');
             }
-            $this->redirect(url('admin/coupons'));
+            $this->redirect(url('13091998/coupons'));
         } catch (\Exception $e) {
             error_log('Coupon creation failed: ' . $e->getMessage());
             $this->flash('error', 'An unexpected error occurred: ' . $e->getMessage());
-            $this->redirect(url('admin/coupons'));
+            $this->redirect(url('13091998/coupons'));
         }
     }
 
@@ -67,7 +67,7 @@ class CouponController extends BaseAdminController
             $id = (int)($params['id'] ?? $request->input('id'));
             if (!$id) {
                 $this->flash('error', 'Invalid coupon ID.');
-                $this->redirect(url('admin/coupons'));
+                $this->redirect(url('13091998/coupons'));
                 return;
             }
 
@@ -91,11 +91,11 @@ class CouponController extends BaseAdminController
             } else {
                 $this->flash('error', 'Failed to update coupon.');
             }
-            $this->redirect(url('admin/coupons'));
+            $this->redirect(url('13091998/coupons'));
         } catch (\Exception $e) {
             error_log('Coupon update failed: ' . $e->getMessage());
             $this->flash('error', 'An unexpected error occurred: ' . $e->getMessage());
-            $this->redirect(url('admin/coupons'));
+            $this->redirect(url('13091998/coupons'));
         }
     }
 
@@ -105,7 +105,7 @@ class CouponController extends BaseAdminController
             $id = (int)$request->input('id');
             if (!$id) {
                 $this->flash('error', 'Invalid coupon ID.');
-                $this->redirect(url('admin/coupons'));
+                $this->redirect(url('13091998/coupons'));
                 return;
             }
 
@@ -118,11 +118,11 @@ class CouponController extends BaseAdminController
             } else {
                 $this->flash('error', 'Failed to delete coupon.');
             }
-            $this->redirect(url('admin/coupons'));
+            $this->redirect(url('13091998/coupons'));
         } catch (\Exception $e) {
             error_log('Coupon deletion failed: ' . $e->getMessage());
             $this->flash('error', 'An unexpected error occurred: ' . $e->getMessage());
-            $this->redirect(url('admin/coupons'));
+            $this->redirect(url('13091998/coupons'));
         }
     }
 }

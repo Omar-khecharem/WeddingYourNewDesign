@@ -28,7 +28,7 @@ class AuthMiddleware
 
         // Admin users should not access customer account pages
         if (($user['role'] ?? '') === 'admin') {
-            header('Location: ' . APP_URL . '/admin');
+            header('Location: ' . APP_URL . '/13091998/dashboard');
             exit;
         }
     }

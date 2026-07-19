@@ -1,11 +1,11 @@
 <?php $card = $card ?? null; $categories = $categories ?? []; $subcategories = $subcategories ?? []; $isEdit = !empty($card); ?>
 <div class="flex items-center justify-between mb-6">
     <div>
-        <a href="<?= url('admin/category-cards') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Cards</a>
+        <a href="<?= url('13091998/category-cards') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Cards</a>
         <h1 class="text-2xl font-bold text-gray-800"><?= $isEdit ? 'Edit Card' : 'Add Card' ?></h1>
     </div>
 </div>
-<form method="POST" action="<?= $isEdit ? url('admin/category-cards/update/' . $card['id']) : url('admin/category-cards') ?>" enctype="multipart/form-data" class="max-w-4xl">
+<form method="POST" action="<?= $isEdit ? url('13091998/category-cards/update/' . $card['id']) : url('13091998/category-cards') ?>" enctype="multipart/form-data" class="max-w-4xl">
     <?= \App\Helpers\Security::csrfField() ?>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
@@ -79,7 +79,7 @@
                     </select>
                 </div>
                 <button type="submit" class="w-full bg-primary-red text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all"><i class="fa-solid fa-save mr-1.5"></i> <?= $isEdit ? 'Update Card' : 'Create Card' ?></button>
-                <a href="<?= url('admin/category-cards') ?>" class="block text-center border border-gray-300 text-gray-600 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Cancel</a>
+                <a href="<?= url('13091998/category-cards') ?>" class="block text-center border border-gray-300 text-gray-600 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Cancel</a>
             </div>
         </div>
     </div>
@@ -87,7 +87,7 @@
         <div class="flex items-center justify-between bg-white rounded-xl border border-gray-200 p-4 shadow-lg">
             <p class="text-xs text-gray-400"><i class="fa-solid fa-rotate mr-1"></i> Cache auto-cleared on save</p>
             <div class="flex gap-2">
-                <a href="<?= url('admin/category-cards') ?>" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Cancel</a>
+                <a href="<?= url('13091998/category-cards') ?>" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Cancel</a>
                 <button type="submit" class="bg-primary-red text-white px-6 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2 shadow-sm shadow-red-200">
                     <i class="fa-solid fa-save"></i> <?= $isEdit ? 'Update Card' : 'Create Card' ?>
                 </button>

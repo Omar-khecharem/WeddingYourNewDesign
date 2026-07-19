@@ -4,7 +4,7 @@
         <h1 class="text-2xl font-bold text-gray-800">Blog Posts</h1>
         <p class="text-sm text-gray-500">Manage blog posts and articles</p>
     </div>
-    <a href="<?= url('admin/blog/create') ?>" class="bg-primary-red text-white px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-all"><i class="fa-solid fa-plus mr-1.5"></i> Add Post</a>
+    <a href="<?= url('13091998/blog/create') ?>" class="bg-primary-red text-white px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-all"><i class="fa-solid fa-plus mr-1.5"></i> Add Post</a>
 </div>
 <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
     <div class="overflow-x-auto">
@@ -37,8 +37,8 @@
                     <td class="px-5 py-3 text-gray-500 whitespace-nowrap"><?= !empty($post['published_at']) ? formatDate($post['published_at'], 'd/m/Y') : '-' ?></td>
                     <td class="px-5 py-3">
                         <div class="flex items-center gap-1">
-                            <a href="<?= url('admin/blog/edit/' . $post['id']) ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="Edit"><i class="fa-solid fa-pen"></i></a>
-                            <form method="POST" action="<?= url('admin/blog/delete') ?>" class="inline" onsubmit="return confirm('Delete this post?')">
+                            <a href="<?= url('13091998/blog/edit/' . $post['id']) ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                            <form method="POST" action="<?= url('13091998/blog/delete') ?>" class="inline" onsubmit="return confirm('Delete this post?')">
                                 <?= \App\Helpers\Security::csrfField() ?>
                                 <input type="hidden" name="id" value="<?= (int)$post['id'] ?>">
                                 <button type="submit" class="p-1.5 text-gray-400 hover:text-red-600 transition-colors" title="Delete"><i class="fa-solid fa-trash-can"></i></button>

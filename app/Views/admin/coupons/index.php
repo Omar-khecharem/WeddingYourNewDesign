@@ -9,14 +9,14 @@ $editCoupon = $editCoupon ?? null;
                     <h1 class="text-2xl font-bold text-gray-800">Coupons</h1>
                     <p class="text-sm text-gray-500">Manage your promotional codes</p>
                 </div>
-                <a href="<?= url('admin/coupons?action=create') ?>" class="bg-primary-red text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2">
+                <a href="<?= url('13091998/coupons?action=create') ?>" class="bg-primary-red text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2">
                     <i class="fa-solid fa-plus"></i> Add Coupon
                 </a>
             </div>
             <?php if ($showForm === 'create' || $editCoupon): ?>
             <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
                 <h2 class="text-lg font-bold text-gray-800 mb-4"><?= $editCoupon ? 'Edit Coupon' : 'New Coupon' ?></h2>
-                <form method="POST" action="<?= $editCoupon ? url('admin/coupons/update/' . e($editCoupon['id'])) : url('admin/coupons/store') ?>" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <form method="POST" action="<?= $editCoupon ? url('13091998/coupons/update/' . e($editCoupon['id'])) : url('13091998/coupons/store') ?>" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <?= \App\Helpers\Security::csrfField() ?>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Code <span class="text-red-500">*</span></label>
@@ -62,7 +62,7 @@ $editCoupon = $editCoupon ?? null;
                         <button type="submit" class="bg-primary-red text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all">
                             <i class="fa-solid fa-save mr-1.5"></i> <?= $editCoupon ? 'Update' : 'Create Coupon' ?>
                         </button>
-                        <a href="<?= url('admin/coupons') ?>" class="border border-gray-300 text-gray-600 px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Cancel</a>
+                        <a href="<?= url('13091998/coupons') ?>" class="border border-gray-300 text-gray-600 px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Cancel</a>
                     </div>
                 </form>
             </div>
@@ -128,8 +128,8 @@ $editCoupon = $editCoupon ?? null;
                                 </td>
                                 <td class="px-5 py-3">
                                     <div class="flex items-center gap-1">
-                                        <a href="<?= url('admin/coupons?action=edit&id=' . e($coupon['id'])) ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="Edit"><i class="fa-solid fa-pen"></i></a>
-                                        <form method="POST" action="<?= url('admin/coupons/delete') ?>" onsubmit="return confirm('Are you sure you want to delete this coupon?')" class="inline">
+                                        <a href="<?= url('13091998/coupons?action=edit&id=' . e($coupon['id'])) ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                                        <form method="POST" action="<?= url('13091998/coupons/delete') ?>" onsubmit="return confirm('Are you sure you want to delete this coupon?')" class="inline">
                                             <?= \App\Helpers\Security::csrfField() ?>
                                             <input type="hidden" name="id" value="<?= e($coupon['id']) ?>">
                                             <button type="submit" class="p-1.5 text-gray-400 hover:text-red-600 transition-colors" title="Delete"><i class="fa-solid fa-trash"></i></button>

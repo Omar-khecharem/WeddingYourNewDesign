@@ -6,7 +6,7 @@
 
 
 
-USE `u514769775_weddingyour`;
+-- Database: u514769775_wedding_your (select in phpMyAdmin before importing)
 
 -- +----------------------------------------------------------------------------
 -- | SECTION 1 – ACCESS CONTROL (roles, permissions, users)

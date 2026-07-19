@@ -31,7 +31,7 @@ $unreadCount = \App\Models\ContactMessage::getUnreadCount();
             <i class="fa-solid fa-search mr-1.5"></i> Filter
         </button>
         <?php if ($search || $status): ?>
-        <a href="<?= url('admin/contacts') ?>" class="border border-gray-300 text-gray-600 px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Clear</a>
+        <a href="<?= url('13091998/contacts') ?>" class="border border-gray-300 text-gray-600 px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Clear</a>
         <?php endif; ?>
     </form>
 </div>
@@ -81,8 +81,8 @@ $unreadCount = \App\Models\ContactMessage::getUnreadCount();
                     <td class="px-5 py-3 text-gray-500 whitespace-nowrap hidden lg:table-cell"><?= formatDate($msg['created_at'] ?? '') ?></td>
                     <td class="px-5 py-3">
                         <div class="flex items-center gap-1">
-                            <a href="<?= url('admin/contacts/' . e($msg['id'])) ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="View"><i class="fa-solid fa-eye"></i></a>
-                            <form method="POST" action="<?= url('admin/contacts/delete') ?>" onsubmit="return confirm('Delete this message?')" class="inline">
+                            <a href="<?= url('13091998/contacts/' . e($msg['id'])) ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="View"><i class="fa-solid fa-eye"></i></a>
+                            <form method="POST" action="<?= url('13091998/contacts/delete') ?>" onsubmit="return confirm('Delete this message?')" class="inline">
                                 <?= \App\Helpers\Security::csrfField() ?>
                                 <input type="hidden" name="id" value="<?= e($msg['id']) ?>">
                                 <button type="submit" class="p-1.5 text-gray-400 hover:text-red-600 transition-colors" title="Delete"><i class="fa-solid fa-trash"></i></button>
@@ -100,11 +100,11 @@ $unreadCount = \App\Models\ContactMessage::getUnreadCount();
         <p class="text-xs text-gray-500"><?= $pagination['total'] ?? 0 ?> total messages</p>
         <div class="flex items-center gap-1">
             <?php if ($pagination['hasPrev'] ?? false): ?>
-            <a href="<?= url('admin/contacts?page=' . ($pagination['prevPage'] ?? 1) . ($search ? '&search=' . urlencode($search) : '') . ($status ? '&status=' . $status : '')) ?>" class="px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-200 rounded transition-colors"><i class="fa-solid fa-chevron-left"></i></a>
+            <a href="<?= url('13091998/contacts?page=' . ($pagination['prevPage'] ?? 1) . ($search ? '&search=' . urlencode($search) : '') . ($status ? '&status=' . $status : '')) ?>" class="px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-200 rounded transition-colors"><i class="fa-solid fa-chevron-left"></i></a>
             <?php endif; ?>
             <span class="px-3 py-1.5 text-xs font-medium text-gray-700"><?= $pagination['page'] ?? 1 ?> / <?= $pagination['totalPages'] ?? 1 ?></span>
             <?php if ($pagination['hasNext'] ?? false): ?>
-            <a href="<?= url('admin/contacts?page=' . ($pagination['nextPage'] ?? 1) . ($search ? '&search=' . urlencode($search) : '') . ($status ? '&status=' . $status : '')) ?>" class="px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-200 rounded transition-colors"><i class="fa-solid fa-chevron-right"></i></a>
+            <a href="<?= url('13091998/contacts?page=' . ($pagination['nextPage'] ?? 1) . ($search ? '&search=' . urlencode($search) : '') . ($status ? '&status=' . $status : '')) ?>" class="px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-200 rounded transition-colors"><i class="fa-solid fa-chevron-right"></i></a>
             <?php endif; ?>
         </div>
     </div>

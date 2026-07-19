@@ -1,11 +1,11 @@
 <?php $page = $page ?? null; $isEdit = !empty($page); ?>
 <div class="flex items-center justify-between mb-6">
     <div>
-        <a href="<?= url('admin/pages') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Pages</a>
+        <a href="<?= url('13091998/pages') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Pages</a>
         <h1 class="text-2xl font-bold text-gray-800"><?= $isEdit ? 'Edit Page' : 'Add Page' ?></h1>
     </div>
 </div>
-<form method="POST" action="<?= $isEdit ? url('admin/pages/update/' . $page['id']) : url('admin/pages') ?>" class="max-w-4xl">
+<form method="POST" action="<?= $isEdit ? url('13091998/pages/update/' . $page['id']) : url('13091998/pages') ?>" class="max-w-4xl">
     <?= \App\Helpers\Security::csrfField() ?>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
@@ -55,6 +55,6 @@
     </div>
     <div class="mt-6 flex items-center gap-3">
         <button type="submit" class="bg-primary-red text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-all"><i class="fa-solid fa-floppy-disk mr-1.5"></i> <?= $isEdit ? 'Update' : 'Create' ?></button>
-        <a href="<?= url('admin/pages') ?>" class="px-6 py-2.5 border border-gray-300 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors">Cancel</a>
+        <a href="<?= url('13091998/pages') ?>" class="px-6 py-2.5 border border-gray-300 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors">Cancel</a>
     </div>
 </form>

@@ -40,7 +40,7 @@ class PageController extends BaseAdminController
         $stmt->execute([':t' => $data['title'], ':s' => $data['slug'], ':c' => $data['content'], ':mt' => $data['meta_title'], ':md' => $data['meta_description'], ':st' => $data['status'], ':so' => $data['sort_order']]);
 
         Session::flash('success', 'Page created successfully.');
-        $this->redirect(url('admin/pages'));
+        $this->redirect(url('13091998/pages'));
     }
 
     public function edit(Request $request, Response $response): string
@@ -74,7 +74,7 @@ class PageController extends BaseAdminController
         $stmt->execute([':t' => $data['title'], ':s' => $data['slug'], ':c' => $data['content'], ':mt' => $data['meta_title'], ':md' => $data['meta_description'], ':st' => $data['status'], ':so' => $data['sort_order'], ':id' => $id]);
 
         Session::flash('success', 'Page updated successfully.');
-        $this->redirect(url('admin/pages'));
+        $this->redirect(url('13091998/pages'));
     }
 
     public function destroy(Request $request, Response $response): void
@@ -85,6 +85,6 @@ class PageController extends BaseAdminController
             $pdo->prepare("DELETE FROM sg_pages WHERE id = :id")->execute([':id' => $id]);
             Session::flash('success', 'Page deleted successfully.');
         }
-        $this->redirect(url('admin/pages'));
+        $this->redirect(url('13091998/pages'));
     }
 }

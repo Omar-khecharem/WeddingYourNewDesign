@@ -56,7 +56,7 @@ class CategoryCardController extends BaseAdminController
         $stmt = $pdo->prepare("INSERT INTO sg_category_cards (title, subtitle, section_key, category_id, subcategory_id, image, link, sort_order, is_active, created_at) VALUES (:title, :subtitle, :section_key, :category_id, :subcategory_id, :image, :link, :sort_order, :is_active, NOW())");
         $stmt->execute($data);
 
-        $this->success('Category card created.', url('admin/category-cards'));
+        $this->success('Category card created.', url('13091998/category-cards'));
     }
 
     public function edit(Request $request, Response $response): string
@@ -69,7 +69,7 @@ class CategoryCardController extends BaseAdminController
 
         if (!$card) {
             $this->flash('error', 'Card not found.');
-            $this->redirect(url('admin/category-cards'));
+            $this->redirect(url('13091998/category-cards'));
         }
 
         $categories = $pdo->query("SELECT id, name FROM sg_categories WHERE status = 1 ORDER BY name")->fetchAll(\PDO::FETCH_ASSOC);
@@ -106,7 +106,7 @@ class CategoryCardController extends BaseAdminController
         $stmt = $pdo->prepare("UPDATE sg_category_cards SET title = :title, subtitle = :subtitle, section_key = :section_key, category_id = :category_id, subcategory_id = :subcategory_id, link = :link, sort_order = :sort_order, is_active = :is_active WHERE id = :id");
         $stmt->execute($data);
 
-        $this->success('Category card updated.', url('admin/category-cards'));
+        $this->success('Category card updated.', url('13091998/category-cards'));
     }
 
     public function destroy(Request $request, Response $response): void
@@ -114,6 +114,6 @@ class CategoryCardController extends BaseAdminController
         $id = (int)$request->input('id');
         $pdo = \App\Core\Database::getInstance()->getConnection();
         $pdo->prepare("DELETE FROM sg_category_cards WHERE id = :id")->execute([':id' => $id]);
-        $this->success('Card deleted.', url('admin/category-cards'));
+        $this->success('Card deleted.', url('13091998/category-cards'));
     }
 }

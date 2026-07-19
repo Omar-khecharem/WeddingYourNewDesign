@@ -402,26 +402,29 @@ class CartService
     private function getProductImage(int $productId): string
     {
         $pdo = $this->db->getConnection();
-        $stmt = $pdo->prepare("SELECT image FROM sg_product_images WHERE product_id = :id AND is_primary = 1 LIMIT 1");
+        $stmt = $pdo->prepare("SELECT image FROM sg_product_images WHERE product_id = :id ORDER BY is_primary DESC, id ASC LIMIT 1");
         $stmt->execute([':id' => $productId]);
         $result = $stmt->fetch();
         if ($result && !empty($result['image'])) {
-            $filename = str_replace('\\', '/', $result['image']);
-            if (str_starts_with($filename, 'products/')) {
-                $checkPath = UPLOADS_DIR . DS . str_replace('/', DS, $filename);
-                if (file_exists($checkPath)) {
-                    return uploadUrl($filename, 'products');
-                }
+            return $this->resolveImageUrl($result['image']);
+        }
+        return asset('images/placeholder.png');
+    }
+
+    private function resolveImageUrl(string $imagePath): string
+    {
+        $filename = str_replace('\\', '/', $imagePath);
+        $paths = [
+            ['prefix' => 'products', 'check' => UPLOADS_DIR . DS . str_replace('/', DS, ltrim($filename, '/'))],
+        ];
+        if (!str_starts_with($filename, 'products/')) {
+            $paths[] = ['prefix' => 'products', 'check' => PRODUCT_IMAGES_DIR . DS . $filename];
+            $paths[] = ['prefix' => '', 'check' => UPLOADS_DIR . DS . $filename];
+        }
+        foreach ($paths as $p) {
+            if (file_exists($p['check'])) {
+                return $p['prefix'] ? uploadUrl($filename, $p['prefix']) : uploadUrl($filename);
             }
-            $prodPath = PRODUCT_IMAGES_DIR . DS . $filename;
-            if (file_exists($prodPath)) {
-                return uploadUrl($filename, 'products');
-            }
-            $rootPath = UPLOADS_DIR . DS . $filename;
-            if (file_exists($rootPath)) {
-                return uploadUrl($filename);
-            }
-            return asset('images/placeholder.png');
         }
         return asset('images/placeholder.png');
     }

@@ -42,7 +42,7 @@ $pagination = $pagination ?? ['currentPage' => 1, 'totalPages' => 1, 'hasPrev' =
                                         <?php else: ?>
                                         <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400"><i class="fa-solid fa-image"></i></div>
                                         <?php endif; ?>
-                                        <a href="<?= url('admin/products/' . e($review['product_id']) . '/edit') ?>" class="font-medium text-gray-800 hover:text-primary-red transition-colors"><?= e($review['product_name'] ?? 'N/A') ?></a>
+                                        <a href="<?= url('13091998/products/' . e($review['product_id']) . '/edit') ?>" class="font-medium text-gray-800 hover:text-primary-red transition-colors"><?= e($review['product_name'] ?? 'N/A') ?></a>
                                     </div>
                                 </td>
                                 <td class="px-5 py-3">
@@ -66,10 +66,10 @@ $pagination = $pagination ?? ['currentPage' => 1, 'totalPages' => 1, 'hasPrev' =
                                 <td class="px-5 py-3">
                                     <div class="flex items-center gap-1">
                                         <?php if (($review['status'] ?? '') !== 'approved'): ?>
-                                        <a href="<?= url('admin/reviews/' . e($review['id']) . '/approve') ?>" class="p-1.5 text-gray-400 hover:text-green-600 transition-colors" title="Approve"><i class="fa-solid fa-check"></i></a>
+                                        <a href="<?= url('13091998/reviews/' . e($review['id']) . '/approve') ?>" class="p-1.5 text-gray-400 hover:text-green-600 transition-colors" title="Approve"><i class="fa-solid fa-check"></i></a>
                                         <?php endif; ?>
                                         <?php if (($review['status'] ?? '') !== 'rejected'): ?>
-                                        <a href="<?= url('admin/reviews/' . e($review['id']) . '/reject') ?>" class="p-1.5 text-gray-400 hover:text-yellow-600 transition-colors" title="Reject"><i class="fa-solid fa-ban"></i></a>
+                                        <a href="<?= url('13091998/reviews/' . e($review['id']) . '/reject') ?>" class="p-1.5 text-gray-400 hover:text-yellow-600 transition-colors" title="Reject"><i class="fa-solid fa-ban"></i></a>
                                         <?php endif; ?>
                                         <button onclick="confirmDelete(<?= e($review['id']) ?>)" class="p-1.5 text-gray-400 hover:text-red-600 transition-colors" title="Delete"><i class="fa-solid fa-trash"></i></button>
                                     </div>
@@ -84,13 +84,13 @@ $pagination = $pagination ?? ['currentPage' => 1, 'totalPages' => 1, 'hasPrev' =
             <?= \App\Core\View::component('Pagination', [
                 'currentPage' => $pagination['currentPage'],
                 'totalPages' => $pagination['totalPages'],
-                'baseUrl' => url('admin/reviews?'),
+                'baseUrl' => url('13091998/reviews?'),
             ]) ?>
 <?php startSection('scripts') ?>
 <script>
 function confirmDelete(id) {
     if (confirm('Are you sure you want to delete this review?')) {
-        window.location.href = '<?= url('admin/reviews') ?>/' + id + '/delete';
+        window.location.href = '<?= url('13091998/reviews') ?>/' + id + '/delete';
     }
 }
 </script>

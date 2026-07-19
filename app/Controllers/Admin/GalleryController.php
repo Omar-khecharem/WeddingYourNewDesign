@@ -34,7 +34,7 @@ class GalleryController extends BaseAdminController
                 $title = pathinfo($file['name'], PATHINFO_FILENAME);
                 $stmt = $pdo->prepare("INSERT INTO sg_gallery (title, image, type, created_at) VALUES (:title, :image, 'image', NOW())");
                 $stmt->execute([':title' => $title, ':image' => $filename]);
-                $this->success('Image added to gallery.', url('admin/gallery'));
+                $this->success('Image added to gallery.', url('13091998/gallery'));
                 return;
             }
         }
@@ -76,7 +76,7 @@ class GalleryController extends BaseAdminController
             $data[':id'] = $id;
             $pdo->prepare("UPDATE sg_gallery SET " . implode(', ', $setClauses) . " WHERE id = :id")->execute($data);
         }
-        $this->success('Gallery item updated.', url('admin/gallery'));
+        $this->success('Gallery item updated.', url('13091998/gallery'));
     }
 
     public function destroy(Request $request, Response $response): void
@@ -84,6 +84,6 @@ class GalleryController extends BaseAdminController
         $id = (int)$request->input('id');
         $pdo = \App\Core\Database::getInstance()->getConnection();
         $pdo->prepare("DELETE FROM sg_gallery WHERE id = :id")->execute([':id' => $id]);
-        $this->success('Image removed from gallery.', url('admin/gallery'));
+        $this->success('Image removed from gallery.', url('13091998/gallery'));
     }
 }

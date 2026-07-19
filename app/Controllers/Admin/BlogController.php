@@ -57,7 +57,7 @@ class BlogController extends BaseAdminController
         ]);
 
         Session::flash('success', 'Blog post created successfully.');
-        $this->redirect(url('admin/blog'));
+        $this->redirect(url('13091998/blog'));
     }
 
     public function edit(Request $request, Response $response): string
@@ -110,7 +110,7 @@ class BlogController extends BaseAdminController
         ]);
 
         Session::flash('success', 'Blog post updated successfully.');
-        $this->redirect(url('admin/blog'));
+        $this->redirect(url('13091998/blog'));
     }
 
     public function destroy(Request $request, Response $response): void
@@ -127,6 +127,6 @@ class BlogController extends BaseAdminController
             $pdo->prepare("DELETE FROM sg_blogs WHERE id = :id")->execute([':id' => $id]);
             Session::flash('success', 'Blog post deleted successfully.');
         }
-        $this->redirect(url('admin/blog'));
+        $this->redirect(url('13091998/blog'));
     }
 }

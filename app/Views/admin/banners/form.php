@@ -1,11 +1,11 @@
 <?php $banner = $banner ?? null; $isEdit = !empty($banner); ?>
 <div class="flex items-center justify-between mb-6">
     <div>
-        <a href="<?= url('admin/banners') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Banners</a>
+        <a href="<?= url('13091998/banners') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Banners</a>
         <h1 class="text-2xl font-bold text-gray-800"><?= $isEdit ? 'Edit Banner' : 'Add Banner' ?></h1>
     </div>
 </div>
-<form method="POST" action="<?= $isEdit ? url('admin/banners/update/' . $banner['id']) : url('admin/banners') ?>" enctype="multipart/form-data" class="max-w-2xl">
+<form method="POST" action="<?= $isEdit ? url('13091998/banners/update/' . $banner['id']) : url('13091998/banners') ?>" enctype="multipart/form-data" class="max-w-2xl">
     <?= \App\Helpers\Security::csrfField() ?>
     <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -13,9 +13,9 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Position</label>
                     <select name="position" id="positionSelect" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary-red/20 focus:border-primary-red outline-none">
-                        <option value="hero_left" <?= (old('position', $banner['position'] ?? '') === 'hero_left') ? 'selected' : '' ?>>Hero Left (Video)</option>
-                        <option value="hero_right" <?= (old('position', $banner['position'] ?? '') === 'hero_right') ? 'selected' : '' ?>>Hero Right (Image)</option>
-                        <option value="bride_video" <?= (old('position', $banner['position'] ?? '') === 'bride_video') ? 'selected' : '' ?>>Bride Video (Video)</option>
+                        <option value="hero_left" <?= (old('position', $banner['position'] ?? '') === 'hero_left') ? 'selected' : '' ?>>Hero Left (Image)</option>
+                        <option value="hero_right" <?= (old('position', $banner['position'] ?? '') === 'hero_right') ? 'selected' : '' ?>>Hero Right Carousel (Image)</option>
+                        <option value="bride_video" <?= (old('position', $banner['position'] ?? '') === 'bride_video') ? 'selected' : '' ?>>Brand Story (Image)</option>
                     </select>
                 </div>
                 <div>
@@ -64,7 +64,7 @@
         <div class="flex items-center justify-between pt-4 border-t border-gray-100">
             <p class="text-xs text-gray-400"><i class="fa-solid fa-rotate mr-1"></i> Cache auto-cleared on save</p>
             <div class="flex gap-2">
-                <a href="<?= url('admin/banners') ?>" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Cancel</a>
+                <a href="<?= url('13091998/banners') ?>" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Cancel</a>
                 <button type="submit" class="bg-primary-red text-white px-6 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2 shadow-sm shadow-red-200">
                     <i class="fa-solid fa-save"></i> <?= $isEdit ? 'Update' : 'Upload' ?>
                 </button>

@@ -4,7 +4,7 @@
         <h1 class="text-2xl font-bold text-gray-800">Category Cards</h1>
         <p class="text-sm text-gray-500">Manage section cards (Mukut & Topor, Wedding Items, etc.)</p>
     </div>
-    <a href="<?= url('admin/category-cards/create') ?>" class="bg-primary-red text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2">
+    <a href="<?= url('13091998/category-cards/create') ?>" class="bg-primary-red text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2">
         <i class="fa-solid fa-plus"></i> Add Card
     </a>
 </div>
@@ -47,7 +47,7 @@
                 </td>
                 <td class="px-5 py-3">
                     <div class="flex items-center gap-1">
-                        <a href="<?= url('admin/category-cards/edit/' . $c['id']) ?>" class="p-1.5 text-gray-400 hover:text-primary-red" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                        <a href="<?= url('13091998/category-cards/edit/' . $c['id']) ?>" class="p-1.5 text-gray-400 hover:text-primary-red" title="Edit"><i class="fa-solid fa-pen"></i></a>
                         <button onclick="confirmDelete(<?= $c['id'] ?>)" class="p-1.5 text-gray-400 hover:text-red-600" title="Delete"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </td>
@@ -58,5 +58,5 @@
     </table>
 </div>
 <?php startSection('scripts') ?>
-<script>function confirmDelete(id){if(confirm('Delete this card?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('admin/category-cards/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}</script>
+<script>function confirmDelete(id){if(confirm('Delete this card?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('13091998/category-cards/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}</script>
 <?php endSection() ?>

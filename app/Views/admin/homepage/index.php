@@ -14,7 +14,7 @@ $homepageSettings = $homepageSettings ?? [];
 </div>
 
 <div class="bg-white rounded-xl border border-gray-200 p-4 mb-6">
-    <form method="GET" action="<?= url('admin/homepage') ?>" class="flex flex-wrap items-end gap-3">
+    <form method="GET" action="<?= url('13091998/homepage') ?>" class="flex flex-wrap items-end gap-3">
         <div>
             <label class="block text-xs font-medium text-gray-500 mb-1">Section</label>
             <select name="filter" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-primary-red/20 focus:border-primary-red outline-none">
@@ -37,7 +37,7 @@ $homepageSettings = $homepageSettings ?? [];
             <input type="text" name="subcategory" value="<?= e($subcategorySlug) ?>" placeholder="subcategory-slug" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-primary-red/20 focus:border-primary-red outline-none">
         </div>
         <button type="submit" class="bg-primary-red text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-all">Filter</button>
-        <a href="<?= url('admin/homepage') ?>" class="border border-gray-300 text-gray-600 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Reset</a>
+        <a href="<?= url('13091998/homepage') ?>" class="border border-gray-300 text-gray-600 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Reset</a>
     </form>
 </div>
 
@@ -50,11 +50,11 @@ $homepageSettings = $homepageSettings ?? [];
     <?php else: ?>
     <?php foreach ($products as $p): ?>
     <div class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all group">
-        <a href="<?= url('admin/products/edit/' . e($p['id'])) ?>" class="block aspect-square bg-gray-50 overflow-hidden">
+        <a href="<?= url('13091998/products/edit/' . e($p['id'])) ?>" class="block aspect-square bg-gray-50 overflow-hidden">
             <img src="<?= e($p['image'] ?? asset('images/placeholder.png')) ?>" alt="<?= e($p['name'] ?? '') ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
         </a>
         <div class="p-3 space-y-2">
-            <a href="<?= url('admin/products/edit/' . e($p['id'])) ?>" class="block text-sm font-semibold text-gray-800 hover:text-primary-red transition-colors leading-tight line-clamp-2"><?= e($p['name'] ?? '') ?></a>
+            <a href="<?= url('13091998/products/edit/' . e($p['id'])) ?>" class="block text-sm font-semibold text-gray-800 hover:text-primary-red transition-colors leading-tight line-clamp-2"><?= e($p['name'] ?? '') ?></a>
             <?php if (!empty($p['category_name'])): ?>
             <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium"><?= e($p['category_name']) ?></p>
             <?php endif; ?>
@@ -70,16 +70,16 @@ $homepageSettings = $homepageSettings ?? [];
                 <?php endif; ?>
             </div>
             <div class="flex items-center gap-1.5 pt-1">
-                <form method="POST" action="<?= url('admin/homepage/toggle-featured') ?>" class="inline">
+                <form method="POST" action="<?= url('13091998/homepage/toggle-featured') ?>" class="inline">
                     <input type="hidden" name="id" value="<?= e($p['id']) ?>">
-                    <input type="hidden" name="redirect" value="<?= e(url('admin/homepage?' . http_build_query(['filter' => $filter, 'category' => $categorySlug, 'subcategory' => $subcategorySlug]))) ?>">
+                    <input type="hidden" name="redirect" value="<?= e(url('13091998/homepage?' . http_build_query(['filter' => $filter, 'category' => $categorySlug, 'subcategory' => $subcategorySlug]))) ?>">
                     <button type="submit" class="text-[11px] font-medium px-2 py-1 rounded transition-colors <?= ($p['is_featured'] ?? false) ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200' ?>">
                         <i class="fa-solid fa-star <?= ($p['is_featured'] ?? false) ? 'text-yellow-500' : '' ?>"></i> Featured
                     </button>
                 </form>
-                <form method="POST" action="<?= url('admin/homepage/toggle-trending') ?>" class="inline">
+                <form method="POST" action="<?= url('13091998/homepage/toggle-trending') ?>" class="inline">
                     <input type="hidden" name="id" value="<?= e($p['id']) ?>">
-                    <input type="hidden" name="redirect" value="<?= e(url('admin/homepage?' . http_build_query(['filter' => $filter, 'category' => $categorySlug, 'subcategory' => $subcategorySlug]))) ?>">
+                    <input type="hidden" name="redirect" value="<?= e(url('13091998/homepage?' . http_build_query(['filter' => $filter, 'category' => $categorySlug, 'subcategory' => $subcategorySlug]))) ?>">
                     <button type="submit" class="text-[11px] font-medium px-2 py-1 rounded transition-colors <?= ($p['is_trending'] ?? false) ? 'bg-orange-100 text-orange-700 hover:bg-orange-200' : 'bg-gray-100 text-gray-500 hover:bg-gray-200' ?>">
                         <i class="fa-solid fa-fire <?= ($p['is_trending'] ?? false) ? 'text-orange-500' : '' ?>"></i> Trending
                     </button>
@@ -99,7 +99,7 @@ $homepageSettings = $homepageSettings ?? [];
             <p class="text-sm text-gray-500">Video showcase, WhatsApp, coupon banner &mdash; saved immediately</p>
         </div>
     </div>
-    <form method="POST" action="<?= url('admin/homepage/settings') ?>" enctype="multipart/form-data" class="space-y-4">
+    <form method="POST" action="<?= url('13091998/homepage/settings') ?>" enctype="multipart/form-data" class="space-y-4">
         <?php if (!empty($homepageSettings)): ?>
         <?php foreach ($homepageSettings as $key => $value): ?>
         <div>

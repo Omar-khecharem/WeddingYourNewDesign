@@ -18,7 +18,7 @@ $compareCount = $compareCount ?? 0;
 $isLoggedIn = $isLoggedIn ?? false;
 $authUser = $authUser ?? null;
 $isAdmin = $isLoggedIn && ($authUser['role'] ?? '') === 'admin';
-$profileUrl = $isAdmin ? url('admin') : url('account');
+$profileUrl = $isAdmin ? url('13091998') : url('account');
 $appName = \App\Models\Setting::get('site_name', 'WeddingYour');
 $appTagline = \App\Models\Setting::get('site_tagline', APP_TAGLINE);
 $facebookUrl = \App\Models\Setting::get('social_facebook', SOCIAL_FACEBOOK);
@@ -269,7 +269,7 @@ try {
         </a>
 
         <?php if ($isAdmin): ?>
-        <a href="<?= url('admin') ?>" class="flex items-center gap-3 px-5 py-3 text-sm font-bold text-premium-charcoal hover:bg-premium-blush hover:text-premium-burgundy transition-colors border-b border-premium-warm-gray">
+        <a href="<?= url('13091998') ?>" class="flex items-center gap-3 px-5 py-3 text-sm font-bold text-premium-charcoal hover:bg-premium-blush hover:text-premium-burgundy transition-colors border-b border-premium-warm-gray">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/></svg>
           Admin Dashboard
         </a>

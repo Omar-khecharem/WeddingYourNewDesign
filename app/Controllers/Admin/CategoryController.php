@@ -60,12 +60,12 @@ class CategoryController extends BaseAdminController
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $filename = Image::upload($file, CATEGORY_IMAGES_DIR, $data['name']);
+            $filename = Image::upload($file, CATEGORY_IMAGES_DIR, 'cat_' . $id . '_' . uniqid());
             if ($filename) {
                 $pdo->prepare("UPDATE sg_categories SET image = :img WHERE id = :id")->execute([':img' => $filename, ':id' => $id]);
             }
         }
-        $this->success('Category created successfully.', url('admin/categories'));
+        $this->success('Category created successfully.', url('13091998/categories'));
     }
 
     public function edit(Request $request, Response $response): string
@@ -78,7 +78,7 @@ class CategoryController extends BaseAdminController
 
         if (!$category) {
             $this->flash('error', 'Category not found.');
-            $this->redirect(url('admin/categories'));
+            $this->redirect(url('13091998/categories'));
         }
 
         $parents = $pdo->query("SELECT id, name FROM sg_categories WHERE id != {$id} AND parent_id IS NULL AND status = 1 ORDER BY name")->fetchAll(\PDO::FETCH_ASSOC);
@@ -101,27 +101,43 @@ class CategoryController extends BaseAdminController
 
         $pdo = \App\Core\Database::getInstance()->getConnection();
 
+        $stmt = $pdo->prepare("SELECT image FROM sg_categories WHERE id = :id");
+        $stmt->execute([':id' => $id]);
+        $oldImage = $stmt->fetchColumn();
+
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $filename = Image::upload($file, CATEGORY_IMAGES_DIR, $data['name']);
+            $filename = Image::upload($file, CATEGORY_IMAGES_DIR, 'cat_' . $id . '_' . uniqid());
             if ($filename) {
+                if ($oldImage) {
+                    $oldPath = UPLOADS_DIR . DS . str_replace('/', DS, $oldImage);
+                    if (file_exists($oldPath)) @unlink($oldPath);
+                }
                 $pdo->prepare("UPDATE sg_categories SET image = :img WHERE id = :id")->execute([':img' => $filename, ':id' => $id]);
             }
-        }
-        if ($request->input('remove_image')) {
+        } elseif ($request->input('remove_image') && $oldImage) {
+            $oldPath = UPLOADS_DIR . DS . str_replace('/', DS, $oldImage);
+            if (file_exists($oldPath)) @unlink($oldPath);
             $pdo->prepare("UPDATE sg_categories SET image = NULL WHERE id = :id")->execute([':id' => $id]);
         }
         $stmt = $pdo->prepare("UPDATE sg_categories SET parent_id = :parent_id, name = :name, description = :description, sort_order = :sort_order, featured = :featured, status = :status WHERE id = :id");
         $stmt->execute($data);
 
-        $this->success('Category updated successfully.', url('admin/categories'));
+        $this->success('Category updated successfully.', url('13091998/categories'));
     }
 
     public function destroy(Request $request, Response $response): void
     {
         $id = (int)$request->input('id');
         $pdo = \App\Core\Database::getInstance()->getConnection();
+        $stmt = $pdo->prepare("SELECT image FROM sg_categories WHERE id = :id");
+        $stmt->execute([':id' => $id]);
+        $oldImage = $stmt->fetchColumn();
+        if ($oldImage) {
+            $oldPath = UPLOADS_DIR . DS . str_replace('/', DS, $oldImage);
+            if (file_exists($oldPath)) @unlink($oldPath);
+        }
         $pdo->prepare("DELETE FROM sg_categories WHERE id = :id")->execute([':id' => $id]);
-        $this->success('Category deleted.', url('admin/categories'));
+        $this->success('Category deleted.', url('13091998/categories'));
     }
 }

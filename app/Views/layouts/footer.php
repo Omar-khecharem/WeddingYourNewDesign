@@ -65,7 +65,6 @@ $isAdmin = \App\Helpers\Session::has('user') && (\App\Helpers\Session::get('user
           <li><a href="<?= url('account') ?>" class="text-premium-mink">My Account</a></li>
           <li><a href="<?= url('account/wishlist') ?>" class="text-premium-mink">Wishlist</a></li>
           <li><a href="<?= url('account/addresses') ?>" class="text-premium-mink">Addresses</a></li>
-          <li><a href="<?= url('order/track') ?>" class="text-premium-mink">Track Order</a></li>
         </ul>
       </div>
 

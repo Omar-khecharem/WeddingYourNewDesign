@@ -34,7 +34,7 @@ $groupLabels = [
         </nav>
     </div>
     <div class="flex-1 space-y-6">
-        <form id="settings-form" method="POST" action="<?= url('admin/settings') ?>" enctype="multipart/form-data">
+        <form id="settings-form" method="POST" action="<?= url('13091998/settings') ?>" enctype="multipart/form-data">
             <?= \App\Helpers\Security::csrfField() ?>
             <input type="hidden" name="clear_cache" value="1">
             <?php foreach ($groups as $groupKey => $groupSettings): ?>
@@ -99,7 +99,7 @@ $groupLabels = [
             <div class="flex items-center justify-between bg-white rounded-xl border border-gray-200 p-4 sticky bottom-0 shadow-lg">
                 <p class="text-xs text-gray-400"><i class="fa-solid fa-rotate mr-1"></i> Cache auto-cleared on save &mdash; frontend updates instantly</p>
                 <div class="flex gap-2">
-                    <a href="<?= url('admin/clear-cache') ?>" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all inline-flex items-center gap-1.5">
+                    <a href="<?= url('13091998/clear-cache') ?>" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all inline-flex items-center gap-1.5">
                         <i class="fa-solid fa-rotate text-xs"></i> Clear Cache
                     </a>
                     <button type="submit" class="bg-primary-red text-white px-6 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-2 shadow-sm shadow-red-200">

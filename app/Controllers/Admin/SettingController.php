@@ -97,6 +97,6 @@ class SettingController extends BaseAdminController
         }
 
         $this->flash('success', 'Settings saved successfully &mdash; frontend is now updated.');
-        $this->redirect(url('admin/settings'));
+        $this->redirect(url('13091998/settings'));
     }
 }

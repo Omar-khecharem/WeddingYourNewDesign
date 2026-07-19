@@ -33,7 +33,7 @@ $status = $status ?? '';
                         <i class="fa-solid fa-search mr-1.5"></i> Filter
                     </button>
                     <?php if ($search || $role || $status !== ''): ?>
-                    <a href="<?= url('admin/users') ?>" class="border border-gray-300 text-gray-600 px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Clear</a>
+                    <a href="<?= url('13091998/users') ?>" class="border border-gray-300 text-gray-600 px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all">Clear</a>
                     <?php endif; ?>
                 </form>
             </div>
@@ -99,9 +99,9 @@ $status = $status ?? '';
                                 <td class="px-5 py-3 text-gray-500 whitespace-nowrap"><?= formatDate($user['created_at'] ?? '') ?></td>
                                 <td class="px-5 py-3">
                                     <div class="flex items-center gap-1">
-                                        <a href="<?= url('admin/users/' . e($user['id']) . '/edit') ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                                        <a href="<?= url('13091998/users/' . e($user['id']) . '/edit') ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="Edit"><i class="fa-solid fa-pen"></i></a>
                                         <?php if ((int)($user['status'] ?? 1) === 1): ?>
-                                        <a href="<?= url('admin/users/' . e($user['id']) . '/ban') ?>" class="p-1.5 text-gray-400 hover:text-red-600 transition-colors" title="Ban"><i class="fa-solid fa-ban"></i></a>
+                                        <a href="<?= url('13091998/users/' . e($user['id']) . '/ban') ?>" class="p-1.5 text-gray-400 hover:text-red-600 transition-colors" title="Ban"><i class="fa-solid fa-ban"></i></a>
                                         <?php endif; ?>
                                     </div>
                                 </td>
@@ -113,7 +113,7 @@ $status = $status ?? '';
                 </div>
             </div>
             <?php
-            $baseUrl = url('admin/users?');
+            $baseUrl = url('13091998/users?');
             $queryParams = [];
             if ($search) $queryParams[] = 'search=' . urlencode($search);
             if ($role) $queryParams[] = 'role=' . urlencode($role);

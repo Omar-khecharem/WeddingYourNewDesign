@@ -44,7 +44,7 @@ echo \App\Core\View::include('layouts.navbar', [
                 ?>
                 <a href="<?= $link['url'] ?>"
                    class="flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-all
-                          <?= $active ? 'bg-primary-red/10 text-primary-red font-bold' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' ?>
+                           <?= $active ? 'bg-premium-burgundy/10 text-premium-burgundy font-bold' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' ?>
                           <?= $isLogout ? 'text-red-500 hover:bg-red-50' : '' ?>">
                     <i class="fa-solid <?= $link['icon'] ?>"></i>
                     <span><?= $link['label'] ?></span>
@@ -56,7 +56,7 @@ echo \App\Core\View::include('layouts.navbar', [
         <!-- Sidebar -->
         <aside class="hidden lg:block lg:w-64 flex-shrink-0">
             <div class="bg-white rounded-xl border border-gray-200 overflow-hidden sticky top-28">
-                <div class="bg-primary-red p-5 text-white text-center">
+                <div class="bg-premium-burgundy p-5 text-white text-center">
                     <div class="w-14 h-14 rounded-full bg-white/20 mx-auto flex items-center justify-center text-xl font-bold mb-2">
                         <?= e(strtoupper(mb_substr($authUser['name'] ?? 'U', 0, 1))) ?>
                     </div>
@@ -70,7 +70,7 @@ echo \App\Core\View::include('layouts.navbar', [
                     ?>
                     <a href="<?= $link['url'] ?>"
                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all
-                              <?= $active ? 'bg-primary-red/10 text-primary-red font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' ?>
+                               <?= $active ? 'bg-premium-burgundy/10 text-premium-burgundy font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' ?>
                               <?= $isLogout ? 'mt-3 border-t border-gray-100 pt-3.5 text-red-500 hover:text-red-600' : '' ?>">
                         <i class="fa-solid <?= $link['icon'] ?> w-4 text-center text-xs"></i>
                         <span><?= $link['label'] ?></span>

@@ -43,7 +43,7 @@
                     </td>
                     <td class="px-5 py-3">
                         <div class="flex items-center gap-1">
-                            <a href="<?= url('admin/subcategories/edit/' . $sub['id']) ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                            <a href="<?= url('13091998/subcategories/edit/' . $sub['id']) ?>" class="p-1.5 text-gray-400 hover:text-primary-red transition-colors" title="Edit"><i class="fa-solid fa-pen"></i></a>
                             <button onclick="confirmDelete(<?= $sub['id'] ?>)" class="p-1.5 text-gray-400 hover:text-red-600 transition-colors" title="Delete"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </td>
@@ -55,5 +55,5 @@
     </div>
 </div>
 <?php startSection('scripts') ?>
-<script>function confirmDelete(id){if(confirm('Delete this subcategory?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('admin/subcategories/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}</script>
+<script>function confirmDelete(id){if(confirm('Delete this subcategory?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('13091998/subcategories/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}</script>
 <?php endSection() ?>

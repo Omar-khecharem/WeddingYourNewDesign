@@ -3,7 +3,7 @@ $message = $message ?? [];
 ?>
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
     <div>
-        <a href="<?= url('admin/contacts') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block">
+        <a href="<?= url('13091998/contacts') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block">
             <i class="fa-solid fa-arrow-left mr-1"></i> Back to Messages
         </a>
         <h1 class="text-2xl font-bold text-gray-800">Message from <?= e($message['name'] ?? 'Unknown') ?></h1>
@@ -82,7 +82,7 @@ $message = $message ?? [];
                 <a href="mailto:<?= e($message['email'] ?? '') ?>" class="flex items-center gap-2 px-3 py-2.5 bg-gray-50 rounded-lg text-sm text-gray-700 hover:bg-primary-red/5 hover:text-primary-red transition-all">
                     <i class="fa-solid fa-envelope w-5 text-center text-gray-400"></i> Send Email
                 </a>
-                <form method="POST" action="<?= url('admin/contacts/delete') ?>" onsubmit="return confirm('Delete this message permanently?')">
+                <form method="POST" action="<?= url('13091998/contacts/delete') ?>" onsubmit="return confirm('Delete this message permanently?')">
                     <?= \App\Helpers\Security::csrfField() ?>
                     <input type="hidden" name="id" value="<?= e($message['id'] ?? '') ?>">
                     <button type="submit" class="w-full flex items-center gap-2 px-3 py-2.5 bg-gray-50 rounded-lg text-sm text-red-600 hover:bg-red-50 transition-all">

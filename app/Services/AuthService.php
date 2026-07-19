@@ -79,16 +79,17 @@ class AuthService
     /**
      * Authenticate a user
      */
-    public function login(string $email, string $password): array
+    public function login(string $email, string $password, bool $skipRateLimit = false): array
     {
-        // Check rate limiting
-        $rateKey = 'login_' . ($_SERVER['REMOTE_ADDR'] ?? '127.0.0.1');
-        if (!Security::checkRateLimit($rateKey, MAX_LOGIN_ATTEMPTS, LOGIN_LOCKOUT_TIME * 60)) {
-            return ['success' => false, 'message' => 'Too many login attempts. Please try again after ' . LOGIN_LOCKOUT_TIME . ' minutes.'];
+        if (!$skipRateLimit) {
+            $rateKey = 'login_' . ($_SERVER['REMOTE_ADDR'] ?? '127.0.0.1');
+            if (!Security::checkRateLimit($rateKey, MAX_LOGIN_ATTEMPTS, LOGIN_LOCKOUT_TIME * 60)) {
+                return ['success' => false, 'message' => 'Too many login attempts. Please try again after ' . LOGIN_LOCKOUT_TIME . ' minutes.'];
+            }
         }
 
         $pdo = $this->db->getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM sg_users WHERE email = :email LIMIT 1");
+        $stmt = $pdo->prepare("SELECT u.*, r.slug AS role FROM sg_users u LEFT JOIN sg_roles r ON r.id = u.role_id WHERE u.email = :email LIMIT 1");
         $stmt->execute([':email' => $email]);
         $user = $stmt->fetch();
 
@@ -151,32 +152,27 @@ class AuthService
     }
 
     /**
-     * Send password reset email
+     * Send password reset request to admin (no email sent to user)
      */
     public function forgotPassword(string $email): array
     {
         $pdo = $this->db->getConnection();
-        $stmt = $pdo->prepare("SELECT id FROM sg_users WHERE email = :email LIMIT 1");
+        $stmt = $pdo->prepare("SELECT id, name FROM sg_users WHERE email = :email LIMIT 1");
         $stmt->execute([':email' => $email]);
         $user = $stmt->fetch();
 
         if (!$user) {
-            // Don't reveal if email exists for security
-            return ['success' => true, 'message' => 'If the email exists, a reset link has been sent.'];
+            return ['success' => true, 'message' => 'If the email exists, the admin has been notified.'];
         }
 
-        $token = Security::generateToken();
-        $expires = date('Y-m-d H:i:s', time() + 3600); // 1 hour
+        $expires = date('Y-m-d H:i:s', time() + 86400); // 24 hours
 
-        $stmt = $pdo->prepare("INSERT INTO sg_password_resets (email, token, expires_at) VALUES (:email, :token, :expires)");
-        $stmt->execute([':email' => $email, ':token' => $token, ':expires' => $expires]);
+        $stmt = $pdo->prepare("INSERT INTO sg_password_resets (email, token, expires_at, admin_request) VALUES (:email, :token, :expires, 1)");
+        $stmt->execute([':email' => $email, ':token' => '', ':expires' => $expires]);
 
-        // Send email
-        $this->sendResetEmail($email, $token);
+        logActivity('password_reset', "Password reset requested for: {$email} (pending admin)");
 
-        logActivity('password_reset', "Password reset requested: {$email}");
-
-        return ['success' => true, 'message' => 'If the email exists, a reset link has been sent.'];
+        return ['success' => true, 'message' => 'Your request has been sent to the admin. Please wait for them to reset your password.'];
     }
 
     /**

@@ -18,7 +18,7 @@ $activeTab = $_GET['tab'] ?? 'error';
                     <button onclick="location.reload()" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors inline-flex items-center gap-2">
                         <i class="fa-solid fa-rotate"></i> Refresh
                     </button>
-                    <form method="POST" action="<?= url('admin/logs/clean') ?>" onsubmit="return confirm('Clean all logs now? This will remove old activity logs and clear the error log file.')">
+                    <form method="POST" action="<?= url('13091998/logs/clean') ?>" onsubmit="return confirm('Clean all logs now? This will remove old activity logs and clear the error log file.')">
                         <?= \App\Helpers\Security::csrfField() ?>
                         <button type="submit" class="border border-red-300 text-red-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-50 transition-colors inline-flex items-center gap-2">
                             <i class="fa-solid fa-broom"></i> Clean Logs Now
@@ -48,7 +48,7 @@ $activeTab = $_GET['tab'] ?? 'error';
                     <span>Last cleanup: <strong class="text-gray-700"><?= e(date('d M Y H:i', strtotime($lastCleanup))) ?></strong></span>
                     <?php endif; ?>
                 </div>
-                <a href="<?= url('admin/settings#group-logs') ?>" class="text-primary-red hover:underline font-medium">Configure</a>
+                <a href="<?= url('13091998/settings#group-logs') ?>" class="text-primary-red hover:underline font-medium">Configure</a>
             </div>
             <?php endif; ?>
 
@@ -156,7 +156,7 @@ $activeTab = $_GET['tab'] ?? 'error';
                             <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="px-5 py-3 text-gray-500 whitespace-nowrap text-xs"><?= e($tx['created_at'] ?? '') ?></td>
                                 <td class="px-5 py-3">
-                                    <a href="<?= url('admin/orders/' . e($tx['id'])) ?>" class="text-primary-red hover:underline font-medium">#<?= e($tx['order_number'] ?? $tx['id']) ?></a>
+                                    <a href="<?= url('13091998/orders/' . e($tx['id'])) ?>" class="text-primary-red hover:underline font-medium">#<?= e($tx['order_number'] ?? $tx['id']) ?></a>
                                 </td>
                                 <td class="px-5 py-3 text-gray-700"><?= e($tx['user_name'] ?? 'Guest') ?></td>
                                 <td class="px-5 py-3">

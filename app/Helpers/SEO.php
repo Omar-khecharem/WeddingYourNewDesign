@@ -247,7 +247,7 @@ class SEO
     {
         $content = "User-agent: *\n";
         $content .= "Allow: /\n";
-        $content .= "Disallow: /admin/\n";
+        $content .= "Disallow: /13091998/\n";
         $content .= "Disallow: /cart/\n";
         $content .= "Disallow: /checkout/\n";
         $content .= "Disallow: /account/\n";

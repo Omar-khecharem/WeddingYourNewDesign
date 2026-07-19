@@ -117,7 +117,7 @@ class DashboardController extends BaseAdminController
         if (!empty($parts)) $msg .= ' Removed: ' . implode(', ', $parts) . '.';
 
         $this->flash('success', $msg);
-        $this->redirect(url('admin/logs'));
+        $this->redirect(url('13091998/logs'));
     }
 
     private function autoCleanupLogs(\PDO $pdo): void

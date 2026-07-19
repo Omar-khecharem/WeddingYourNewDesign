@@ -9,7 +9,7 @@
     <div class="lg:col-span-1">
         <div class="bg-white rounded-xl border border-gray-200 p-5">
             <h2 class="text-lg font-bold text-gray-800 mb-4">Add Deal Image</h2>
-            <form method="POST" action="<?= url('admin/deals') ?>" enctype="multipart/form-data" class="space-y-4">
+            <form method="POST" action="<?= url('13091998/deals') ?>" enctype="multipart/form-data" class="space-y-4">
                 <?= \App\Helpers\Security::csrfField() ?>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Image <span class="text-red-500">*</span></label>
@@ -43,7 +43,7 @@
 </div>
 <?php startSection('scripts') ?>
 <script>
-function confirmDelete(id){if(confirm('Delete this deal?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('admin/deals/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}
+function confirmDelete(id){if(confirm('Delete this deal?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('13091998/deals/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}
 function previewDealImage(input){if(input.files&&input.files[0]){var r=new FileReader();r.onload=function(e){var p=document.getElementById('deal-image-preview');p.src=e.target.result;p.classList.remove('hidden');document.getElementById('deal-image-icon').classList.add('hidden');};r.readAsDataURL(input.files[0]);}}
 </script>
 <?php endSection() ?>

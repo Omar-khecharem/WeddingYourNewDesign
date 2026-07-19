@@ -7,7 +7,7 @@
     <div class="max-w-md w-full bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
         <div class="text-center mb-8">
             <div class="w-16 h-16 rounded-full bg-premium-burgundy text-white text-2xl flex items-center justify-center mx-auto mb-4">
-                <i class="fa-regular fa-user-plus"></i>
+                <i class="fa-solid fa-user-plus"></i>
             </div>
             <h1 class="text-2xl font-bold text-gray-800">Create Account</h1>
             <p class="text-gray-500 text-sm mt-1">Join <?= e($appName ?? 'WeddingYour') ?> today</p>

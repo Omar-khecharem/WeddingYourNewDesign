@@ -6,13 +6,13 @@ $timeline = $order['timeline'] ?? [];
 
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
-                    <a href="<?= url('admin/orders') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Orders</a>
+                    <a href="<?= url('13091998/orders') ?>" class="text-sm text-gray-500 hover:text-primary-red transition-colors mb-1 inline-block"><i class="fa-solid fa-arrow-left mr-1"></i> Back to Orders</a>
                     <h1 class="text-2xl font-bold text-gray-800">Order #<?= e($order['order_number'] ?? $order['id']) ?></h1>
                     <p class="text-sm text-gray-500">Placed on <?= formatDate($order['created_at'] ?? '', 'd M Y \a\t H:i') ?></p>
                 </div>
                 <div class="flex gap-2">
-                    <a href="<?= url('admin/orders/' . e($order['id']) . '/invoice') ?>" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"><i class="fa-solid fa-file-pdf mr-1.5"></i> Download Invoice</a>
-                    <a href="<?= url('admin/orders/' . e($order['id']) . '/print') ?>" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"><i class="fa-solid fa-print mr-1.5"></i> Print</a>
+                    <a href="<?= url('13091998/orders/' . e($order['id']) . '/invoice') ?>" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"><i class="fa-solid fa-file-pdf mr-1.5"></i> Download Invoice</a>
+                    <a href="<?= url('13091998/orders/' . e($order['id']) . '/print') ?>" class="border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"><i class="fa-solid fa-print mr-1.5"></i> Print</a>
                 </div>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
@@ -73,7 +73,7 @@ $timeline = $order['timeline'] ?? [];
                     </div>
                     <div class="bg-white rounded-xl border border-gray-200 p-5">
                         <h2 class="text-lg font-bold text-gray-800 mb-4">Status Update</h2>
-                        <form method="POST" action="<?= url('admin/orders/status') ?>" class="flex flex-wrap items-end gap-3">
+                        <form method="POST" action="<?= url('13091998/orders/status') ?>" class="flex flex-wrap items-end gap-3">
                             <?= \App\Helpers\Security::csrfField() ?>
                             <input type="hidden" name="order_id" value="<?= (int)($order['id'] ?? 0) ?>">
                             <div>

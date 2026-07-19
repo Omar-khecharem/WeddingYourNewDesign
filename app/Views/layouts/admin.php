@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e($metaTitle ?? 'Admin - ' . \App\Models\Setting::get('site_name', 'WeddingYour')) ?></title>
-    <link rel="icon" type="image/png" href="<?= e(\App\Models\Setting::get('site_logo', asset('images/favicon.png'))) ?>">
-    <link rel="shortcut icon" href="<?= e(\App\Models\Setting::get('site_logo', asset('images/favicon.png'))) ?>">
+    <?php $adminFavicon = \App\Models\Setting::get('site_favicon', ''); if (empty($adminFavicon) && file_exists(PUBLIC_DIR . DS . 'uploads' . DS . 'site_favicon.png')) $adminFavicon = 'site_favicon.png'; ?>
+    <?php if ($adminFavicon): ?>
+    <link rel="icon" href="<?= uploadUrl($adminFavicon) ?>">
+    <?php else: ?>
+    <link rel="icon" type="image/svg+xml" href="<?= asset('images/favicon.svg') ?>">
+    <?php endif; ?>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -47,7 +51,7 @@
             <div class="p-5 border-b border-gray-100">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <?php $adminLogo = \App\Models\Setting::get('site_logo', ''); if (empty($adminLogo) && file_exists(PUBLIC_DIR . DS . 'uploads' . DS . 'site_logo.png')) $adminLogo = 'site_logo.png'; ?>
+                        <?php $adminLogo = \App\Models\Setting::get('site_logo', ''); if ($adminLogo && !file_exists(PUBLIC_DIR . DS . 'uploads' . DS . $adminLogo)) $adminLogo = ''; if (empty($adminLogo) && file_exists(PUBLIC_DIR . DS . 'uploads' . DS . 'site_logo.png')) $adminLogo = 'site_logo.png'; ?>
                         <?php if ($adminLogo): ?>
                         <img src="<?= uploadUrl($adminLogo) ?>" alt="Logo" class="h-8 w-auto object-contain">
                         <?php else: ?>
@@ -69,27 +73,38 @@
             <nav class="p-3 space-y-0.5">
                 <?php
                 $currentUri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-                $basePath = rtrim(dirname(parse_url(url('admin'), PHP_URL_PATH)), '/');
+                $basePath = rtrim(dirname(parse_url(url('13091998'), PHP_URL_PATH)), '/');
                 $isActive = function($path) use ($currentUri, $basePath) {
-                    if ($path === $basePath . '/admin') return $currentUri === $basePath . '/admin';
+                    if ($path === $basePath . '/13091998') return $currentUri === $basePath . '/13091998';
                     return strpos($currentUri, $path) === 0;
                 };
-                $navItems = [
-                    ['url' => url('admin'), 'label' => 'Dashboard', 'icon' => 'fa-chart-pie'],
-                    ['url' => url('admin/products'), 'label' => 'Products', 'icon' => 'fa-box'],
-                    ['url' => url('admin/categories'), 'label' => 'Categories', 'icon' => 'fa-folder'],
-                    ['url' => url('admin/orders'), 'label' => 'Orders', 'icon' => 'fa-truck'],
-                    ['url' => url('admin/users'), 'label' => 'Users', 'icon' => 'fa-users'],
-                    ['url' => url('admin/reviews'), 'label' => 'Reviews', 'icon' => 'fa-star'],
-                    ['url' => url('admin/coupons'), 'label' => 'Coupons', 'icon' => 'fa-tag'],
-                    ['url' => url('admin/pages'), 'label' => 'Pages', 'icon' => 'fa-file-lines'],
-                    ['url' => url('admin/blog'), 'label' => 'Blog', 'icon' => 'fa-newspaper'],
-                    ['url' => url('admin/contacts'), 'label' => 'Contact Messages', 'icon' => 'fa-envelope'],
+                $pdo = \App\Core\Database::getInstance()->getConnection();
+                $viewedAt = \App\Helpers\Session::get('forgot_requests_viewed_at', 0);
+                $pendingResetStmt = $pdo->prepare("SELECT COUNT(*) FROM sg_password_resets WHERE admin_request = 1 AND used = 0 AND created_at > :viewed");
+                $pendingResetStmt->execute([':viewed' => $viewedAt ? date('Y-m-d H:i:s', $viewedAt) : '1970-01-01 00:00:00']);
+                $pendingResetCount = (int)$pendingResetStmt->fetchColumn();
 
-                    ['url' => url('admin/banners'), 'label' => 'Banners', 'icon' => 'fa-images'],
-                    ['url' => url('admin/deals'), 'label' => 'Best Deals', 'icon' => 'fa-percent'],
-                    ['url' => url('admin/category-cards'), 'label' => 'Section Cards', 'icon' => 'fa-layer-group'],
-                    ['url' => url('admin/gallery'), 'label' => 'Gallery', 'icon' => 'fa-camera'],
+                $contactsViewedAt = \App\Helpers\Session::get('contacts_viewed_at', 0);
+                $unreadContactsStmt = $pdo->prepare("SELECT COUNT(*) FROM sg_contact_messages WHERE is_read = 0 AND created_at > :viewed");
+                $unreadContactsStmt->execute([':viewed' => $contactsViewedAt ? date('Y-m-d H:i:s', $contactsViewedAt) : '1970-01-01 00:00:00']);
+                $unreadContactsCount = (int)$unreadContactsStmt->fetchColumn();
+                $navItems = [
+                    ['url' => url('13091998'), 'label' => 'Dashboard', 'icon' => 'fa-chart-pie'],
+                    ['url' => url('13091998/products'), 'label' => 'Products', 'icon' => 'fa-box'],
+                    ['url' => url('13091998/categories'), 'label' => 'Categories', 'icon' => 'fa-folder'],
+                    ['url' => url('13091998/orders'), 'label' => 'Orders', 'icon' => 'fa-truck'],
+                    ['url' => url('13091998/users'), 'label' => 'Users', 'icon' => 'fa-users'],
+                    ['url' => url('13091998/reviews'), 'label' => 'Reviews', 'icon' => 'fa-star'],
+                    ['url' => url('13091998/coupons'), 'label' => 'Coupons', 'icon' => 'fa-tag'],
+                    ['url' => url('13091998/pages'), 'label' => 'Pages', 'icon' => 'fa-file-lines'],
+                    ['url' => url('13091998/blog'), 'label' => 'Blog', 'icon' => 'fa-newspaper'],
+                    ['url' => url('13091998/contacts'), 'label' => 'Contact Messages', 'icon' => 'fa-envelope', 'badge' => $unreadContactsCount],
+                    ['url' => url('13091998/forgot-password-requests'), 'label' => 'Password Reset' . ($pendingResetCount > 0 ? ' (' . $pendingResetCount . ')' : ''), 'icon' => 'fa-key', 'badge' => $pendingResetCount],
+
+                    ['url' => url('13091998/banners'), 'label' => 'Banners', 'icon' => 'fa-images'],
+                    ['url' => url('13091998/deals'), 'label' => 'Best Deals', 'icon' => 'fa-percent'],
+                    ['url' => url('13091998/category-cards'), 'label' => 'Section Cards', 'icon' => 'fa-layer-group'],
+                    ['url' => url('13091998/gallery'), 'label' => 'Gallery', 'icon' => 'fa-camera'],
 
                 ];
                 ?>
@@ -99,20 +114,23 @@
                        class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all <?= $active ? 'bg-primary-red/10 text-primary-red font-semibold active' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800' ?>"
                        @click="if(window.innerWidth < 1024) sidebarOpen = false">
                         <i class="fa-solid <?= $item['icon'] ?> w-5 text-center text-xs <?= $active ? 'text-primary-red' : 'text-gray-400' ?>"></i>
-                        <span><?= $item['label'] ?></span>
+                        <span class="flex-1"><?= $item['label'] ?></span>
+                        <?php if (!empty($item['badge'])): ?>
+                        <span class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center"><?= $item['badge'] > 99 ? '99+' : $item['badge'] ?></span>
+                        <?php endif; ?>
                     </a>
                 <?php endforeach; ?>
                 <hr class="my-3 border-gray-100">
                 <div class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-3 py-2">System</div>
-                <a href="<?= url('admin/settings') ?>"
-                   class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all <?= $isActive(url('admin/settings')) ? 'bg-primary-red/10 text-primary-red font-semibold active' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800' ?>"
+                <a href="<?= url('13091998/settings') ?>"
+                   class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all <?= $isActive(url('13091998/settings')) ? 'bg-primary-red/10 text-primary-red font-semibold active' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800' ?>"
                    @click="if(window.innerWidth < 1024) sidebarOpen = false">
-                    <i class="fa-solid fa-gear w-5 text-center text-xs <?= $isActive(url('admin/settings')) ? 'text-primary-red' : 'text-gray-400' ?>"></i> Settings
+                    <i class="fa-solid fa-gear w-5 text-center text-xs <?= $isActive(url('13091998/settings')) ? 'text-primary-red' : 'text-gray-400' ?>"></i> Settings
                 </a>
-                <a href="<?= url('admin/logs') ?>"
-                   class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all <?= $isActive(url('admin/logs')) ? 'bg-primary-red/10 text-primary-red font-semibold active' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800' ?>"
+                <a href="<?= url('13091998/logs') ?>"
+                   class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all <?= $isActive(url('13091998/logs')) ? 'bg-primary-red/10 text-primary-red font-semibold active' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800' ?>"
                    @click="if(window.innerWidth < 1024) sidebarOpen = false">
-                    <i class="fa-solid fa-list w-5 text-center text-xs <?= $isActive(url('admin/logs')) ? 'text-primary-red' : 'text-gray-400' ?>"></i> Logs
+                    <i class="fa-solid fa-list w-5 text-center text-xs <?= $isActive(url('13091998/logs')) ? 'text-primary-red' : 'text-gray-400' ?>"></i> Logs
                 </a>
                 <hr class="my-3 border-gray-100">
                 <a href="<?= url('logout') ?>"
@@ -134,10 +152,10 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <a href="<?= url('admin/logs') ?>" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 transition-all" title="System Logs">
+                    <a href="<?= url('13091998/logs') ?>" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 transition-all" title="System Logs">
                         <i class="fa-solid fa-terminal text-sm"></i>
                     </a>
-                    <a href="<?= url('admin/settings') ?>" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 transition-all" title="Settings">
+                    <a href="<?= url('13091998/settings') ?>" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 transition-all" title="Settings">
                         <i class="fa-solid fa-sliders text-sm"></i>
                     </a>
                     <div class="h-6 w-px bg-gray-200 mx-1"></div>

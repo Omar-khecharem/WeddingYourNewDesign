@@ -9,7 +9,7 @@
     <div class="lg:col-span-1">
         <div class="bg-white rounded-xl border border-gray-200 p-5">
             <h2 class="text-lg font-bold text-gray-800 mb-4">Upload Image</h2>
-            <form method="POST" action="<?= url('admin/gallery') ?>" enctype="multipart/form-data" class="space-y-4">
+            <form method="POST" action="<?= url('13091998/gallery') ?>" enctype="multipart/form-data" class="space-y-4">
                 <?= \App\Helpers\Security::csrfField() ?>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Image <span class="text-red-500">*</span></label>
@@ -36,7 +36,7 @@
                     <p class="text-sm font-medium text-gray-800 truncate"><?= e($img['title'] ?: 'Untitled') ?></p>
                 </div>
                 <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                    <a href="<?= url('admin/gallery/edit/' . $img['id']) ?>" class="bg-blue-500 text-white w-8 h-8 rounded-lg flex items-center justify-center hover:bg-blue-600" title="Edit"><i class="fa-solid fa-pen text-xs"></i></a>
+                    <a href="<?= url('13091998/gallery/edit/' . $img['id']) ?>" class="bg-blue-500 text-white w-8 h-8 rounded-lg flex items-center justify-center hover:bg-blue-600" title="Edit"><i class="fa-solid fa-pen text-xs"></i></a>
                     <button onclick="confirmDelete(<?= $img['id'] ?>)" class="bg-red-500 text-white w-8 h-8 rounded-lg flex items-center justify-center hover:bg-red-600" title="Delete"><i class="fa-solid fa-trash text-xs"></i></button>
                 </div>
             </div>
@@ -47,7 +47,7 @@
 </div>
 <?php startSection('scripts') ?>
 <script>
-function confirmDelete(id){if(confirm('Delete this image?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('admin/gallery/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}
+function confirmDelete(id){if(confirm('Delete this image?')){var f=document.createElement('form');f.method='POST';f.action='<?= url('13091998/gallery/delete') ?>';f.innerHTML='<?= \App\Helpers\Security::csrfField() ?>';var i=document.createElement('input');i.type='hidden';i.name='id';i.value=id;f.appendChild(i);document.body.appendChild(f);f.submit();}}
 function previewGalleryImage(input){if(input.files&&input.files[0]){var r=new FileReader();r.onload=function(e){var p=document.getElementById('gallery-image-preview');p.src=e.target.result;p.classList.remove('hidden');document.getElementById('gallery-image-icon').classList.add('hidden');};r.readAsDataURL(input.files[0]);}}
 </script>
 <?php endSection() ?>

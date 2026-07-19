@@ -24,8 +24,8 @@ define('CSRF_TOKEN_NAME', EnvLoader::get('CSRF_TOKEN_NAME', '_csrf_token'));
 define('SESSION_LIFETIME', (int) EnvLoader::get('SESSION_LIFETIME', 480));
 define('PASSWORD_ALGO', PASSWORD_BCRYPT);
 define('PASSWORD_COST', 12);
-define('MAX_LOGIN_ATTEMPTS', (int) EnvLoader::get('MAX_LOGIN_ATTEMPTS', 5));
-define('LOGIN_LOCKOUT_TIME', (int) EnvLoader::get('LOGIN_LOCKOUT_TIME', 15));
+define('MAX_LOGIN_ATTEMPTS', (int) EnvLoader::get('MAX_LOGIN_ATTEMPTS', 50));
+define('LOGIN_LOCKOUT_TIME', (int) EnvLoader::get('LOGIN_LOCKOUT_TIME', 1));
 
 define('MAX_UPLOAD_SIZE', 50 * 1024 * 1024);
 define('ALLOWED_IMAGE_TYPES', ['jpg', 'jpeg', 'png', 'webp', 'gif']);

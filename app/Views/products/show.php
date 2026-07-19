@@ -162,7 +162,7 @@ $subName = $product['subcategory_name'] ?? '';
         <div class="flex flex-wrap gap-4 text-sm text-premium-mink">
           <button data-compare="<?= $product['id'] ?>" onclick="addToCompare(<?= $product['id'] ?>)" class="hover:text-premium-crimson flex items-center gap-1.5"><svg class="w-4 h-4" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg> Add to compare</button>
           <button data-wishlist="<?= $product['id'] ?>" onclick="toggleWishlist(<?= $product['id'] ?>)" class="hover:text-premium-crimson flex items-center gap-1.5"><svg class="w-4 h-4" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg> Add to wishlist</button>
-          <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg> Share</span>
+          <button onclick="shareProduct()" class="hover:text-premium-crimson flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg> Share</button>
         </div>
 
       </div>
@@ -391,6 +391,19 @@ $subName = $product['subcategory_name'] ?? '';
 
 })();
 
+function shareProduct(){
+  var url = window.location.href;
+  if (navigator.share) {
+    navigator.share({ title: document.title, url: url });
+  } else {
+    navigator.clipboard.writeText(url).then(function(){
+      var btn = event.target.closest('button');
+      var orig = btn.innerHTML;
+      btn.innerHTML = 'Copied!';
+      setTimeout(function(){ btn.innerHTML = orig; }, 2000);
+    });
+  }
+}
 function buyNow(id){
   addToCart(id, parseInt(document.getElementById('qtyInput').value));
   setTimeout(function(){ window.location.href='<?= url('checkout') ?>'; }, 500);

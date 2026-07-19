@@ -26,7 +26,7 @@ class DealController extends BaseAdminController
             if ($filename) {
                 $stmt = $pdo->prepare("INSERT INTO sg_deals (image, sort_order, is_active, created_at) VALUES (:image, 0, 1, NOW())");
                 $stmt->execute([':image' => $filename]);
-                $this->success('Deal added.', url('admin/deals'));
+                $this->success('Deal added.', url('13091998/deals'));
                 return;
             }
         }
@@ -40,6 +40,6 @@ class DealController extends BaseAdminController
         $id = (int)$request->input('id');
         $pdo = \App\Core\Database::getInstance()->getConnection();
         $pdo->prepare("DELETE FROM sg_deals WHERE id = :id")->execute([':id' => $id]);
-        $this->success('Deal deleted.', url('admin/deals'));
+        $this->success('Deal deleted.', url('13091998/deals'));
     }
 }

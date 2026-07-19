@@ -2,7 +2,7 @@
 -- SHOLA GHAR — SEED DATA (Indian Bengali Wedding Context)
 -- =============================================================================
 
-USE `u514769775_weddingyour`;
+-- Database: u514769775_wedding_your (select in phpMyAdmin before importing)
 
 -- +----------------------------------------------------------------------------
 -- 1. COUNTRIES

@@ -72,7 +72,7 @@ class MenuItemController extends BaseAdminController
         $stmt = $pdo->prepare("INSERT INTO sg_menu_items (menu_id, parent_id, title, url, type, reference_id, sort_order, is_active, created_at) VALUES (:menu_id, :parent_id, :title, :url, :type, :reference_id, :sort_order, :is_active, NOW())");
         $stmt->execute($data);
 
-        $this->success('Menu item created.', url('admin/menus?menu_id=' . $data['menu_id']));
+        $this->success('Menu item created.', url('13091998/menus?menu_id=' . $data['menu_id']));
     }
 
     public function edit(Request $request, Response $response): string
@@ -85,7 +85,7 @@ class MenuItemController extends BaseAdminController
 
         if (!$item) {
             $this->flash('error', 'Menu item not found.');
-            $this->redirect(url('admin/menus'));
+            $this->redirect(url('13091998/menus'));
         }
 
         $this->setMeta('Edit: ' . $item['title']);
@@ -122,7 +122,7 @@ class MenuItemController extends BaseAdminController
         $stmt = $pdo->prepare("UPDATE sg_menu_items SET menu_id = :menu_id, parent_id = :parent_id, title = :title, url = :url, type = :type, reference_id = :reference_id, sort_order = :sort_order, is_active = :is_active WHERE id = :id");
         $stmt->execute($data);
 
-        $this->success('Menu item updated.', url('admin/menus?menu_id=' . $data['menu_id']));
+        $this->success('Menu item updated.', url('13091998/menus?menu_id=' . $data['menu_id']));
     }
 
     public function destroy(Request $request, Response $response): void
@@ -130,7 +130,7 @@ class MenuItemController extends BaseAdminController
         $id = (int)$request->input('id');
         $pdo = \App\Core\Database::getInstance()->getConnection();
         $pdo->prepare("DELETE FROM sg_menu_items WHERE id = :id")->execute([':id' => $id]);
-        $this->success('Menu item deleted.', url('admin/menus'));
+        $this->success('Menu item deleted.', url('13091998/menus'));
     }
 
     private function buildTree(array $items, int $parentId = null): array
