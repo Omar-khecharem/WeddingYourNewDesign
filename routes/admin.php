@@ -89,8 +89,9 @@ Router::group('/13091998', ['middleware' => [AdminMiddleware::class]], function 
         $paymentStatus = $_POST['payment_status'] ?? '';
         if ($paymentStatus) {
             $pdo = \App\Core\Database::getInstance()->getConnection();
-            $stmt = $pdo->prepare("UPDATE sg_orders SET payment_status = :ps WHERE id = :id");
-            $stmt->execute([':ps' => $paymentStatus, ':id' => $orderId]);
+            $isPaid = in_array($paymentStatus, ['completed', 'paid']) ? 1 : 0;
+            $stmt = $pdo->prepare("UPDATE sg_orders SET payment_status = :ps, is_paid = :ip WHERE id = :id");
+            $stmt->execute([':ps' => $paymentStatus, ':ip' => $isPaid, ':id' => $orderId]);
         }
 
         \App\Helpers\Session::flash('success', 'Order status updated.');
@@ -256,8 +257,17 @@ Router::group('/13091998', ['middleware' => [AdminMiddleware::class]], function 
 
     // Reviews
     Router::get('/reviews', function () {
-        $reviews = \App\Models\Review::getPending();
-        return \App\Core\View::render('admin.reviews.index', ['reviews' => $reviews], 'admin');
+        $status = $_GET['status'] ?? '';
+        $search = $_GET['search'] ?? '';
+        $page = max(1, (int)($_GET['page'] ?? 1));
+        $result = \App\Models\Review::getFiltered(['status' => $status, 'search' => $search], $page, 20);
+        \App\Models\Review::markNotificationsRead();
+        return \App\Core\View::render('admin.reviews.index', [
+            'reviews' => $result['reviews'],
+            'pagination' => $result['pagination'],
+            'currentStatus' => $status,
+            'searchQuery' => $search,
+        ], 'admin');
     })->name('admin.reviews');
 
     Router::get('/reviews/{id}/approve', function ($params) {
@@ -280,6 +290,14 @@ Router::group('/13091998', ['middleware' => [AdminMiddleware::class]], function 
         header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? url('13091998/reviews')));
         exit;
     })->name('admin.reviews.delete');
+
+    // Mark review notification as read (AJAX)
+    Router::post('/reviews/notifications/read', function () {
+        \App\Models\Review::markNotificationsRead();
+        header('Content-Type: application/json');
+        echo json_encode(['success' => true]);
+        exit;
+    })->name('admin.reviews.notifications.read');
 
     // Password Reset Requests
     Router::get('/forgot-password-requests', function () {

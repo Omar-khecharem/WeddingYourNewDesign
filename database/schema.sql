@@ -1,5 +1,5 @@
 -- =============================================================================
--- SHOLA GHAR E-COMMERCE — COMPLETE DATABASE SCHEMA
+-- WEDDINGYOUR E-COMMERCE — COMPLETE DATABASE SCHEMA
 -- Engine: InnoDB  |  Charset: utf8mb4  |  Collation: utf8mb4_unicode_ci
 -- Version: 2.1 (unified from migrations + code requirements)
 -- =============================================================================

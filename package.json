@@ -1,0 +1,11 @@
+{
+  "name": "weddingyour",
+  "private": true,
+  "scripts": {
+    "build": "tailwindcss -i assets/css/input.css -o public_html/assets/css/app.css --minify",
+    "watch": "tailwindcss -i assets/css/input.css -o public_html/assets/css/app.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}

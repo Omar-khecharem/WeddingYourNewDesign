@@ -106,9 +106,10 @@ class OrderService
 
             // Create order items
             foreach ($cart['items'] as $item) {
+                $itemImage = $item['image'] ?? '';
                 $stmt = $pdo->prepare("
-                    INSERT INTO sg_order_items (order_id, product_id, product_name, quantity, unit_price, total_price)
-                    VALUES (:order_id, :product_id, :product_name, :quantity, :unit_price, :total_price)
+                    INSERT INTO sg_order_items (order_id, product_id, product_name, quantity, unit_price, total_price, image)
+                    VALUES (:order_id, :product_id, :product_name, :quantity, :unit_price, :total_price, :image)
                 ");
                 $stmt->execute([
                     ':order_id' => $orderId,
@@ -117,6 +118,7 @@ class OrderService
                     ':quantity' => $item['quantity'],
                     ':unit_price' => $item['unit_price'],
                     ':total_price' => $item['total'],
+                    ':image' => $itemImage,
                 ]);
 
                 // Update stock
@@ -166,7 +168,14 @@ class OrderService
         // Get items
         $stmt = $pdo->prepare("SELECT * FROM sg_order_items WHERE order_id = :order_id");
         $stmt->execute([':order_id' => $orderId]);
-        $order['items'] = $stmt->fetchAll();
+        $items = $stmt->fetchAll();
+        foreach ($items as &$item) {
+            if (empty($item['image']) && !empty($item['product_id'])) {
+                $imgs = \App\Models\Product::getImages((int)$item['product_id']);
+                $item['image'] = $imgs[0]['url'] ?? '';
+            }
+        }
+        $order['items'] = $items;
 
         return $order;
     }
@@ -325,9 +334,9 @@ class OrderService
         $stats['processing_orders'] = (int)$pdo->query("SELECT COUNT(*) FROM sg_orders WHERE order_status = 'processing'")->fetchColumn();
         $stats['completed_orders'] = (int)$pdo->query("SELECT COUNT(*) FROM sg_orders WHERE order_status = 'delivered'")->fetchColumn();
         $stats['cancelled_orders'] = (int)$pdo->query("SELECT COUNT(*) FROM sg_orders WHERE order_status = 'cancelled'")->fetchColumn();
-        $stats['total_revenue'] = (float)$pdo->query("SELECT COALESCE(SUM(total), 0) FROM sg_orders WHERE order_status NOT IN ('cancelled', 'refunded')")->fetchColumn();
-        $stats['today_revenue'] = (float)$pdo->query("SELECT COALESCE(SUM(total), 0) FROM sg_orders WHERE DATE(created_at) = CURDATE() AND order_status NOT IN ('cancelled', 'refunded')")->fetchColumn();
-        $stats['month_revenue'] = (float)$pdo->query("SELECT COALESCE(SUM(total), 0) FROM sg_orders WHERE MONTH(created_at) = MONTH(CURDATE()) AND YEAR(created_at) = YEAR(CURDATE()) AND order_status NOT IN ('cancelled', 'refunded')")->fetchColumn();
+        $stats['total_revenue'] = (float)$pdo->query("SELECT COALESCE(SUM(total), 0) FROM sg_orders WHERE order_status NOT IN ('cancelled', 'refunded') AND payment_status IN ('paid', 'completed')")->fetchColumn();
+        $stats['today_revenue'] = (float)$pdo->query("SELECT COALESCE(SUM(total), 0) FROM sg_orders WHERE DATE(created_at) = CURDATE() AND order_status NOT IN ('cancelled', 'refunded') AND payment_status IN ('paid', 'completed')")->fetchColumn();
+        $stats['month_revenue'] = (float)$pdo->query("SELECT COALESCE(SUM(total), 0) FROM sg_orders WHERE MONTH(created_at) = MONTH(CURDATE()) AND YEAR(created_at) = YEAR(CURDATE()) AND order_status NOT IN ('cancelled', 'refunded') AND payment_status IN ('paid', 'completed')")->fetchColumn();
 
         return $stats;
     }
@@ -343,7 +352,7 @@ class OrderService
         $stmt->execute([':uid' => $userId]);
         $totalOrders = (int)$stmt->fetchColumn();
 
-        $stmt = $pdo->prepare("SELECT COALESCE(SUM(total), 0) FROM sg_orders WHERE user_id = :uid AND order_status NOT IN ('cancelled', 'refunded')");
+        $stmt = $pdo->prepare("SELECT COALESCE(SUM(total), 0) FROM sg_orders WHERE user_id = :uid AND order_status NOT IN ('cancelled', 'refunded') AND payment_status IN ('paid', 'completed')");
         $stmt->execute([':uid' => $userId]);
         $totalSpent = (float)$stmt->fetchColumn();
 

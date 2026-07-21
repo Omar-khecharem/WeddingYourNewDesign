@@ -29,7 +29,7 @@ class DashboardController extends BaseAdminController
         $stats['total_categories'] = (int)$pdo->query("SELECT COUNT(*) FROM sg_categories WHERE status = 1")->fetchColumn();
         $stats['total_reviews'] = (int)$pdo->query("SELECT COUNT(*) FROM sg_reviews WHERE is_approved = 0")->fetchColumn();
 
-        $lastMonthRevenue = (float)$pdo->query("SELECT COALESCE(SUM(total), 0) FROM sg_orders WHERE MONTH(created_at) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) AND YEAR(created_at) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) AND order_status NOT IN ('cancelled', 'refunded')")->fetchColumn();
+        $lastMonthRevenue = (float)$pdo->query("SELECT COALESCE(SUM(total), 0) FROM sg_orders WHERE MONTH(created_at) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) AND YEAR(created_at) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) AND order_status NOT IN ('cancelled', 'refunded') AND payment_status IN ('paid', 'completed')")->fetchColumn();
         $stats['revenue_growth'] = $lastMonthRevenue > 0 ? round((($stats['total_revenue'] - $lastMonthRevenue) / $lastMonthRevenue) * 100, 1) : 0;
 
         $recentOrders = $pdo->query("SELECT o.*, u.name AS customer_name FROM sg_orders o LEFT JOIN sg_users u ON u.id = o.user_id ORDER BY o.created_at DESC LIMIT 5")->fetchAll(\PDO::FETCH_ASSOC);

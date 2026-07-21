@@ -1,5 +1,5 @@
 -- =============================================================================
--- SHOLA GHAR — SEED DATA (Indian Bengali Wedding Context)
+-- WEDDINGYOUR — SEED DATA (Indian Bengali Wedding Context)
 -- =============================================================================
 
 -- Database: u514769775_wedding_your (select in phpMyAdmin before importing)
@@ -133,7 +133,7 @@ INSERT INTO `sg_subcategories` (`id`, `category_id`, `name`, `slug`, `sort_order
 -- 11. BRANDS
 -- +----------------------------------------------------------------------------
 INSERT INTO `sg_brands` (`id`, `name`, `slug`, `description`, `featured`, `status`) VALUES
-(1, 'Shola Ghar',    'shola-ghar',    'Premium Shola Ghar brand',       1, 1),
+(1, 'WeddingYour',    'weddingyour',    'Premium WeddingYour brand',       1, 1),
 (2, 'Artisan Bengal', 'artisan-bengal', 'Bengal artisans cooperative',   0, 1),
 (3, 'Traditional Luxe', 'trad-luxe', 'Traditional luxury collection',   1, 1);
 
@@ -251,7 +251,7 @@ INSERT INTO `sg_blogs` (`id`, `category_id`, `author_id`, `title`, `slug`, `exce
 -- 23. PAGES
 -- +----------------------------------------------------------------------------
 INSERT INTO `sg_pages` (`id`, `title`, `slug`, `content`, `status`, `sort_order`) VALUES
-(1, 'About Us',          'about',           '<h2>Welcome to Shola Ghar</h2><p>Shola Ghar is India\'s premier destination for handcrafted Mukut, Topor and Sholapith wedding accessories. Based in Kolkata, West Bengal, we bring generations of artisanal craftsmanship to your special day.</p>', 1, 1),
+(1, 'About Us',          'about',           '<h2>Welcome to WeddingYour</h2><p>WeddingYour is India\'s premier destination for handcrafted Mukut, Topor and Sholapith wedding accessories. Based in Kolkata, West Bengal, we bring generations of artisanal craftsmanship to your special day.</p>', 1, 1),
 (2, 'Shipping & Returns', 'shipping-returns','<h2>Shipping Policy</h2><p>We ship across India with free shipping on orders above ₹500.</p><h2>Returns</h2><p>Returns accepted within 7 days of delivery in original condition.</p>', 1, 2),
 (3, 'Privacy Policy',    'privacy',         '<h2>Privacy Policy</h2><p>Your data is protected and never shared with third parties.</p>', 1, 3),
 (4, 'Terms & Conditions','terms',           '<h2>Terms & Conditions</h2><p>Please read our terms and conditions carefully before placing an order.</p>', 1, 4);
@@ -377,9 +377,9 @@ INSERT INTO `sg_menu_items` (`id`, `menu_id`, `parent_id`, `title`, `url`, `type
 -- 32. SEO
 -- +----------------------------------------------------------------------------
 INSERT INTO `sg_seo` (`entity_type`, `entity_id`, `title`, `description`, `og_title`, `og_description`) VALUES
-('home',     0, 'BengaliWedding – Bengali Wedding Marketplace | Topor, Mukut & Accessories', 'India\'s leading Bengali wedding marketplace for premium handmade Topor, Mukut, bridal accessories, and traditional Bengali wedding items.', 'BengaliWedding – Wedding Mukut & Topor', 'Discover our exceptional collection of traditional mukut and topor, handcrafted by Bengal\'s finest artisans.'),
-('page',    1, 'About Us – BengaliWedding', 'Learn about BengaliWedding\'s heritage in traditional sholapith craftsmanship', NULL, NULL),
-('category',2, 'Bridal Mukut – BengaliWedding', 'Collection of premium bridal mukut and patashi', NULL, NULL);
+('home',     0, 'WeddingYour – Bengali Wedding Marketplace | Topor, Mukut & Accessories', 'India\'s leading Bengali wedding marketplace for premium handmade Topor, Mukut, bridal accessories, and traditional Bengali wedding items.', 'WeddingYour – Wedding Mukut & Topor', 'Discover our exceptional collection of traditional mukut and topor, handcrafted by Bengal\'s finest artisans.'),
+('page',    1, 'About Us – WeddingYour', 'Learn about WeddingYour\u2019s heritage in traditional sholapith craftsmanship', NULL, NULL),
+('category',2, 'Bridal Mukut – WeddingYour', 'Collection of premium bridal mukut and patashi', NULL, NULL);
 
 -- +----------------------------------------------------------------------------
 -- 33. SETTINGS
@@ -403,9 +403,9 @@ INSERT INTO `sg_settings` (`key`, `value`, `group`, `type`, `sort_order`, `is_pu
 ('free_shipping_min',     '500',                                                             'shipping', 'number',   13,1),
 ('standard_shipping',     '49',                                                              'shipping', 'number',   14,1),
 ('express_shipping',      '99',                                                              'shipping', 'number',   15,1),
-('meta_title',            'BengaliWedding – Bengali Wedding Marketplace | Topor, Mukut & Accessories', 'seo', 'text', 16,1),
+('meta_title',            'WeddingYour – Bengali Wedding Marketplace | Topor, Mukut & Accessories', 'seo', 'text', 16,1),
 ('meta_description',      'India\'s leading Bengali wedding marketplace for premium handmade Topor, Mukut, bridal accessories, and traditional Bengali wedding items.', 'seo', 'textarea', 17,1),
-('meta_keywords',         'BengaliWedding, Bengali Wedding, Bengali Wedding Planner, Bengali Wedding Photography, Bengali Wedding Dresses, Bengali Wedding Decor, Bengali Wedding Invitation, Bengali Wedding Venue, Bengali Bride, Bengali Groom, Bengali Marriage, topor, mukut, sholapith', 'seo', 'text', 18,1),
+('meta_keywords',         'WeddingYour, Bengali Wedding, Bengali Wedding Planner, Bengali Wedding Photography, Bengali Wedding Dresses, Bengali Wedding Decor, Bengali Wedding Invitation, Bengali Wedding Venue, Bengali Bride, Bengali Groom, Bengali Marriage, topor, mukut, sholapith', 'seo', 'text', 18,1),
 ('currency',              '₹',                                                               'general',  'text',     19,1),
 ('currency_code',         'INR',                                                             'general',  'text',     20,1),
 ('site_logo',             'site_logo.png',                                                    'general',  'image',    21,1),

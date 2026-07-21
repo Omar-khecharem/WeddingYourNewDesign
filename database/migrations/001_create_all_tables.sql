@@ -1,5 +1,5 @@
 -- =============================================================================
--- SHOLA GHAR — MASTER DATABASE SCHEMA
+-- WEDDINGYOUR — MASTER DATABASE SCHEMA
 -- Engine: InnoDB  |  Charset: utf8mb4  |  Collation: utf8mb4_unicode_ci
 -- Version: 2.0
 -- =============================================================================

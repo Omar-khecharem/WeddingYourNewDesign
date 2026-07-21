@@ -15,7 +15,7 @@ class CompareController extends Controller
         $products = Compare::getList($userId, $sessionId);
         $count = Compare::getCount($userId, $sessionId);
 
-        $this->setMeta('Compare Products - BengaliWedding', 'Compare your favorite Bengali wedding products side by side.');
+        $this->setMeta('Compare Products - WeddingYour', 'Compare your favorite Bengali wedding products side by side.');
         $this->setBreadcrumb([
             ['label' => 'Home', 'url' => url('/')],
             ['label' => 'Comparer'],

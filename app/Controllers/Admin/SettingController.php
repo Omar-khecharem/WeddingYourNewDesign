@@ -21,14 +21,16 @@ class SettingController extends BaseAdminController
         $this->ensureSetting($pdo, 'log_cleanup_enabled', '0', 'logs', 'boolean', 1, 1);
         $this->ensureSetting($pdo, 'log_cleanup_period', 'weekly', 'logs', 'select', 2, 1, json_encode(['daily' => 'Daily', 'weekly' => 'Weekly', 'monthly' => 'Monthly']));
         $this->ensureSetting($pdo, 'tax_enabled', '1', 'tax', 'boolean', 9, 1);
+        $this->ensureSetting($pdo, 'maintenance_mode', '0', 'general', 'boolean', 10, 1);
+        $this->ensureSetting($pdo, 'store_open', '1', 'general', 'boolean', 11, 1);
 
         $stmt = $pdo->query("SELECT * FROM sg_settings ORDER BY `group`, sort_order");
         $settings = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $groups = [];
         foreach ($settings as $s) {
+            if (str_starts_with($s['key'], 'hero_')) continue;
             $g = $s['group'];
-            if ($g === 'homepage') continue;
             if (!isset($groups[$g])) $groups[$g] = [];
             $groups[$g][] = $s;
         }

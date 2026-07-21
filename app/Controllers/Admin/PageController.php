@@ -13,7 +13,23 @@ class PageController extends BaseAdminController
     {
         $this->setMeta('Manage Pages');
         $pdo = Database::getInstance()->getConnection();
-        $pages = $pdo->query("SELECT * FROM sg_pages ORDER BY sort_order ASC, title ASC")->fetchAll();
+        try {
+            $pages = $pdo->query("SELECT * FROM sg_pages ORDER BY sort_order ASC, title ASC")->fetchAll();
+        } catch (\PDOException $e) {
+            $pdo->exec("CREATE TABLE IF NOT EXISTS sg_pages (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                slug VARCHAR(255) NOT NULL UNIQUE,
+                content LONGTEXT,
+                meta_title VARCHAR(255),
+                meta_description TEXT,
+                status TINYINT DEFAULT 1,
+                sort_order INT DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            )");
+            $pages = [];
+        }
         return $this->view('admin.pages.index', ['pages' => $pages]);
     }
 

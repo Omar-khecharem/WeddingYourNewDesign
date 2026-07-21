@@ -33,7 +33,7 @@ class ProductCard extends Component
         $price = $salePrice ?: $regularPrice;
         $showOldPrice = $salePrice && $salePrice < $regularPrice;
 
-        $html = '<div class="product-card group">';
+        $html .= '<a href="' . url('product/' . $slug) . '" class="product-card group">';
 
         // Badges
         if ($discountPercent > 0) {
@@ -45,20 +45,19 @@ class ProductCard extends Component
 
         // Image
         $html .= '<div class="prod-img relative">';
-        $html .= '<a href="' . url('product/' . $slug) . '">';
         $html .= '<img src="' . $this->e($image) . '" alt="' . $this->e($name) . '" loading="lazy" class="w-full h-full object-cover">';
-        $html .= '</a>';
+        $html .= '</div>';
 
         // Quick action overlay
         $html .= '<div class="absolute top-2 right-2 flex flex-col gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">';
-        $html .= '<button data-wishlist="' . $productId . '" onclick="toggleWishlist(' . $productId . ')" class="w-8 h-8 bg-white rounded-full shadow flex items-center justify-center text-gray-500 hover:text-primary-red transition-all" title="Add to Wishlist"><i class="fa-regular fa-heart text-xs"></i></button>';
-        $html .= '<button onclick="addToCompare(' . $productId . ')" class="w-8 h-8 bg-white rounded-full shadow flex items-center justify-center text-gray-500 hover:text-primary-red transition-all" title="Compare"><i class="fa-solid fa-arrows-rotate text-xs"></i></button>';
+        $html .= '<button data-wishlist="' . $productId . '" onclick="event.stopPropagation();toggleWishlist(' . $productId . ')" class="w-8 h-8 bg-white rounded-full shadow flex items-center justify-center text-gray-500 hover:text-primary-red transition-all" title="Add to Wishlist"><i class="fa-regular fa-heart text-xs"></i></button>';
+        $html .= '<button onclick="event.stopPropagation();addToCompare(' . $productId . ')" class="w-8 h-8 bg-white rounded-full shadow flex items-center justify-center text-gray-500 hover:text-primary-red transition-all" title="Compare"><i class="fa-solid fa-arrows-rotate text-xs"></i></button>';
         $html .= '</div>';
 
         $html .= '</div>';
 
         // Name
-        $html .= '<h4 class="prod-name"><a href="' . url('product/' . $slug) . '">' . $this->e($name) . '</a></h4>';
+        $html .= '<h4 class="prod-name">' . $this->e($name) . '</h4>';
 
         // Category
         if ($category) {
@@ -92,11 +91,11 @@ class ProductCard extends Component
         $html .= '</div>';
 
         // Add to cart button
-        $html .= '<button onclick="addToCart(' . $productId . ')" class="w-full bg-primary-red text-white text-xs font-bold py-2.5 px-4 rounded-lg hover:bg-opacity-90 transition-all flex items-center justify-center gap-2">';
+        $html .= '<button onclick="event.stopPropagation();addToCart(' . $productId . ')" class="w-full bg-primary-red text-white text-xs font-bold py-2.5 px-4 rounded-lg hover:bg-opacity-90 transition-all flex items-center justify-center gap-2">';
         $html .= '<i class="fa-solid fa-cart-shopping"></i> Add to Cart';
         $html .= '</button>';
 
-        $html .= '</div>';
+        $html .= '</a>';
 
         return $html;
     }

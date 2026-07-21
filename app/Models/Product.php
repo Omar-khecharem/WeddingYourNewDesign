@@ -354,7 +354,10 @@ class Product extends Model
         if (empty($path)) return asset('images/placeholder.png');
         $path = str_replace('\\', '/', $path);
         $checkPath = UPLOADS_DIR . DS . str_replace('/', DS, $path);
-        if (!file_exists($checkPath)) return asset('images/placeholder.png');
+        if (!file_exists($checkPath)) {
+            $altPath = ROOT_DIR . DS . 'uploads' . DS . str_replace('/', DS, $path);
+            if (!file_exists($altPath)) return uploadUrl($path, $subdir);
+        }
         return uploadUrl($path, $subdir);
     }
 

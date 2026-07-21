@@ -4,25 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e($metaTitle ?? 'Admin - ' . \App\Models\Setting::get('site_name', 'WeddingYour')) ?></title>
-    <?php $adminFavicon = \App\Models\Setting::get('site_favicon', ''); if (empty($adminFavicon) && file_exists(PUBLIC_DIR . DS . 'uploads' . DS . 'site_favicon.png')) $adminFavicon = 'site_favicon.png'; ?>
+    <?php $adminFavicon = \App\Models\Setting::get('site_favicon', '') ?: 'site_favicon.png'; ?>
     <?php if ($adminFavicon): ?>
     <link rel="icon" href="<?= uploadUrl($adminFavicon) ?>">
     <?php else: ?>
     <link rel="icon" type="image/svg+xml" href="<?= asset('images/favicon.svg') ?>">
     <?php endif; ?>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary-red': '#B8845A',
-                        'accent-orange': '#9E6F46',
-                    }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="<?= asset('css/app.css') ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * { scrollbar-width: thin; scrollbar-color: #d1d5db transparent; }
@@ -51,7 +39,7 @@
             <div class="p-5 border-b border-gray-100">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <?php $adminLogo = \App\Models\Setting::get('site_logo', ''); if ($adminLogo && !file_exists(PUBLIC_DIR . DS . 'uploads' . DS . $adminLogo)) $adminLogo = ''; if (empty($adminLogo) && file_exists(PUBLIC_DIR . DS . 'uploads' . DS . 'site_logo.png')) $adminLogo = 'site_logo.png'; ?>
+                        <?php $adminLogo = \App\Models\Setting::get('site_logo', '') ?: 'site_logo.png'; ?>
                         <?php if ($adminLogo): ?>
                         <img src="<?= uploadUrl($adminLogo) ?>" alt="Logo" class="h-8 w-auto object-contain">
                         <?php else: ?>
@@ -59,16 +47,7 @@
                         <?php endif; ?>
                         <span class="font-semibold text-gray-800 text-sm"><?= e(\App\Models\Setting::get('site_name', 'WeddingYour')) ?></span>
                     </div>
-                    <button @click="sidebarOpen = false" class="lg:hidden w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400">
-                <?php if ($authUser ?? null): ?>
-                <div class="mt-4 flex items-center gap-3 px-3 py-2 bg-gray-50 rounded-lg">
-                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-red to-red-500 flex items-center justify-center text-white font-bold text-xs uppercase shadow-sm"><?= e(substr($authUser['name'] ?? 'Admin', 0, 2)) ?></div>
-                    <div class="min-w-0 flex-1">
-                        <p class="text-xs font-semibold text-gray-800 truncate"><?= e($authUser['name'] ?? 'Admin') ?></p>
-                        <p class="text-[10px] text-gray-400 truncate"><?= e($authUser['email'] ?? '') ?></p>
-                    </div>
-                </div>
-                <?php endif; ?>
+                    <button @click="sidebarOpen = false" class="lg:hidden w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <nav class="p-3 space-y-0.5">
                 <?php
@@ -88,13 +67,15 @@
                 $unreadContactsStmt = $pdo->prepare("SELECT COUNT(*) FROM sg_contact_messages WHERE is_read = 0 AND created_at > :viewed");
                 $unreadContactsStmt->execute([':viewed' => $contactsViewedAt ? date('Y-m-d H:i:s', $contactsViewedAt) : '1970-01-01 00:00:00']);
                 $unreadContactsCount = (int)$unreadContactsStmt->fetchColumn();
+
+                $unreadReviewNotifs = (int)$pdo->query("SELECT COUNT(*) FROM sg_notifications WHERE type = 'new_review' AND is_read = 0")->fetchColumn();
                 $navItems = [
                     ['url' => url('13091998'), 'label' => 'Dashboard', 'icon' => 'fa-chart-pie'],
                     ['url' => url('13091998/products'), 'label' => 'Products', 'icon' => 'fa-box'],
                     ['url' => url('13091998/categories'), 'label' => 'Categories', 'icon' => 'fa-folder'],
                     ['url' => url('13091998/orders'), 'label' => 'Orders', 'icon' => 'fa-truck'],
                     ['url' => url('13091998/users'), 'label' => 'Users', 'icon' => 'fa-users'],
-                    ['url' => url('13091998/reviews'), 'label' => 'Reviews', 'icon' => 'fa-star'],
+                    ['url' => url('13091998/reviews'), 'label' => 'Reviews', 'icon' => 'fa-star', 'badge' => $unreadReviewNotifs],
                     ['url' => url('13091998/coupons'), 'label' => 'Coupons', 'icon' => 'fa-tag'],
                     ['url' => url('13091998/pages'), 'label' => 'Pages', 'icon' => 'fa-file-lines'],
                     ['url' => url('13091998/blog'), 'label' => 'Blog', 'icon' => 'fa-newspaper'],

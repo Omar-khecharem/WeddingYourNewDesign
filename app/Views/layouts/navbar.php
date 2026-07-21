@@ -61,7 +61,7 @@ try {
   </div>
   <?php endif; ?>
 
-  <?php $siteLogo = \App\Models\Setting::get('site_logo', ''); if (empty($siteLogo) && file_exists(PUBLIC_DIR . DS . 'uploads' . DS . 'site_logo.png')) $siteLogo = 'site_logo.png'; ?>
+  <?php $siteLogo = \App\Models\Setting::get('site_logo', '') ?: 'site_logo.png'; ?>
 
   <!-- HEADER - premium minimal -->
   <header class="w-full bg-premium-ivory border-b border-premium-warm-gray px-5 md:px-10 lg:px-16">

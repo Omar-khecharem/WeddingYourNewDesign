@@ -170,6 +170,87 @@ class Review extends Model
     }
 
     /**
+     * Get all reviews with optional filters
+     */
+    public static function getFiltered(array $filters = [], int $page = 1, int $perPage = 20): array
+    {
+        $pdo = Database::getInstance()->getConnection();
+        $where = [];
+        $params = [];
+
+        if (isset($filters['status'])) {
+            if ($filters['status'] === 'approved') {
+                $where[] = 'r.is_approved = 1';
+            } elseif ($filters['status'] === 'pending') {
+                $where[] = 'r.is_approved = 0';
+            }
+        }
+
+        if (!empty($filters['search'])) {
+            $where[] = '(r.name LIKE :search OR r.comment LIKE :search2 OR p.name LIKE :search3)';
+            $params[':search'] = '%' . $filters['search'] . '%';
+            $params[':search2'] = '%' . $filters['search'] . '%';
+            $params[':search3'] = '%' . $filters['search'] . '%';
+        }
+
+        $whereClause = $where ? 'WHERE ' . implode(' AND ', $where) : '';
+
+        $countStmt = $pdo->prepare("SELECT COUNT(*) FROM sg_reviews r LEFT JOIN sg_products p ON p.id = r.product_id $whereClause");
+        $countStmt->execute($params);
+        $totalItems = (int)$countStmt->fetchColumn();
+        $totalPages = max(1, (int)ceil($totalItems / $perPage));
+        $page = max(1, min($page, $totalPages));
+        $offset = ($page - 1) * $perPage;
+
+        $stmt = $pdo->prepare("
+            SELECT r.*, p.name AS product_name, p.slug AS product_slug
+            FROM sg_reviews r
+            LEFT JOIN sg_products p ON p.id = r.product_id
+            $whereClause
+            ORDER BY r.created_at DESC
+            LIMIT :limit OFFSET :offset
+        ");
+        $stmt->bindValue(':limit', $perPage, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
+        foreach ($params as $k => $v) {
+            $stmt->bindValue($k, $v);
+        }
+        $stmt->execute();
+        $reviews = $stmt->fetchAll();
+
+        return [
+            'reviews' => $reviews,
+            'pagination' => [
+                'currentPage' => $page,
+                'totalPages' => $totalPages,
+                'totalItems' => $totalItems,
+                'hasPrev' => $page > 1,
+                'hasNext' => $page < $totalPages,
+                'prevPage' => $page - 1,
+                'nextPage' => $page + 1,
+            ]
+        ];
+    }
+
+    /**
+     * Get unread review notification count
+     */
+    public static function getUnreadNotificationCount(): int
+    {
+        $pdo = Database::getInstance()->getConnection();
+        return (int)$pdo->query("SELECT COUNT(*) FROM sg_notifications WHERE type = 'new_review' AND is_read = 0")->fetchColumn();
+    }
+
+    /**
+     * Mark all review notifications as read
+     */
+    public static function markNotificationsRead(): void
+    {
+        $pdo = Database::getInstance()->getConnection();
+        $pdo->exec("UPDATE sg_notifications SET is_read = 1, read_at = NOW() WHERE type = 'new_review' AND is_read = 0");
+    }
+
+    /**
      * Submit a new review
      */
     public static function submit(array $data): array
@@ -190,9 +271,29 @@ class Review extends Model
             ':comment' => $data['comment'],
         ]);
 
+        $reviewId = (int)$pdo->lastInsertId();
+
+        // Create notification for admin
+        try {
+            $productName = '';
+            if (!empty($data['product_id'])) {
+                $pStmt = $pdo->prepare("SELECT name FROM sg_products WHERE id = :id LIMIT 1");
+                $pStmt->execute([':id' => $data['product_id']]);
+                $product = $pStmt->fetch();
+                $productName = $product['name'] ?? '';
+            }
+            $notifStmt = $pdo->prepare("
+                INSERT INTO sg_notifications (type, title, message, link, icon, is_read, created_at)
+                VALUES ('new_review', 'New Review', :msg, '/13091998/reviews', 'fa-star', 0, NOW())
+            ");
+            $notifStmt->execute([':msg' => $data['name'] . ' reviewed "' . $productName . '" — ' . $data['rating'] . ' stars']);
+        } catch (\Exception $e) {
+            // Silently ignore notification failure
+        }
+
         return [
             'success' => true,
-            'id' => (int)$pdo->lastInsertId(),
+            'id' => $reviewId,
             'message' => 'Thank you for your review! It will be shown after moderation.'
         ];
     }

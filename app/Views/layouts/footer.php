@@ -3,7 +3,7 @@ $currentYear = $currentYear ?? date('Y');
 $footerName = \App\Models\Setting::get('site_name', 'WeddingYour');
 $footerTagline = \App\Models\Setting::get('site_tagline', '');
 $siteLogo = \App\Models\Setting::get('site_logo', '');
-if (empty($siteLogo) && file_exists(PUBLIC_DIR . DS . 'uploads' . DS . 'site_logo.png')) $siteLogo = 'site_logo.png';
+if (empty($siteLogo)) $siteLogo = 'site_logo.png';
 $isAdmin = \App\Helpers\Session::has('user') && (\App\Helpers\Session::get('user')['role'] ?? '') === 'admin';
 ?>
 <!-- ============================================ -->
@@ -325,6 +325,44 @@ function showToast(message, type) {
 document.addEventListener('click', function(e) {
     if (e.target.closest('[onclick*="remove"]')) e.target.closest('.fixed.top-24').remove();
 });
+</script>
+
+<div id="privacy-banner" class="fixed bottom-0 left-0 right-0 z-[99999] bg-white border-t border-premium-warm-gray shadow-lg" style="display:none">
+  <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
+    <div class="flex-1 text-center sm:text-left">
+      <p class="text-xs sm:text-sm text-premium-mink">
+        This site uses cookies to improve your experience. Read our 
+        <a href="<?= url('privacy-policy') ?>" class="text-premium-burgundy underline font-medium hover:text-premium-crimson" target="_blank">Privacy Policy</a>.
+      </p>
+    </div>
+    <div class="flex items-center gap-2 shrink-0">
+      <button onclick="acceptPrivacy()" class="bg-premium-burgundy hover:bg-premium-crimson text-white text-xs font-bold px-5 py-2 rounded-lg transition-all hover:shadow-md">
+        Accept
+      </button>
+      <button onclick="declinePrivacy()" class="text-xs font-medium text-premium-taupe hover:text-premium-charcoal px-3 py-2 transition-colors">
+        Decline
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var accepted = localStorage.getItem('privacy_accepted');
+  if (accepted === '1') return;
+  if (document.cookie.indexOf('privacy_accepted=1') !== -1) { localStorage.setItem('privacy_accepted', '1'); return; }
+  setTimeout(function(){
+    document.getElementById('privacy-banner').style.display = 'block';
+  }, 4000);
+})();
+function acceptPrivacy(){
+  localStorage.setItem('privacy_accepted', '1');
+  document.cookie = 'privacy_accepted=1; path=/; max-age=' + (365*24*60*60);
+  document.getElementById('privacy-banner').style.display = 'none';
+}
+function declinePrivacy(){
+  document.getElementById('privacy-banner').style.display = 'none';
+}
 </script>
 
 </body>

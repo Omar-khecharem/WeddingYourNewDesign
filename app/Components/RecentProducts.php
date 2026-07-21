@@ -47,7 +47,7 @@ class RecentProducts extends Component
             $category = $this->e($p['category_name'] ?? '');
             $name = $this->e($p['name'] ?? '');
 
-            $items .= '<div class="product-card">';
+            $items .= '<a href="' . url('product/' . $p['slug']) . '" class="product-card">';
             if ($discount > 0) $items .= '<span class="discount-badge">-' . $discount . '%</span>';
             $items .= '<div class="prod-img"><img src="' . $this->e($img) . '" alt="' . $name . '" loading="lazy"></div>';
             $items .= '<h4 class="prod-name">' . $name . '</h4>';
@@ -57,7 +57,7 @@ class RecentProducts extends Component
             $items .= '<div>';
             if ($sale && $sale < $regular) $items .= '<span class="old-price">' . $this->price($regular) . '</span>';
             $items .= '<span class="new-price">' . $this->price($price) . '</span>';
-            $items .= '</div></div>';
+            $items .= '</div></a>';
         }
 
         if (empty($products)) {

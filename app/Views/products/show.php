@@ -79,7 +79,11 @@ $subName = $product['subcategory_name'] ?? '';
         <div class="flex items-center gap-2">
           <div class="flex">
             <?php $avg = round($ratingStats['average'] ?? 0); for ($s = 1; $s <= 5; $s++): ?>
-            <svg class="w-4 h-4 <?= $s <= $avg ? 'text-yellow-400' : 'text-gray-300' ?>" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <?php if ($s <= $avg): ?>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <?php else: ?>
+            <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <?php endif; ?>
             <?php endfor; ?>
           </div>
           <span class="text-sm text-premium-taupe"><?= number_format($ratingStats['average'] ?? 0, 1) ?> (<?= (int)($ratingStats['total'] ?? 0) ?> reviews)</span>
@@ -217,7 +221,11 @@ $subName = $product['subcategory_name'] ?? '';
               <p class="text-4xl font-black text-premium-charcoal"><?= number_format($ratingStats['average'] ?? 0, 1) ?></p>
               <div class="flex items-center justify-center sm:justify-start mt-1">
                 <?php $a = round($ratingStats['average'] ?? 0); for ($s = 1; $s <= 5; $s++): ?>
-                <svg class="w-4 h-4 <?= $s <= $a ? 'text-yellow-400' : 'text-premium-stone' ?>" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <?php if ($s <= $a): ?>
+                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <?php else: ?>
+                <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                <?php endif; ?>
                 <?php endfor; ?>
               </div>
               <p class="text-sm text-premium-taupe mt-1">Based on <?= (int)($ratingStats['total'] ?? 0) ?> reviews</p>
@@ -249,14 +257,19 @@ $subName = $product['subcategory_name'] ?? '';
                   <p class="text-sm font-semibold text-premium-charcoal"><?= e($review['name'] ?? 'Anonymous') ?></p>
                   <div class="flex items-center gap-1">
                     <?php for ($s = 1; $s <= 5; $s++): ?>
-                    <svg class="w-3.5 h-3.5 <?= $s <= ($review['rating'] ?? 5) ? 'text-yellow-400' : 'text-premium-stone' ?>" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <?php if ($s <= ($review['rating'] ?? 5)): ?>
+                    <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <?php else: ?>
+                    <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <?php endif; ?>
                     <?php endfor; ?>
                   </div>
                 </div>
               </div>
               <time class="text-xs text-premium-taupe"><?= date('d M Y', strtotime($review['created_at'] ?? 'now')) ?></time>
             </div>
-            <p class="mt-2 text-sm text-premium-mink"><?= nl2br(e($review['comment'] ?? '')) ?></p>
+            <?php if (!empty($review['title'])): ?><p class="mt-2 text-sm font-semibold text-premium-charcoal"><?= e($review['title']) ?></p><?php endif; ?>
+            <p class="mt-1 text-sm text-premium-mink"><?= nl2br(e($review['comment'] ?? '')) ?></p>
           </div>
           <?php endforeach; ?>
         </div>
@@ -274,9 +287,9 @@ $subName = $product['subcategory_name'] ?? '';
             <?= \App\Helpers\Security::csrfField() ?>
             <div>
               <label class="block text-sm font-medium text-premium-mink mb-1">Rating</label>
-              <div class="flex items-center gap-1 star-rating">
+              <div class="flex items-center gap-1 star-rating flex-row-reverse justify-end">
                 <?php for ($s = 5; $s >= 1; $s--): ?>
-                <input type="radio" name="rating" value="<?= $s ?>" id="star<?= $s ?>" class="hidden" required>
+                <input type="radio" name="rating" value="<?= $s ?>" id="star<?= $s ?>" class="star-input"<?= $s === 1 ? ' required' : '' ?>>
                 <label for="star<?= $s ?>" class="cursor-pointer text-premium-stone hover:text-yellow-400 transition-colors">
                   <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                 </label>
@@ -299,6 +312,7 @@ $subName = $product['subcategory_name'] ?? '';
           </form>
         </div>
 
+        <style>.star-input{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}</style>
         <script>
         document.querySelectorAll('.star-rating label').forEach(function(label) {
           label.addEventListener('click', function() {
@@ -321,25 +335,25 @@ $subName = $product['subcategory_name'] ?? '';
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
         <?php foreach ($relatedProducts as $p): ?>
         <?php $pImg = $p['image'] ?? ''; $pName = $p['name'] ?? ''; $pSlug = $p['slug'] ?? '#'; $pReg = $p['regular_price'] ?? 0; $pSale = $p['sale_price'] ?? null; $pDisc = $p['discount_percent'] ?? 0; $pId = $p['id'] ?? 0; ?>
-        <div class="group bg-white border border-premium-warm-gray rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-          <a href="<?= url('product/' . e($pSlug)) ?>" class="block aspect-square bg-premium-ivory relative overflow-hidden">
+        <a href="<?= url('product/' . e($pSlug)) ?>" class="group bg-white border border-premium-warm-gray rounded-xl overflow-hidden hover:shadow-lg transition-shadow block">
+          <div class="aspect-square bg-premium-ivory relative overflow-hidden">
             <?php if ($pDisc): ?><span class="absolute top-2 left-2 bg-premium-burgundy text-white text-xs font-black px-2 py-0.5 rounded-md z-10">-<?= (int)$pDisc ?>%</span><?php endif; ?>
             <img src="<?= e($pImg ?: 'https://placehold.co/300x300?text=No+Image') ?>" alt="<?= e($pName) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-          </a>
+          </div>
           <div class="p-3 space-y-1">
-            <a href="<?= url('product/' . e($pSlug)) ?>" class="text-xs font-bold text-premium-charcoal uppercase tracking-wide block truncate"><?= e($pName) ?></a>
+            <div class="text-xs font-bold text-premium-charcoal uppercase tracking-wide block truncate"><?= e($pName) ?></div>
             <div class="flex items-center gap-2">
               <?php if ($pSale && $pSale < $pReg): ?><span class="text-sm font-black text-premium-crimson"><?= formatPrice($pSale) ?></span><span class="text-xs text-premium-stone line-through"><?= formatPrice($pReg) ?></span>
               <?php else: ?><span class="text-sm font-black text-premium-charcoal"><?= formatPrice($pReg) ?></span><?php endif; ?>
             </div>
-            <div class="flex items-center gap-1">
-              <button onclick="addToCart(<?= $pId ?>, 1)" class="flex-1 bg-premium-burgundy hover:bg-premium-cabernet text-white text-xs font-bold py-1.5 rounded transition-colors">Add to cart</button>
-              <button data-wishlist="<?= $pId ?>" onclick="toggleWishlist(<?= $pId ?>)" class="w-8 h-8 bg-white border border-premium-warm-gray rounded-lg flex items-center justify-center text-premium-taupe hover:text-premium-crimson hover:border-premium-blush transition-colors" title="Wishlist">
+            <div class="flex items-center gap-1" onclick="event.stopPropagation()">
+              <button onclick="event.stopPropagation();addToCart(<?= $pId ?>, 1)" class="flex-1 bg-premium-burgundy hover:bg-premium-cabernet text-white text-xs font-bold py-1.5 rounded transition-colors">Add to cart</button>
+              <button data-wishlist="<?= $pId ?>" onclick="event.stopPropagation();toggleWishlist(<?= $pId ?>)" class="w-8 h-8 bg-white border border-premium-warm-gray rounded-lg flex items-center justify-center text-premium-taupe hover:text-premium-crimson hover:border-premium-blush transition-colors" title="Wishlist">
                 <svg class="w-4 h-4" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
               </button>
             </div>
           </div>
-        </div>
+        </a>
         <?php endforeach; ?>
       </div>
     </div>
@@ -388,6 +402,13 @@ $subName = $product['subcategory_name'] ?? '';
       document.getElementById('tab-' + this.dataset.tab)?.classList.remove('hidden');
     });
   });
+
+  // Open tab from URL hash
+  var hash = window.location.hash.replace('#', '');
+  if (hash) {
+    var tabBtn = document.querySelector('.tab-btn[data-tab="' + hash + '"]');
+    if (tabBtn) tabBtn.click();
+  }
 
 })();
 

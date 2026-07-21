@@ -44,9 +44,9 @@ define('FREE_SHIPPING_MIN', (int) EnvLoader::get('FREE_SHIPPING_MIN', 500));
 define('STANDARD_SHIPPING', (int) EnvLoader::get('STANDARD_SHIPPING', 49));
 define('EXPRESS_SHIPPING', (int) EnvLoader::get('EXPRESS_SHIPPING', 99));
 
-define('DEFAULT_META_TITLE', 'BengaliWedding - Bengali Wedding Marketplace | Topor, Mukut & Accessories');
+define('DEFAULT_META_TITLE', 'WeddingYour — Premium Bengali Wedding Accessories | Topor, Mukut & More');
 define('DEFAULT_META_DESCRIPTION', 'India\'s leading Bengali wedding marketplace for premium handmade Topor, Mukut, bridal accessories, and traditional wedding items. Your complete Bengali wedding destination.');
-define('DEFAULT_META_KEYWORDS', 'BengaliWedding, Bengali Wedding, Bengali Wedding Planner, Bengali Wedding Photography, Bengali Wedding Dresses, Bengali Wedding Decor, Bengali Wedding Invitation, Bengali Wedding Venue, Bengali Bride, Bengali Groom, Bengali Marriage, Bengali Wedding Ceremony, Bengali Wedding Traditions, Bengali Wedding Ideas, Bengali Wedding Marketplace, topor, mukut, sholapith');
+define('DEFAULT_META_KEYWORDS', 'WeddingYour, Bengali Wedding, Bengali Wedding Planner, Bengali Wedding Photography, Bengali Wedding Dresses, Bengali Wedding Decor, Bengali Wedding Invitation, Bengali Wedding Venue, Bengali Bride, Bengali Groom, Bengali Marriage, topor, mukut, sholapith');
 
 define('INVOICES_DIR', ROOT_DIR . DS . 'invoices');
 define('INVOICE_PREFIX', 'INV');

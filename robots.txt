@@ -1,3 +1,10 @@
 User-agent: *
 Allow: /
-Sitemap: https://sholaghar.com/sitemap.xml
+Disallow: /13091998/
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /account/
+Disallow: /api/
+Disallow: /admin/
+
+Sitemap: https://weddingyour.com/sitemap.xml

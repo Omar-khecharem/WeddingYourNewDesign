@@ -36,7 +36,13 @@ $timeline = $order['timeline'] ?? [];
                                         <td class="px-4 py-3">
                                             <div class="flex items-center gap-3">
                                                 <div class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden border border-gray-200">
-                                                    <?php $img = $item['image'] ?? ''; ?>
+                                                    <?php
+                                                    $img = $item['image'] ?? '';
+                                                    if (empty($img) && !empty($item['product_id'])) {
+                                                        $imgs = \App\Models\Product::getImages((int)$item['product_id']);
+                                                        $img = $imgs[0]['url'] ?? '';
+                                                    }
+                                                    ?>
                                                     <?php if ($img): ?>
                                                     <img src="<?= e($img) ?>" alt="<?= e($item['product_name'] ?? '') ?>" class="w-full h-full object-cover" loading="lazy">
                                                     <?php else: ?>
@@ -90,7 +96,7 @@ $timeline = $order['timeline'] ?? [];
                                 <label class="block text-xs font-medium text-gray-500 mb-1">Payment Status</label>
                                 <select name="payment_status" class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-primary-red/20 focus:border-primary-red outline-none">
                                     <option value="pending" <?= ($order['payment_status'] ?? '') === 'pending' ? 'selected' : '' ?>>Pending</option>
-                                    <option value="paid" <?= in_array($order['payment_status'] ?? '', ['paid', 'completed']) ? 'selected' : '' ?>>Paid</option>
+                                    <option value="completed" <?= in_array($order['payment_status'] ?? '', ['paid', 'completed']) ? 'selected' : '' ?>>Paid</option>
                                     <option value="failed" <?= ($order['payment_status'] ?? '') === 'failed' ? 'selected' : '' ?>>Failed</option>
                                     <option value="refunded" <?= ($order['payment_status'] ?? '') === 'refunded' ? 'selected' : '' ?>>Refunded</option>
                                 </select>

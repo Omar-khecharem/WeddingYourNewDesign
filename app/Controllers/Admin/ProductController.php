@@ -14,76 +14,61 @@ class ProductController extends BaseAdminController
     public function index(Request $request, Response $response): string
     {
         $this->setMeta('Manage Products');
-        $page = $this->getPage();
+        $page = max(1, (int)$request->query('page', 1));
         $search = $request->query('search', '');
         $categoryId = (int)$request->query('category', 0);
         $statusFilter = $request->query('status', '');
 
-        $conditions = [];
+        $pdo = \App\Core\Database::getInstance()->getConnection();
+        $where = ' WHERE 1=1';
+        $params = [];
+
+        if ($search !== '') {
+            $like = '%' . $search . '%';
+            $where .= ' AND (p.name LIKE :search OR p.sku LIKE :sku)';
+            $params[':search'] = $like;
+            $params[':sku'] = $like;
+        }
         if ($categoryId > 0) {
-            $conditions['category_id'] = $categoryId;
+            $where .= ' AND p.category_id = :cat';
+            $params[':cat'] = $categoryId;
         }
         if ($statusFilter !== '') {
-            $conditions['status'] = (int)$statusFilter;
+            $where .= ' AND p.status = :st';
+            $params[':st'] = (int)$statusFilter;
         }
 
-        if (!empty($search)) {
-            $pdo = \App\Core\Database::getInstance()->getConnection();
-            $like = '%' . $search . '%';
-            $where = ' WHERE (p.name LIKE :search OR p.sku LIKE :sku)';
-            $params = [':search' => $like, ':sku' => $like];
-            if ($categoryId > 0) {
-                $where .= ' AND p.category_id = :cat';
-                $params[':cat'] = $categoryId;
-            }
-            if ($statusFilter !== '') {
-                $where .= ' AND p.status = :st';
-                $params[':st'] = (int)$statusFilter;
-            }
-            $countStmt = $pdo->prepare("SELECT COUNT(*) FROM sg_products p{$where}");
-            $countStmt->execute($params);
-            $total = (int)$countStmt->fetchColumn();
-            $totalPages = max(1, ceil($total / PAGINATION_ADMIN_PER_PAGE));
-            $page = max(1, min($page, $totalPages));
-            $offset = ($page - 1) * PAGINATION_ADMIN_PER_PAGE;
-            $stmt = $pdo->prepare("SELECT p.*, c.name AS category_name FROM sg_products p LEFT JOIN sg_categories c ON c.id = p.category_id{$where} ORDER BY p.created_at DESC LIMIT :lim OFFSET :off");
-            $stmt->bindValue(':lim', PAGINATION_ADMIN_PER_PAGE, \PDO::PARAM_INT);
-            $stmt->bindValue(':off', $offset, \PDO::PARAM_INT);
-            foreach ($params as $k => $v) $stmt->bindValue($k, $v);
-            $stmt->execute();
-            $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            $items = [];
-            foreach ($rows as $r) {
-                $p = new \App\Models\Product($r);
-                $p->category_name = $r['category_name'] ?? '-';
-                $items[] = $p;
-            }
-            $products = [
-                'items' => $items,
-                'total' => $total,
-                'perPage' => PAGINATION_ADMIN_PER_PAGE,
-                'currentPage' => $page,
-                'totalPages' => $totalPages,
-                'hasPrev' => $page > 1,
-                'hasNext' => $page < $totalPages,
-                'prevPage' => $page - 1,
-                'nextPage' => $page + 1,
-            ];
-        } else {
-            $products = Product::paginate($page, PAGINATION_ADMIN_PER_PAGE, $conditions);
-            // Attach category names
-            $pdo = \App\Core\Database::getInstance()->getConnection();
-            $ids = array_map(fn($p) => $p->id, $products['items']);
-            if (!empty($ids)) {
-                $ph = implode(',', array_fill(0, count($ids), '?'));
-                $stmt = $pdo->prepare("SELECT p.id, c.name AS category_name FROM sg_products p LEFT JOIN sg_categories c ON c.id = p.category_id WHERE p.id IN ($ph)");
-                $stmt->execute($ids);
-                $catNames = $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
-                foreach ($products['items'] as $p) {
-                    $p->category_name = $catNames[$p->id] ?? '-';
-                }
-            }
+        $countStmt = $pdo->prepare("SELECT COUNT(*) FROM sg_products p{$where}");
+        $countStmt->execute($params);
+        $total = (int)$countStmt->fetchColumn();
+        $totalPages = max(1, ceil($total / PAGINATION_ADMIN_PER_PAGE));
+        $page = max(1, min($page, $totalPages));
+        $offset = ($page - 1) * PAGINATION_ADMIN_PER_PAGE;
+
+        $stmt = $pdo->prepare("SELECT p.*, c.name AS category_name FROM sg_products p LEFT JOIN sg_categories c ON c.id = p.category_id{$where} ORDER BY p.created_at DESC LIMIT :lim OFFSET :off");
+        $stmt->bindValue(':lim', PAGINATION_ADMIN_PER_PAGE, \PDO::PARAM_INT);
+        $stmt->bindValue(':off', $offset, \PDO::PARAM_INT);
+        foreach ($params as $k => $v) $stmt->bindValue($k, $v);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $items = [];
+        foreach ($rows as $r) {
+            $p = new \App\Models\Product($r);
+            $p->category_name = $r['category_name'] ?? '-';
+            $items[] = $p;
         }
+
+        $products = [
+            'items' => $items,
+            'total' => $total,
+            'perPage' => PAGINATION_ADMIN_PER_PAGE,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'hasPrev' => $page > 1,
+            'hasNext' => $page < $totalPages,
+            'prevPage' => $page - 1,
+            'nextPage' => $page + 1,
+        ];
 
         $categories = Category::getActive();
 

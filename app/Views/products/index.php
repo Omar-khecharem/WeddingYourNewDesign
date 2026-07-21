@@ -208,53 +208,64 @@ $end = min($page * $perPage, $total);
           $rAvg = $productRatings[$pId]['average'] ?? 0;
           $rTot = $productRatings[$pId]['total'] ?? 0;
         ?>
-        <div class="bg-white border border-premium-warm-gray rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow flex flex-col group/card product-card">
-          <div class="relative overflow-hidden bg-premium-ivory">
+        <a href="<?= url('product/' . e($pSlug)) ?>" class="bg-white border border-premium-warm-gray rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow flex flex-col group/card product-card">
+          <div class="relative overflow-hidden bg-premium-ivory" style="padding-bottom:133.33%">
             <?php if ($pDiscount > 0): ?>
             <span class="absolute top-2 left-2 bg-premium-burgundy text-white text-[10px] font-black px-2 py-0.5 rounded-md z-10">-<?= $pDiscount ?>%</span>
             <?php endif; ?>
-            <a href="<?= url('product/' . e($pSlug)) ?>" class="block aspect-square">
-              <img src="<?= e($pImg) ?>" alt="<?= e($pName) ?>" class="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500" loading="lazy">
-            </a>
+              <img src="<?= e($pImg) ?>" alt="<?= e($pName) ?>" class="absolute inset-0 w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500" loading="lazy">
             <!-- Hover overlay buttons -->
             <div class="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1.5 p-2 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 product-card-actions">
-              <button onclick="addToCart(<?= $pId ?>, 1)" class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-premium-mink hover:bg-premium-crimson hover:text-white transition-colors shadow" title="Cart">
+              <button onclick="event.stopPropagation();addToCart(<?= $pId ?>, 1)" class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-premium-mink hover:bg-premium-crimson hover:text-white transition-colors shadow" title="Cart">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
               </button>
-              <button class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-premium-mink hover:bg-premium-crimson hover:text-white transition-colors shadow hidden sm:flex" title="Quick view">
+              <button onclick="event.stopPropagation();" class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-premium-mink hover:bg-premium-crimson hover:text-white transition-colors shadow hidden sm:flex" title="Quick view">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
               </button>
-              <button data-compare="<?= $pId ?>" onclick="addToCompare(<?= $pId ?>)" class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-premium-mink hover:bg-premium-crimson hover:text-white transition-colors shadow hidden sm:flex" title="Compare">
+              <button data-compare="<?= $pId ?>" onclick="event.stopPropagation();addToCompare(<?= $pId ?>)" class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-premium-mink hover:bg-premium-crimson hover:text-white transition-colors shadow hidden sm:flex" title="Compare">
                 <svg class="w-3.5 h-3.5" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
               </button>
-              <button data-wishlist="<?= $pId ?>" onclick="toggleWishlist(<?= $pId ?>)" class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-premium-mink hover:bg-premium-crimson hover:text-white transition-colors shadow" title="Wishlist">
+              <button data-wishlist="<?= $pId ?>" onclick="event.stopPropagation();toggleWishlist(<?= $pId ?>)" class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-premium-mink hover:bg-premium-crimson hover:text-white transition-colors shadow" title="Wishlist">
                 <svg class="w-3.5 h-3.5" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
               </button>
             </div>
           </div>
-          <div class="p-3 flex flex-col gap-1.5 flex-1">
-            <h3 class="text-xs font-bold text-premium-charcoal uppercase tracking-wide leading-tight"><?= e($pName) ?></h3>
-            <p class="text-[10px] text-premium-taupe font-medium flex flex-wrap gap-x-1">
-              <span><?= e($pCategory) ?></span><span class="text-premium-stone">,</span>
-              <span><?= e($pSubcategory) ?></span>
-              <?php if ($pTags): ?><span class="text-premium-stone">,</span><span><?= e(is_array($pTags) ? implode(', ', $pTags) : $pTags) ?></span><?php endif; ?>
-            </p>
-            <div class="flex items-center gap-1">
-              <?= renderStars($rAvg) ?>
-              <?php if ($rTot > 0): ?><span class="text-[10px] text-premium-taupe">(<?= $rTot ?>)</span><?php endif; ?>
+          <div class="p-3 flex flex-col gap-1.5 flex-1 product-card-body">
+            <div class="product-info-main flex flex-col flex-1 min-h-0 gap-1">
+              <div class="space-y-1">
+                <h3 class="text-xs font-bold text-premium-charcoal uppercase tracking-wide leading-tight line-clamp-2"><?= e($pName) ?></h3>
+                <p class="text-[10px] text-premium-taupe font-medium flex flex-wrap gap-x-1">
+                  <span><?= e($pCategory) ?></span><span class="text-premium-stone">,</span>
+                  <span><?= e($pSubcategory) ?></span>
+                  <?php if ($pTags): ?><span class="text-premium-stone">,</span><span><?= e(is_array($pTags) ? implode(', ', $pTags) : $pTags) ?></span><?php endif; ?>
+                </p>
+                <div class="flex items-center gap-1">
+                  <?= renderStars($rAvg) ?>
+                  <?php if ($rTot > 0): ?><span class="text-[10px] text-premium-taupe">(<?= $rTot ?>)</span><?php endif; ?>
+                </div>
+                <span class="text-[10px] text-premium-mink font-bold flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> In stock
+                </span>
+              </div>
+              <div class="flex items-center gap-2 mt-auto">
+                <span class="text-sm font-black text-premium-crimson">₹<?= number_format($pSale, 2) ?></span>
+                <?php if ($pDiscount > 0): ?>
+                <span class="text-[10px] text-premium-stone line-through">₹<?= number_format($pRegular, 2) ?></span>
+                <?php endif; ?>
+              </div>
             </div>
-            <span class="text-[10px] text-premium-mink font-bold flex items-center gap-1">
-              <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> In stock
-            </span>
-            <div class="flex items-center gap-2 mt-auto">
-              <span class="text-sm font-black text-premium-crimson">₹<?= number_format($pSale, 2) ?></span>
-              <?php if ($pDiscount > 0): ?>
-              <span class="text-[10px] text-premium-stone line-through">₹<?= number_format($pRegular, 2) ?></span>
-              <?php endif; ?>
+            <div class="product-info-actions">
+              <button onclick="event.stopPropagation();addToCart(<?= $pId ?>, 1)" class="list-cart-btn" title="Add to Cart">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM15.75 14.25a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM5.106 5.25H20.25l-2.614 7.276A1.5 1.5 0 0116.2 13.5H7.5a1.5 1.5 0 01-1.436-1.044L5.106 5.25z"/></svg>
+                <span>Add to Cart</span>
+              </button>
+              <button onclick="event.stopPropagation();addToCart(<?= $pId ?>, 1);setTimeout(function(){window.location.href='<?= url('checkout') ?>'},500)" class="list-buy-btn" title="Buy Now">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
+                <span>Buy Now</span>
+              </button>
             </div>
-            <button onclick="addToCart(<?= $pId ?>, 1);setTimeout(function(){window.location.href='<?= url('checkout') ?>'},500)" class="hidden mt-2 w-full bg-premium-burgundy hover:bg-premium-cabernet text-white text-xs font-bold py-2 rounded-lg transition-colors product-card-buy">Buy Now</button>
           </div>
-        </div>
+        </a>
         <?php endforeach; ?>
       </div>
 
@@ -285,17 +296,36 @@ $end = min($page * $perPage, $total);
 
 <style>
 .product-card.list-view-card { flex-direction: row !important; }
-.product-card.list-view-card > .relative { width: 220px; min-width: 220px; height: 220px; flex-shrink: 0; }
+.product-card.list-view-card > .relative { width: 220px; min-width: 220px; height: 220px; flex-shrink: 0; border-radius: 0; padding-bottom: 0 !important; }
 .product-card.list-view-card > .relative .product-card-actions { opacity: 1 !important; background: linear-gradient(to top, rgba(0,0,0,0.6), transparent) !important; padding: 10px !important; gap: 8px !important; }
 .product-card.list-view-card > .relative .product-card-actions button { width: 32px; height: 32px; }
-.product-card.list-view-card > div:last-child { flex: 1; display: flex; flex-direction: column; padding: 16px 20px; }
-.product-card.list-view-card h3 { font-size: 14px; }
-.product-card.list-view-card p { font-size: 12px; }
-.product-card.list-view-card .text-sm { font-size: 16px; }
-.product-card.list-view-card .product-card-buy { display: block !important; }
-@media (max-width: 640px) {
+
+.product-card.list-view-card .product-card-body { flex-direction: row !important; align-items: stretch; padding: 20px 24px; gap: 0; }
+
+.product-card.list-view-card .product-info-main { flex: 1; display: flex; flex-direction: column; gap: 6px; padding-right: 24px; }
+.product-card.list-view-card .product-info-main h3 { font-size: 15px; letter-spacing: 0.05em; line-height: 1.3; }
+.product-card.list-view-card .product-info-main p { font-size: 12px; }
+.product-card.list-view-card .product-info-main .text-sm { font-size: 18px; }
+
+.product-card.list-view-card .product-info-actions { display: flex !important; flex-direction: column; gap: 10px; justify-content: center; min-width: 130px; border-left: 1px solid #E5E2DA; padding-left: 20px; }
+
+.product-card.list-view-card .list-cart-btn,
+.product-card.list-view-card .list-buy-btn { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; border: none; width: 100%; white-space: nowrap; }
+.product-card.list-view-card .list-cart-btn { background: #B8845A; color: #FFF; }
+.product-card.list-view-card .list-cart-btn:hover { background: #9E6F46; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(184,132,90,0.3); }
+.product-card.list-view-card .list-buy-btn { background: #FFF; color: #1F2937; border: 1.5px solid #D1CCC4; }
+.product-card.list-view-card .list-buy-btn:hover { border-color: #B8845A; color: #B8845A; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(184,132,90,0.12); }
+
+.product-info-actions { display: none; }
+
+@media (max-width: 768px) {
   .product-card.list-view-card { flex-direction: column !important; }
   .product-card.list-view-card > .relative { width: 100%; min-width: 100%; height: auto; }
+  .product-card.list-view-card .product-card-body { flex-direction: column !important; padding: 16px; }
+  .product-card.list-view-card .product-info-main { padding-right: 0; }
+  .product-card.list-view-card .product-info-actions { flex-direction: row; flex-wrap: wrap; border-left: none; border-top: 1px solid #E5E2DA; padding-left: 0; padding-top: 16px; margin-top: 12px; min-width: 0; justify-content: stretch; }
+  .product-card.list-view-card .list-cart-btn,
+  .product-card.list-view-card .list-buy-btn { flex: 1; }
 }
 </style>
 <script>
@@ -375,14 +405,10 @@ function applyView(mode) {
   document.getElementById('view-list')?.classList.toggle('text-premium-mink', mode !== 'list');
   var cards = grid.querySelectorAll('.product-card');
   if (mode === 'list') {
-    grid.className = 'grid grid-cols-1 gap-4';
-    grid.style.maxWidth = '';
-    grid.style.margin = '';
+    grid.className = 'grid grid-cols-1 gap-4 max-w-5xl mx-auto';
     cards.forEach(function(c) { c.classList.add('list-view-card'); });
   } else {
     grid.className = 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4';
-    grid.style.maxWidth = '';
-    grid.style.margin = '';
     cards.forEach(function(c) { c.classList.remove('list-view-card'); });
   }
 }

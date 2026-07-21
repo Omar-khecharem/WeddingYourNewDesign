@@ -34,15 +34,19 @@ class ProductController extends Controller
 
         $title = 'All Products';
         $description = 'Discover our complete collection of mukut, topor and wedding accessories.';
+        $currentCategoryLabel = '';
         if ($filters['category']) {
             $cat = Category::findBySlug($filters['category']);
             if ($cat) {
+                $currentCategoryLabel = $cat['name'];
                 $title = $cat['name'];
                 $description = $cat['description'] ?: $description;
                 $this->setBreadcrumb([
                     ['label' => 'Home', 'url' => url('/')],
                     ['label' => $cat['name']],
                 ]);
+            } else {
+                $currentCategoryLabel = $filters['category'];
             }
         } elseif ($filters['search']) {
             $title = 'Search: ' . e($filters['search']);
@@ -67,7 +71,7 @@ class ProductController extends Controller
         return $this->view('products.index', array_merge($result, [
             'filterOptions' => $filterOptions,
             'filters' => $filters,
-            'currentCategory' => $filters['category'] ?: '',
+            'currentCategory' => $currentCategoryLabel,
             'searchQuery' => $filters['search'] ?: '',
             'productRatings' => $ratings,
             'sortBy' => $filters['sort'],
@@ -156,23 +160,42 @@ class ProductController extends Controller
             exit;
         }
 
-        $user = $this->viewData['authUser'];
-        $result = Review::submit([
-            'product_id' => $product['id'],
-            'user_id' => $user['id'] ?? null,
-            'name' => $request->input('name', 'Anonymous'),
-            'email' => $request->input('email', ''),
-            'rating' => (int)$request->input('rating', 5),
-            'title' => $request->input('title', ''),
-            'comment' => $request->input('comment', ''),
-        ]);
+        $rating = (int)$request->input('rating', 0);
+        $comment = trim($request->input('comment', ''));
+        $name = trim($request->input('name', 'Anonymous'));
 
-        if ($result['success']) {
-            Session::flash('success', $result['message']);
-        } else {
-            Session::flash('error', 'Failed to submit review. Please try again.');
+        if ($name === '') {
+            Session::flash('error', 'Please provide your name.');
+            $this->redirect(url('product/' . $product['slug']) . '#reviews');
         }
 
-        $this->redirect(url('product/' . e($product['slug'])));
+        if ($rating < 1 || $rating > 5) {
+            Session::flash('error', 'Please select a valid rating (1-5 stars).');
+            $this->redirect(url('product/' . $product['slug']) . '#reviews');
+        }
+
+        if ($comment === '') {
+            Session::flash('error', 'Please write a review comment.');
+            $this->redirect(url('product/' . $product['slug']) . '#reviews');
+        }
+
+        $user = $this->viewData['authUser'];
+
+        try {
+            $result = Review::submit([
+                'product_id' => $product['id'],
+                'user_id' => $user['id'] ?? null,
+                'name' => $name,
+                'email' => trim($request->input('email', '')),
+                'rating' => $rating,
+                'title' => trim($request->input('title', '')),
+                'comment' => $comment,
+            ]);
+            Session::flash('success', $result['message']);
+        } catch (\Exception $e) {
+            Session::flash('error', 'An error occurred while submitting your review. Please try again.');
+        }
+
+        $this->redirect(url('product/' . $product['slug']) . '#reviews');
     }
 }

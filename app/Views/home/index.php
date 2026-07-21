@@ -12,7 +12,45 @@ $defaultCardFallback = $defaultCardFallback ?? [];
 $galleryItems = $galleryItems ?? [];
 $whatsappNumber = $whatsappNumber ?? '+919830136355';
 $videoShowcaseBg = $videoShowcaseBg ?? '';
+$heroSubtitle = $heroSubtitle ?? '';
+$heroButtonText = $heroButtonText ?? 'Shop Now';
+$heroButtonLink = $heroButtonLink ?? '';
 ?>
+<style>
+  [data-a] { opacity: 0; will-change: transform, opacity; }
+  [data-a].a-done { opacity: 1; }
+  .a-fade-up { transform: translateY(40px); }
+  .a-fade-up.a-done { transform: translateY(0); transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .a-fade-down { transform: translateY(-30px); }
+  .a-fade-down.a-done { transform: translateY(0); transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+  .a-fade-left { transform: translateX(-40px); }
+  .a-fade-left.a-done { transform: translateX(0); transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .a-fade-right { transform: translateX(40px); }
+  .a-fade-right.a-done { transform: translateX(0); transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .a-scale { transform: scale(0.92); }
+  .a-scale.a-done { transform: scale(1); transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+  .a-stagger > * { opacity: 0; transform: translateY(25px); will-change: transform, opacity; }
+  .a-stagger.a-done > * { opacity: 1; transform: translateY(0); }
+  .a-stagger.a-done > *:nth-child(1) { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0s, opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0s; }
+  .a-stagger.a-done > *:nth-child(2) { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.08s, opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.08s; }
+  .a-stagger.a-done > *:nth-child(3) { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.16s, opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.16s; }
+  .a-stagger.a-done > *:nth-child(4) { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.24s, opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.24s; }
+  .a-stagger.a-done > *:nth-child(5) { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.32s, opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.32s; }
+  .a-stagger.a-done > *:nth-child(6) { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s, opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s; }
+  .a-stagger.a-done > *:nth-child(7) { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.48s, opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.48s; }
+  .a-stagger.a-done > *:nth-child(8) { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.56s, opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.56s; }
+  .a-stagger.a-done > *:nth-child(9) { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.64s, opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.64s; }
+  .a-stagger.a-done > *:nth-child(10) { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.72s, opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.72s; }
+  @keyframes heroIn { 0% { opacity: 0; transform: scale(1.08); } 100% { opacity: 1; transform: scale(1); } }
+  .hero-img { animation: heroIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  @keyframes heroContent { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+  .hero-content > * { animation: heroContent 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+  .hero-content > *:nth-child(3) { animation-delay: 0.3s; }
+  .hero-content > *:nth-child(4) { animation-delay: 0.4s; }
+  .hero-content > *:nth-child(5) { animation-delay: 0.5s; }
+</style>
 <div class="min-h-screen bg-premium-ivory font-sans text-premium-charcoal antialiased selection:bg-premium-burgundy selection:text-white">
 
   <main class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,7 +59,7 @@ $videoShowcaseBg = $videoShowcaseBg ?? '';
     <!-- SUBCATEGORIES STRIP                                           -->
     <!-- ============================================================ -->
     <?php $subList = $subcategories; if (empty($subList)): $subList = [['slug'=>'bridal-patashi-mukut','name'=>'Bridal Patashi','cat_slug'=>'bride'],['slug'=>'sithi-small-mukut','name'=>'Sithi Mukut','cat_slug'=>'bride'],['slug'=>'topor-mukut-set','name'=>'Topor Set','cat_slug'=>'groom'],['slug'=>'baby-topor-boy','name'=>'Baby Topor','cat_slug'=>'baby'],['slug'=>'groom-dorpon','name'=>'Dorpon','cat_slug'=>'groom'],['slug'=>'matha-patti','name'=>'Matha Patti','cat_slug'=>'sholas-jewellery'],['slug'=>'wedding-panpata','name'=>'Panpata','cat_slug'=>'wedding-items'],['slug'=>'mini-crown','name'=>'Mini Crown','cat_slug'=>'sholas-jewellery']]; endif; ?>
-    <section class="py-6 md:py-8 overflow-hidden select-none" id="subcatSectionHome">
+    <section class="py-6 md:py-8 overflow-hidden select-none" id="subcatSectionHome" data-a="fade-up">
       <div id="subcatScrollHome" class="flex gap-3 md:gap-5 overflow-x-auto pb-3 scrollbar-hide" style="cursor:grab; scrollbar-width:none; -ms-overflow-style:none; user-select:none; -webkit-user-select:none; -webkit-overflow-scrolling:touch;">
         <?php foreach ($subList as $sub): ?>
         <?php $subSlug = is_array($sub) ? ($sub['slug'] ?? '') : $sub; ?>
@@ -51,25 +89,28 @@ $videoShowcaseBg = $videoShowcaseBg ?? '';
       $heroLeft = $heroLeftBanners ? current($heroLeftBanners) : null;
       $heroLeftImg = $heroLeft['image'] ?? '';
       $heroTitle = $heroLeft['title'] ?? 'Where Heritage Meets<br><span class="text-premium-champagne">Elegance</span>';
-      $heroDesc = $heroLeft['description'] ?? 'Discover handcrafted Bengali wedding treasures, made by master artisans.';
-      $heroLink = $heroLeft['link'] ?? url('products');
+      $heroDesc = $heroDesc ?? ($heroLeft['description'] ?? 'Discover handcrafted Bengali wedding treasures, made by master artisans.');
+      $heroButtonLink = $heroButtonLink ?: ($heroLeft['link'] ?? url('products'));
     ?>
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-6 mb-8">
       <!-- Left Main Image -->
-      <div class="lg:col-span-7 relative overflow-hidden rounded-2xl bg-premium-charcoal min-h-[320px] sm:min-h-[400px] lg:min-h-[480px] group">
+      <div class="lg:col-span-7 relative overflow-hidden rounded-2xl bg-premium-charcoal min-h-[320px] sm:min-h-[400px] lg:min-h-[480px] group hero-img">
         <?php if ($heroLeftImg): ?>
-        <img src="<?= uploadUrl($heroLeftImg) ?>" alt="" class="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700">
+        <img src="<?= uploadUrl($heroLeftImg) ?>" alt="" class="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 hero-img">
         <?php else: ?>
         <div class="absolute inset-0 bg-gradient-to-br from-premium-burgundy to-premium-cabernet"></div>
         <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=60 height=60 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M30 0L60 30L30 60L0 30Z%22 fill=%22white%22 opacity=%220.1%22/%3E%3C/svg%3E'); background-size: 60px 60px;"></div>
         <?php endif; ?>
         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-        <div class="absolute bottom-0 left-0 right-0 p-6 sm:p-8 lg:p-10">
-          <span class="inline-block bg-premium-champagne text-premium-charcoal text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-3">BengaliWedding Collection</span>
+        <div class="absolute bottom-0 left-0 right-0 p-6 sm:p-8 lg:p-10 hero-content">
+          <span class="inline-block bg-premium-champagne text-premium-charcoal text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-3">WeddingYour Collection</span>
+          <?php if ($heroSubtitle): ?>
+          <p class="text-premium-champagne/90 text-xs sm:text-sm font-semibold tracking-widest uppercase mb-2"><?= e($heroSubtitle) ?></p>
+          <?php endif; ?>
           <h1 class="font-playfair text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight max-w-xl"><?= $heroTitle ?></h1>
           <p class="text-white/70 text-sm sm:text-base mt-3 max-w-md leading-relaxed"><?= e($heroDesc) ?></p>
-          <a href="<?= e($heroLink) ?>" class="inline-flex items-center gap-2 mt-5 bg-premium-champagne hover:bg-premium-gold text-premium-charcoal font-bold text-xs sm:text-sm px-6 sm:px-8 py-3 sm:py-3.5 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-premium-champagne/25">
-            Shop Now
+          <a href="<?= e($heroButtonLink) ?>" class="inline-flex items-center gap-2 mt-5 bg-premium-champagne hover:bg-premium-gold text-premium-charcoal font-bold text-xs sm:text-sm px-6 sm:px-8 py-3 sm:py-3.5 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-premium-champagne/25">
+            <?= e($heroButtonText) ?>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
           </a>
         </div>
@@ -142,8 +183,8 @@ $videoShowcaseBg = $videoShowcaseBg ?? '';
     <!-- ============================================================ -->
     <!-- FEATURED PRODUCTS - Boutique Grid                            -->
     <!-- ============================================================ -->
-    <section class="py-8 sm:py-12">
-      <div class="flex items-end justify-between mb-8">
+    <section class="py-8 sm:py-12" data-a="fade-up">
+      <div class="flex items-end justify-between mb-8" data-a="fade-up">
         <div>
           <span class="text-premium-burgundy text-xs font-bold tracking-[0.2em] uppercase">Curated Collection</span>
           <h2 class="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold text-premium-charcoal mt-1">Our Finest Creations</h2>
@@ -154,7 +195,7 @@ $videoShowcaseBg = $videoShowcaseBg ?? '';
         </a>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-5">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-5 a-stagger" data-a="stagger">
         <?php $displayProducts = array_slice(array_merge($featuredProducts, $trendingProducts, $recentProducts), 0, 10); ?>
         <?php foreach ($displayProducts as $product): ?>
         <?php $pImg = is_array($product) ? ($product['image'] ?? '') : ($product->image ?? ''); ?>
@@ -229,12 +270,12 @@ $videoShowcaseBg = $videoShowcaseBg ?? '';
     <!-- ============================================================ -->
     <!-- CATEGORY CARDS - Luxury Grid                                 -->
     <!-- ============================================================ -->
-    <section class="py-8 sm:py-12">
-      <div class="text-center mb-8 sm:mb-10">
+    <section class="py-8 sm:py-12" data-a="fade-up">
+      <div class="text-center mb-8 sm:mb-10" data-a="fade-up">
         <span class="text-premium-burgundy text-xs font-bold tracking-[0.2em] uppercase">Shop by</span>
         <h2 class="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold text-premium-charcoal mt-1">Categories</h2>
       </div>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-5 a-stagger" data-a="stagger">
         <?php $trendingCats = array_slice($categories, 0, 4); ?>
         <?php if (!empty($trendingCats)): ?>
         <?php foreach ($trendingCats as $cat): $cs = is_array($cat) ? ($cat['slug']??'') : $cat; $cn = is_array($cat) ? ($cat['name']??'') : $cat; $ci = is_array($cat) ? ($cat['image']??'') : ''; ?>
@@ -273,8 +314,8 @@ $videoShowcaseBg = $videoShowcaseBg ?? '';
     <!-- ============================================================ -->
     <!-- RECENT PRODUCTS - Horizontal Carousel                        -->
     <!-- ============================================================ -->
-    <section class="py-8 sm:py-12">
-      <div class="flex items-end justify-between mb-8">
+    <section class="py-8 sm:py-12" data-a="fade-up">
+      <div class="flex items-end justify-between mb-8" data-a="fade-up">
         <div>
           <span class="text-premium-burgundy text-xs font-bold tracking-[0.2em] uppercase">New Arrivals</span>
           <h2 class="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold text-premium-charcoal mt-1">Just Added</h2>
@@ -353,7 +394,7 @@ $videoShowcaseBg = $videoShowcaseBg ?? '';
     $bvExt = $bvImg ? strtolower(pathinfo($bvImg, PATHINFO_EXTENSION)) : '';
     $bvIsVideo = in_array($bvExt, ['mp4','webm','ogg','mov']);
     ?>
-    <section class="relative overflow-hidden rounded-2xl bg-premium-charcoal min-h-[280px] sm:min-h-[360px] lg:min-h-[440px] flex items-center justify-center my-6 sm:my-8">
+    <section class="relative overflow-hidden rounded-2xl bg-premium-charcoal min-h-[280px] sm:min-h-[360px] lg:min-h-[440px] flex items-center justify-center my-6 sm:my-8" data-a="scale">
       <?php if ($bvImg): ?>
       <?php if ($bvIsVideo): ?>
       <video src="<?= uploadUrl($bvImg) ?>" autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover"></video>
@@ -380,10 +421,61 @@ $videoShowcaseBg = $videoShowcaseBg ?? '';
     </section>
 
     <!-- ============================================================ -->
+    <!-- CUSTOMER REVIEWS / TESTIMONIALS                              -->
+    <!-- ============================================================ -->
+    <?php if (!empty($reviews)): ?>
+    <section class="py-8 sm:py-12" data-a="fade-up">
+      <div class="text-center mb-8 sm:mb-10" data-a="fade-up">
+        <span class="text-premium-burgundy text-xs font-bold tracking-[0.2em] uppercase">Testimonials</span>
+        <h2 class="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold text-premium-charcoal mt-1">What Our Customers Say</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 a-stagger" data-a="stagger">
+        <?php foreach ($reviews as $review):
+          $rName = $review['name'] ?? 'Anonymous';
+          $rRating = $review['rating'] ?? 5;
+          $rComment = $review['comment'] ?? '';
+          $rTitle = $review['title'] ?? '';
+          $rProduct = $review['product_name'] ?? '';
+          $rDate = $review['created_at'] ?? '';
+          $rAvatar = $review['avatar'] ?? '';
+        ?>
+        <div class="bg-white rounded-2xl border border-premium-warm-gray p-6 shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col">
+          <div class="flex items-center gap-1 mb-3">
+            <?php for ($s = 1; $s <= 5; $s++): ?>
+            <?php if ($s <= $rRating): ?>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <?php else: ?>
+            <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <?php endif; ?>
+            <?php endfor; ?>
+          </div>
+          <?php if ($rTitle): ?>
+          <h4 class="text-sm font-bold text-premium-charcoal mb-1"><?= e($rTitle) ?></h4>
+          <?php endif; ?>
+          <p class="text-sm text-premium-mink leading-relaxed flex-1">"<?= e(truncate($rComment, 200)) ?>"</p>
+          <div class="flex items-center gap-3 mt-4 pt-4 border-t border-premium-warm-gray">
+            <div class="w-10 h-10 rounded-full bg-premium-blush flex items-center justify-center text-sm font-bold text-premium-cabernet shrink-0"><?= strtoupper(substr($rName, 0, 1)) ?></div>
+            <div>
+              <p class="text-sm font-semibold text-premium-charcoal"><?= e($rName) ?></p>
+              <?php if ($rProduct): ?>
+              <p class="text-[11px] text-premium-taupe"><?= e($rProduct) ?></p>
+              <?php endif; ?>
+            </div>
+          </div>
+        </div>
+        <?php endforeach; ?>
+      </div>
+      <div class="text-center mt-8">
+        <a href="<?= url('products') ?>" class="inline-flex items-center gap-2 bg-premium-burgundy hover:bg-premium-cabernet text-white font-bold text-sm px-8 py-3 rounded-full transition-all shadow-md hover:shadow-lg">Shop Now & Leave Your Review</a>
+      </div>
+    </section>
+    <?php endif; ?>
+
+    <!-- ============================================================ -->
     <!-- GALLERY / MEMORIES SECTION                                   -->
     <!-- ============================================================ -->
-    <section class="py-8 sm:py-12 my-6 sm:my-8 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-premium-burgundy to-premium-cabernet rounded-none sm:rounded-2xl">
-      <div class="text-center mb-8">
+    <section class="py-8 sm:py-12 my-6 sm:my-8 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-premium-burgundy to-premium-cabernet rounded-none sm:rounded-2xl" data-a="fade-up">
+      <div class="text-center mb-8" data-a="fade-up">
         <h2 class="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold text-white">Moments from Our World</h2>
         <p class="text-white/60 text-sm mt-2">Glimpses of Bengali wedding traditions</p>
       </div>
@@ -419,4 +511,23 @@ upd();window.addEventListener('resize',upd);})();
 
 /* Memories scroll drag */
 (function(){var el=document.getElementById('memories-scroll');if(!el)return;var down=false,startX=0,scrollLeft=0;el.addEventListener('mousedown',function(e){down=true;startX=e.pageX;scrollLeft=el.scrollLeft;el.style.cursor='grabbing';});window.addEventListener('mousemove',function(e){if(!down)return;e.preventDefault();var walk=e.pageX-startX;el.scrollLeft=scrollLeft-walk;});window.addEventListener('mouseup',function(){down=false;if(el)el.style.cursor='grab';});})();
+
+/* High-quality scroll animations */
+(function(){
+  if (!window.IntersectionObserver) {
+    document.querySelectorAll('[data-a]').forEach(function(el){ el.classList.add('a-done'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      var el = entry.target;
+      var type = el.getAttribute('data-a');
+      el.classList.remove('a-' + type);
+      requestAnimationFrame(function(){ el.classList.add('a-done'); });
+      observer.unobserve(el);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('[data-a]').forEach(function(el){ observer.observe(el); });
+})();
 </script>
