@@ -54,7 +54,7 @@ class CartController extends Controller
     public function add(Request $request, Response $response): void
     {
         $productId = (int)$request->input('product_id');
-        $quantity = (int)$request->input('quantity', 1);
+        $quantity = max(1, (int)$request->input('quantity', 1));
         $variantId = $request->input('variant_id') ? (int)$request->input('variant_id') : null;
 
         $result = $this->cartService->add($productId, $quantity, $variantId);
@@ -63,6 +63,9 @@ class CartController extends Controller
             $cart = $this->cartService->getCart();
             $result['cart_count'] = $cart['total_items'];
             $result['cart_total'] = $cart['total'];
+        } else {
+            $result['cart_count'] = 0;
+            $result['cart_total'] = 0;
         }
 
         $this->json($result);

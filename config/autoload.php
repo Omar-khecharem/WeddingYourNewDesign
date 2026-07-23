@@ -64,8 +64,15 @@ set_exception_handler(function (Throwable $exception): void {
 
 if (session_status() === PHP_SESSION_NONE) {
     $sessPath = STORAGE_DIR . DS . 'sessions';
-    if (!is_dir($sessPath)) { @mkdir($sessPath, 0755, true); }
-    session_save_path($sessPath);
+    $useDefault = false;
+    if (!is_dir($sessPath)) {
+        @mkdir($sessPath, 0755, true);
+    }
+    if (is_dir($sessPath) && is_writable($sessPath)) {
+        session_save_path($sessPath);
+    } else {
+        $useDefault = true;
+    }
     ini_set('session.gc_maxlifetime', SESSION_LIFETIME * 60);
     ini_set('session.gc_probability', 1);
     ini_set('session.gc_divisor', 100);
@@ -77,7 +84,11 @@ if (session_status() === PHP_SESSION_NONE) {
         'httponly' => true,
         'samesite' => 'Lax'
     ]);
-    session_start();
+    $started = session_start();
+    if (!$started && !$useDefault) {
+        session_save_path('');
+        session_start();
+    }
 }
 
 ini_set('upload_max_filesize', '50M');

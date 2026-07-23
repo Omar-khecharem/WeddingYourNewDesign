@@ -50,7 +50,7 @@ $wishlistItems = $wishlistItems ?? [];
                 <?php if ($pDisc > 0): ?>
                 <span class="absolute top-2 left-2 bg-red-600 text-white text-xs font-black px-2 py-0.5 rounded-md z-10">-<?= $pDisc ?>%</span>
                 <?php endif; ?>
-                    <img src="<?= e($pImg) ?>" alt="<?= e($pName) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 w-full aspect-square bg-gray-50" loading="lazy">
+                    <img src="<?= e($pImg) ?>" alt="<?= e($pName) ?>" class="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500 aspect-square bg-gray-50" loading="lazy">
                 <button data-wishlist="<?= $pId ?>" onclick="event.stopPropagation();toggleWishlist(<?= $pId ?>)" class="absolute top-2 right-2 w-8 h-8 bg-white rounded-full shadow flex items-center justify-center text-red-500 hover:bg-red-50 transition-all z-10" title="Remove from wishlist">
                     <svg class="w-4 h-4" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                 </button>

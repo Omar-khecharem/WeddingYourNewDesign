@@ -33,7 +33,8 @@ class ProductCard extends Component
         $price = $salePrice ?: $regularPrice;
         $showOldPrice = $salePrice && $salePrice < $regularPrice;
 
-        $html .= '<a href="' . url('product/' . $slug) . '" class="product-card group">';
+        $html .= '<div class="product-card group">';
+        $html .= '<a href="' . url('product/' . $slug) . '" class="block">';
 
         // Badges
         if ($discountPercent > 0) {
@@ -45,7 +46,7 @@ class ProductCard extends Component
 
         // Image
         $html .= '<div class="prod-img relative">';
-        $html .= '<img src="' . $this->e($image) . '" alt="' . $this->e($name) . '" loading="lazy" class="w-full h-full object-cover">';
+        $html .= '<img src="' . $this->e($image) . '" alt="' . $this->e($name) . '" loading="lazy" class="w-full h-full object-contain">';
         $html .= '</div>';
 
         // Quick action overlay
@@ -90,12 +91,15 @@ class ProductCard extends Component
         $html .= '<span class="new-price">' . APP_CURRENCY . number_format($price, 2) . '</span>';
         $html .= '</div>';
 
-        // Add to cart button
-        $html .= '<button onclick="event.stopPropagation();addToCart(' . $productId . ')" class="w-full bg-primary-red text-white text-xs font-bold py-2.5 px-4 rounded-lg hover:bg-opacity-90 transition-all flex items-center justify-center gap-2">';
+        // Close the link
+        $html .= '</a>';
+
+        // Add to cart button (outside anchor)
+        $html .= '<button onclick="addToCart(' . $productId . ')" class="w-full bg-primary-red text-white text-xs font-bold py-2.5 px-4 rounded-lg hover:bg-opacity-90 transition-all flex items-center justify-center gap-2">';
         $html .= '<i class="fa-solid fa-cart-shopping"></i> Add to Cart';
         $html .= '</button>';
 
-        $html .= '</a>';
+        $html .= '</div>';
 
         return $html;
     }

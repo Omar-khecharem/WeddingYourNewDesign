@@ -221,7 +221,7 @@ $heroButtonLink = $heroButtonLink ?? '';
                 <svg class="w-4 h-4" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
               </button>
             </div>
-            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="<?= e($pImg ?: 'https://placehold.co/400x400/FEF3C7/D4A847?text=WeddingYour') ?>" alt="<?= e($pName) ?>" loading="lazy">
+            <img class="w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-110" src="<?= e($pImg ?: 'https://placehold.co/400x400/FEF3C7/D4A847?text=WeddingYour') ?>" alt="<?= e($pName) ?>" loading="lazy">
             <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
           </div>
           <div class="p-4">
@@ -247,7 +247,7 @@ $heroButtonLink = $heroButtonLink ?? '';
         <div class="bg-white rounded-2xl overflow-hidden border border-premium-warm-gray group">
           <div class="relative aspect-square overflow-hidden bg-premium-cream">
             <span class="absolute top-2.5 left-2.5 bg-premium-burgundy text-white text-[10px] font-bold px-2.5 py-1 rounded-full z-10 shadow-md">-<?= $product['discount_percent'] ?>%</span>
-            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://placehold.co/400x400/FEF3C7/D4A847?text=WeddingYour" alt="<?= $product['name'] ?>" loading="lazy">
+            <img class="w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-110" src="https://placehold.co/400x400/FEF3C7/D4A847?text=WeddingYour" alt="<?= $product['name'] ?>" loading="lazy">
           </div>
           <div class="p-4">
             <p class="text-[10px] text-premium-taupe font-semibold uppercase tracking-wider"><?= $product['category_name'] ?></p>
@@ -355,7 +355,7 @@ $heroButtonLink = $heroButtonLink ?? '';
                 </button>
               </div>
               <?php if ($pimg): ?>
-              <img src="<?= e($pimg) ?>" alt="<?= e($pn) ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+              <img src="<?= e($pimg) ?>" alt="<?= e($pn) ?>" class="w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-110" loading="lazy">
               <?php else: ?>
               <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-premium-blush to-premium-cream text-premium-champagne font-bold"><?= e(substr($pn,0,2)) ?></div>
               <?php endif; ?>

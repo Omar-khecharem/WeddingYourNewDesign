@@ -87,7 +87,7 @@
                     <div class="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-4 py-3">
                         <div>
                             <span class="text-sm font-medium text-green-800">Code : <?= $cart['coupon_code'] ?></span>
-                            <span class="block text-xs text-green-600">−<?= number_format($cart['coupon_discount'] ?? 0, 2) ?> <?= APP_CURRENCY ?></span>
+                            <span class="block text-xs text-green-600">−<?= number_format($cart['discount'] ?? 0, 2) ?> <?= APP_CURRENCY ?></span>
                         </div>
                         <button type="button" id="remove-coupon" class="text-green-600 hover:text-green-800 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -147,8 +147,42 @@
 </div>
 <?php endif; ?>
 
+<div id="confirm-modal" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40" style="display:none">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4 p-6 text-center" onclick="event.stopPropagation()">
+    <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
+      <svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+      </svg>
+    </div>
+    <h3 class="text-lg font-bold text-gray-900 mb-2">Remove item?</h3>
+    <p class="text-sm text-gray-500 mb-1">Are you sure you want to remove</p>
+    <p id="confirm-product-name" class="text-sm font-semibold text-gray-800 mb-6 truncate"></p>
+    <div class="flex gap-3">
+      <button id="confirm-no" class="flex-1 border border-gray-300 text-gray-700 font-medium px-4 py-2.5 rounded-xl hover:bg-gray-50 transition">Cancel</button>
+      <button id="confirm-yes" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        Remove
+      </button>
+    </div>
+  </div>
+</div>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // Guest cart recovery: sync localStorage token to cookie, reload if empty
+    (function() {
+        var token = localStorage.getItem('cart_token');
+        if (token) {
+            document.cookie = 'cart_token=' + encodeURIComponent(token) + '; path=/; max-age=' + (30*24*60*60) + '; samesite=Lax';
+        }
+        <?php if (empty($cart['items'])): ?>
+        // Cart is empty server-side — try recovering from localStorage token
+        if (token && window.location.href.indexOf('cart_token') === -1) {
+            var sep = window.location.href.indexOf('?') === -1 ? '?' : '&';
+            window.location.href = window.location.href + sep + 'cart_token=' + encodeURIComponent(token);
+            return;
+        }
+        <?php endif; ?>
+    })();
     <?php if (!empty($cart['items'])): ?>
     var csrfToken = window.CSRF_TOKEN || '<?= \App\Helpers\Session::csrfToken() ?>';
 
@@ -258,17 +292,41 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    var _removeItemId = null;
+    var _removeRow = null;
+    var modalOverlay = document.getElementById('confirm-modal');
+    function showRemoveModal(itemId) {
+        _removeItemId = itemId;
+        _removeRow = document.querySelector('.cart-item[data-item-id="' + itemId + '"]');
+        if (_removeRow) {
+            var name = _removeRow.querySelector('.font-medium.text-gray-900')?.textContent || '';
+            document.getElementById('confirm-product-name').textContent = name;
+        }
+        if (modalOverlay) modalOverlay.style.display = 'flex';
+    }
+    function closeConfirmModal() {
+        if (modalOverlay) modalOverlay.style.display = 'none';
+        _removeItemId = null;
+        _removeRow = null;
+    }
     document.querySelectorAll('.remove-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
-            if (confirm('Are you sure you want to remove this item?')) {
-                var row = this.closest('.cart-item');
-                postForm('<?= url('cart/remove') ?>', { item_id: this.dataset.itemId }).then(function (d) {
-                    if (d && d.success) {
-                        location.reload();
-                    }
-                });
-            }
+            showRemoveModal(this.dataset.itemId);
         });
+    });
+    document.getElementById('confirm-yes')?.addEventListener('click', function () {
+        if (_removeItemId) {
+            postForm('<?= url('cart/remove') ?>', { item_id: _removeItemId }).then(function (d) {
+                if (d && d.success) {
+                    location.reload();
+                }
+            });
+        }
+        closeConfirmModal();
+    });
+    document.getElementById('confirm-no')?.addEventListener('click', closeConfirmModal);
+    if (modalOverlay) modalOverlay.addEventListener('click', function (e) {
+        if (e.target === this) closeConfirmModal();
     });
 
     <?php if (empty($cart['coupon_code'])): ?>
@@ -281,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     <?php else: ?>
     document.getElementById('remove-coupon').addEventListener('click', function () {
-        postForm('<?= url('cart/coupon') ?>', { code: '' }).then(function (d) {
+        postForm('<?= url('cart/coupon/remove') ?>', {}).then(function (d) {
             if (d && d.success) location.reload();
         });
     });

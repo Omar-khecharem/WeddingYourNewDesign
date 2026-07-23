@@ -23,6 +23,11 @@ class SettingController extends BaseAdminController
         $this->ensureSetting($pdo, 'tax_enabled', '1', 'tax', 'boolean', 9, 1);
         $this->ensureSetting($pdo, 'maintenance_mode', '0', 'general', 'boolean', 10, 1);
         $this->ensureSetting($pdo, 'store_open', '1', 'general', 'boolean', 11, 1);
+        $this->ensureSetting($pdo, 'shipping_label', 'Standard Shipping', 'shipping', 'text', 1, 1);
+        $this->ensureSetting($pdo, 'shipping_cost', '49', 'shipping', 'text', 2, 1);
+        $this->ensureSetting($pdo, 'free_shipping_min', '500', 'shipping', 'text', 3, 1);
+        $this->ensureSetting($pdo, 'express_shipping_label', 'Express Shipping', 'shipping', 'text', 4, 1);
+        $this->ensureSetting($pdo, 'express_shipping_cost', '99', 'shipping', 'text', 5, 1);
 
         $stmt = $pdo->query("SELECT * FROM sg_settings ORDER BY `group`, sort_order");
         $settings = $stmt->fetchAll(\PDO::FETCH_ASSOC);

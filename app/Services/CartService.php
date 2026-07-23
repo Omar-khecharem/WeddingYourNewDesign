@@ -24,6 +24,20 @@ class CartService
     }
 
     /**
+     * Get total item count for the current cart (guest or logged-in).
+     * Does NOT rely on PHP session — reads directly from DB.
+     */
+    public function getCount(): int
+    {
+        $cartId = $this->getCartId();
+        if (!$cartId) return 0;
+        $pdo = $this->db->getConnection();
+        $stmt = $pdo->prepare("SELECT COALESCE(SUM(quantity), 0) FROM sg_cart_items WHERE cart_id = :cart_id");
+        $stmt->execute([':cart_id' => $cartId]);
+        return (int)$stmt->fetchColumn();
+    }
+
+    /**
      * Get current cart
      */
     public function getCart(): array
@@ -94,11 +108,12 @@ class CartService
             return ['success' => false, 'message' => 'Product not found.'];
         }
 
-        if ($product['stock_status'] === 'out_of_stock' || $product['stock_quantity'] <= 0) {
+        $stockQty = $product['stock_quantity'];
+        if ($product['stock_status'] === 'out_of_stock' || ($stockQty !== null && $stockQty <= 0)) {
             return ['success' => false, 'message' => 'Product is out of stock.'];
         }
 
-        $price = $product['sale_price'] ?? $product['regular_price'];
+        $price = (float)($product['sale_price'] ?? $product['regular_price'] ?? 0);
         $cartId = $this->getOrCreateCart();
 
         // Check if item already in cart
@@ -153,7 +168,15 @@ class CartService
         $this->recalculateCart($cartId);
         $this->updateSessionCount();
 
-        return ['success' => true, 'message' => 'Product added to cart.'];
+        $cart = $this->getCart();
+        return [
+            'success' => true,
+            'message' => 'Product added to cart.',
+            'cart_count' => $cart['total_items'],
+            'cart_total' => $cart['total'],
+            'cart_token' => $this->readGuestToken(),
+            'cart_id' => $cartId,
+        ];
     }
 
     /**
@@ -226,7 +249,8 @@ class CartService
         $pdo->prepare("DELETE FROM sg_cart_items WHERE cart_id = :id")->execute([':id' => $cartId]);
         $pdo->prepare("DELETE FROM sg_carts WHERE id = :id")->execute([':id' => $cartId]);
 
-        Session::remove('cart.id');
+        setcookie('cart_token', '', time() - 3600, '/', '', false, false);
+        unset($_COOKIE['cart_token']);
         $this->updateSessionCount();
     }
 
@@ -308,10 +332,12 @@ class CartService
             }
         }
 
-        // Calculate shipping
+        // Calculate shipping from admin settings
         $shipping = 0;
-        if ($subtotal < FREE_SHIPPING_MIN) {
-            $shipping = STANDARD_SHIPPING;
+        $freeMin = (float) \App\Models\Setting::get('free_shipping_min', FREE_SHIPPING_MIN);
+        $stdCost = (float) \App\Models\Setting::get('shipping_cost', STANDARD_SHIPPING);
+        if ($subtotal < $freeMin) {
+            $shipping = $stdCost;
         }
 
         // Calculate tax (GST)
@@ -337,6 +363,43 @@ class CartService
     }
 
     /**
+     * Read guest token from: POST > X-Cart-Token header > cookie
+     */
+    private function readGuestToken(): string
+    {
+        return $_POST['cart_token'] ?? $_SERVER['HTTP_X_CART_TOKEN'] ?? $_COOKIE['cart_token'] ?? $_GET['cart_token'] ?? '';
+    }
+
+    /**
+     * Get unique guest token (from request/cookie, or generate new)
+     */
+    private function getGuestToken(): string
+    {
+        $token = $this->readGuestToken();
+        if (strlen($token) !== 40) {
+            $token = bin2hex(random_bytes(20));
+        }
+        $this->setGuestTokenCookie($token);
+        return $token;
+    }
+
+    /**
+     * Set guest token cookie
+     */
+    private function setGuestTokenCookie(string $token): void
+    {
+        setcookie('cart_token', $token, [
+            'expires' => time() + 86400 * 30,
+            'path' => '/',
+            'domain' => '',
+            'secure' => false,
+            'httponly' => false,
+            'samesite' => 'Lax',
+        ]);
+        $_COOKIE['cart_token'] = $token;
+    }
+
+    /**
      * Get or create cart ID
      */
     private function getOrCreateCart(): int
@@ -346,7 +409,8 @@ class CartService
 
         $pdo = $this->db->getConnection();
         $userId = Session::get('user.id');
-        $sessionId = session_id();
+
+        $token = $this->getGuestToken();
 
         $stmt = $pdo->prepare("
             INSERT INTO sg_carts (user_id, session_id, subtotal, discount, tax, shipping, total)
@@ -354,11 +418,10 @@ class CartService
         ");
         $stmt->execute([
             ':user_id' => $userId,
-            ':session_id' => $userId ? null : $sessionId
+            ':session_id' => $userId ? null : $token
         ]);
 
         $cartId = (int)$pdo->lastInsertId();
-        Session::set('cart.id', $cartId);
 
         return $cartId;
     }
@@ -368,22 +431,30 @@ class CartService
      */
     private function getCartId(): ?int
     {
-        $cartId = Session::get('cart.id');
-
-        // If user logged in, find cart by user ID
         $userId = Session::get('user.id');
+        $pdo = $this->db->getConnection();
+
         if ($userId) {
-            $pdo = $this->db->getConnection();
             $stmt = $pdo->prepare("SELECT id FROM sg_carts WHERE user_id = :user_id ORDER BY id DESC LIMIT 1");
             $stmt->execute([':user_id' => $userId]);
             $result = $stmt->fetch();
             if ($result) {
-                Session::set('cart.id', (int)$result['id']);
                 return (int)$result['id'];
             }
         }
 
-        return $cartId ? (int)$cartId : null;
+        $token = $this->readGuestToken();
+        if ($token) {
+            $stmt = $pdo->prepare("SELECT id FROM sg_carts WHERE session_id = :token ORDER BY id DESC LIMIT 1");
+            $stmt->execute([':token' => $token]);
+            $result = $stmt->fetch();
+            if ($result) {
+                $this->setGuestTokenCookie($token);
+                return (int)$result['id'];
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -462,11 +533,21 @@ class CartService
     }
 
     /**
-     * Merge session cart into user cart on login
+     * Merge guest cart into user cart on login
      */
     public function mergeCartOnLogin(int $userId): void
     {
         $sessionCartId = Session::get('cart.id');
+        if (!$sessionCartId) {
+            $token = $_COOKIE['cart_token'] ?? '';
+            if ($token) {
+                $pdo = $this->db->getConnection();
+                $stmt = $pdo->prepare("SELECT id FROM sg_carts WHERE session_id = :token ORDER BY id DESC LIMIT 1");
+                $stmt->execute([':token' => $token]);
+                $result = $stmt->fetch();
+                $sessionCartId = $result ? (int)$result['id'] : null;
+            }
+        }
         if (!$sessionCartId) return;
 
         $pdo = $this->db->getConnection();

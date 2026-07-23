@@ -338,7 +338,7 @@ $subName = $product['subcategory_name'] ?? '';
         <a href="<?= url('product/' . e($pSlug)) ?>" class="group bg-white border border-premium-warm-gray rounded-xl overflow-hidden hover:shadow-lg transition-shadow block">
           <div class="aspect-square bg-premium-ivory relative overflow-hidden">
             <?php if ($pDisc): ?><span class="absolute top-2 left-2 bg-premium-burgundy text-white text-xs font-black px-2 py-0.5 rounded-md z-10">-<?= (int)$pDisc ?>%</span><?php endif; ?>
-            <img src="<?= e($pImg ?: 'https://placehold.co/300x300?text=No+Image') ?>" alt="<?= e($pName) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="<?= e($pImg ?: 'https://placehold.co/300x300?text=No+Image') ?>" alt="<?= e($pName) ?>" class="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500">
           </div>
           <div class="p-3 space-y-1">
             <div class="text-xs font-bold text-premium-charcoal uppercase tracking-wide block truncate"><?= e($pName) ?></div>

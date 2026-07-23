@@ -26,7 +26,7 @@ class OrderService
     /**
      * Create order from cart
      */
-    public function createOrder(array $billing, array $shipping, string $paymentMethod = 'cod'): array
+    public function createOrder(array $billing, array $shipping, string $paymentMethod = 'cod', ?string $couponCode = null): array
     {
         $pdo = $this->db->getConnection();
         $cartService = new CartService();
@@ -90,7 +90,7 @@ class OrderService
                 ':tax' => $cart['tax'],
                 ':shipping_cost' => $cart['shipping'],
                 ':total' => $cart['total'],
-                ':coupon_code' => $cart['coupon_code'],
+                ':coupon_code' => $couponCode ?? $cart['coupon_code'],
                 ':coupon_discount' => $cart['discount'],
                 ':payment_method_name' => $paymentMethod === 'cod' ? 'Cash on Delivery' : ($paymentMethod === 'razorpay' ? 'Online Payment' : $paymentMethod),
                 ':payment_status' => $paymentMethod === 'cod' ? 'pending' : 'pending',
@@ -131,9 +131,15 @@ class OrderService
             }
 
             // Update coupon usage count
-            if ($cart['coupon_code']) {
-                $stmt = $pdo->prepare("UPDATE sg_coupons SET used_count = used_count + 1 WHERE code = :code");
-                $stmt->execute([':code' => $cart['coupon_code']]);
+            $effectiveCode = $couponCode ?? ($cart['coupon_code'] ?? null);
+            if ($effectiveCode) {
+                $stmt = $pdo->prepare("SELECT id FROM sg_coupons WHERE code = :code");
+                $stmt->execute([':code' => $effectiveCode]);
+                $couponId = $stmt->fetchColumn();
+                if ($couponId) {
+                    $pdo->prepare("UPDATE sg_coupons SET used_count = used_count + 1 WHERE id = :id")
+                        ->execute([':id' => $couponId]);
+                }
             }
 
             $pdo->commit();

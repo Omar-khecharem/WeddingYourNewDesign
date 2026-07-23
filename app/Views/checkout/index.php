@@ -201,7 +201,7 @@
                 <?php if (!empty($cart['coupon_code'])): ?>
                 <div class="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-4 py-3 mb-4">
                     <span class="text-sm font-medium text-green-800">Code : <?= $cart['coupon_code'] ?></span>
-                    <span class="text-sm font-semibold text-green-600">−<?= number_format($cart['coupon_discount'] ?? 0, 2) ?> <?= APP_CURRENCY ?></span>
+                    <span class="text-sm font-semibold text-green-600">−<?= number_format($cart['discount'] ?? 0, 2) ?> <?= APP_CURRENCY ?></span>
                 </div>
                 <?php endif; ?>
 

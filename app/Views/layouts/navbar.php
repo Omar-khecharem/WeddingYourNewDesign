@@ -63,8 +63,8 @@ try {
 
   <?php $siteLogo = \App\Models\Setting::get('site_logo', '') ?: 'site_logo.png'; ?>
 
-  <!-- HEADER - premium minimal -->
-  <header class="w-full bg-premium-ivory border-b border-premium-warm-gray px-5 md:px-10 lg:px-16">
+  <!-- HEADER - premium minimal (sticky on scroll) -->
+  <header id="main-header" class="w-full bg-premium-ivory border-b border-premium-warm-gray px-5 md:px-10 lg:px-16">
     <div class="max-w-[1440px] mx-auto flex items-center justify-between h-[72px] lg:h-[80px]">
 
       <!-- Mobile left: hamburger -->
@@ -133,11 +133,14 @@ try {
         </a>
 
         <!-- Cart -->
-        <a href="<?= url('cart') ?>" class="icon-btn-premium relative" aria-label="Cart">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
-          </svg>
-          <span class="badge-premium cart-count" style="display:<?= $cartCount > 0 ? 'flex' : 'none' ?>"><?= $cartCount ?></span>
+        <a href="<?= url('cart') ?>" class="relative flex items-center gap-2 py-2 pl-1 pr-3 hover:bg-premium-warm-gray rounded-lg transition-colors" aria-label="Cart">
+          <span class="relative w-[40px] h-[40px] flex items-center justify-center flex-shrink-0 rounded-full">
+            <svg class="w-5 h-5 text-premium-dark" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
+            </svg>
+            <span class="badge-premium cart-count"><?= $cartCount ?></span>
+          </span>
+          <span class="cart-total text-xs font-semibold text-premium-charcoal tracking-tight hidden sm:inline"><?= APP_CURRENCY ?> <?= number_format($cartTotal, 2) ?></span>
         </a>
       </div>
     </div>
@@ -154,6 +157,7 @@ try {
       </form>
     </div>
   </header>
+  <div id="header-spacer" class="hidden"></div>
 
   <!-- DESKTOP NAVIGATION -->
   <nav id="desktop-nav" class="w-full bg-white border-b border-premium-warm-gray hidden lg:block relative">
@@ -321,43 +325,97 @@ try {
       });
     }
 
-    // Scroll hide/show for desktop nav
+    // Sticky header + desktop nav scroll hide/show
     var nav = document.getElementById('desktop-nav');
-    if (!nav) return;
+    var headerEl = document.getElementById('main-header');
+    var spacer = document.getElementById('header-spacer');
+    var topBanner = document.querySelector('.marquee-top') ? document.querySelector('.marquee-top').closest('div') : null;
     var lastScroll = 0;
-    var navHeight = nav.offsetHeight;
+    var navHeight = nav ? nav.offsetHeight : 0;
     var ticking = false;
+    var headerSticky = false;
 
-    nav.style.transition = 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1)';
+    if (nav) {
+      nav.style.transition = 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1)';
+    }
+    if (headerEl) {
+      headerEl.style.transition = 'box-shadow 0.3s ease';
+    }
+
+    function updateHeaderPosition() {
+      if (!headerEl) return;
+      var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+      var bannerH = topBanner ? topBanner.offsetHeight : 0;
+      var threshold = bannerH + 20;
+      var headerH = headerEl.offsetHeight;
+
+      if (currentScroll > threshold && !headerSticky) {
+        headerSticky = true;
+        headerEl.style.position = 'fixed';
+        headerEl.style.top = '0';
+        headerEl.style.left = '0';
+        headerEl.style.right = '0';
+        headerEl.style.zIndex = '60';
+        headerEl.style.boxShadow = '0 4px 16px rgba(0,0,0,0.08)';
+        if (spacer) {
+          spacer.style.display = 'block';
+          spacer.style.height = headerH + 'px';
+        }
+      } else if (currentScroll <= threshold && headerSticky) {
+        headerSticky = false;
+        headerEl.style.position = '';
+        headerEl.style.top = '';
+        headerEl.style.left = '';
+        headerEl.style.right = '';
+        headerEl.style.zIndex = '';
+        headerEl.style.boxShadow = 'none';
+        if (spacer) {
+          spacer.style.display = 'none';
+          spacer.style.height = '0';
+        }
+      }
+    }
 
     window.addEventListener('scroll', function() {
       if (!ticking) {
         window.requestAnimationFrame(function() {
           var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-          if (currentScroll > navHeight) {
-            if (currentScroll > lastScroll) {
-              if (nav.style.transform !== 'translateY(-100%)') {
-                nav.style.transform = 'translateY(-100%)';
-                nav.style.boxShadow = 'none';
+          var headerH = headerEl ? headerEl.offsetHeight : 80;
+
+          // Update header sticky state
+          updateHeaderPosition();
+
+          // Re-get header height after potential sticky change
+          headerH = headerEl ? headerEl.offsetHeight : 80;
+
+          // Desktop nav show/hide
+          if (nav && navHeight > 0) {
+            if (currentScroll > navHeight) {
+              if (currentScroll > lastScroll) {
+                if (nav.style.transform !== 'translateY(-100%)') {
+                  nav.style.transform = 'translateY(-100%)';
+                  nav.style.boxShadow = 'none';
+                }
+              } else {
+                nav.style.position = 'fixed';
+                nav.style.top = headerH + 'px';
+                nav.style.left = '0';
+                nav.style.right = '0';
+                nav.style.zIndex = '50';
+                nav.style.transform = 'translateY(0)';
+                nav.style.boxShadow = '0 4px 16px rgba(0,0,0,0.12)';
               }
             } else {
-              nav.style.position = 'fixed';
-              nav.style.top = '0';
-              nav.style.left = '0';
-              nav.style.right = '0';
-              nav.style.zIndex = '50';
               nav.style.transform = 'translateY(0)';
-              nav.style.boxShadow = '0 4px 16px rgba(0,0,0,0.12)';
+              nav.style.position = '';
+              nav.style.top = '';
+              nav.style.left = '';
+              nav.style.right = '';
+              nav.style.zIndex = '';
+              nav.style.boxShadow = '';
             }
-          } else {
-            nav.style.transform = 'translateY(0)';
-            nav.style.position = '';
-            nav.style.top = '';
-            nav.style.left = '';
-            nav.style.right = '';
-            nav.style.zIndex = '';
-            nav.style.boxShadow = '';
           }
+
           lastScroll = currentScroll;
           ticking = false;
         });

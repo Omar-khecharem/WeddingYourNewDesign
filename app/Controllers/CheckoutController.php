@@ -160,7 +160,7 @@ class CheckoutController extends Controller
         $invoiceNumber = generateInvoiceNumber();
 
         // Create the order
-        $result = $this->orderService->createOrder($billing, $shipping, $paymentMethod);
+        $result = $this->orderService->createOrder($billing, $shipping, $paymentMethod, $cart['coupon_code'] ?? null);
 
         if ($result['success']) {
             // Update order with correct totals, TVA, shipping, invoice
@@ -256,21 +256,21 @@ class CheckoutController extends Controller
         return [
             [
                 'id' => 0,
-                'name' => 'Standard Shipping',
+                'name' => \App\Models\Setting::get('shipping_label', 'Standard Shipping'),
                 'slug' => 'standard',
                 'description' => 'Estimated delivery in 5-7 business days.',
-                'base_rate' => STANDARD_SHIPPING,
-                'free_above' => FREE_SHIPPING_MIN,
+                'base_rate' => (float) \App\Models\Setting::get('shipping_cost', STANDARD_SHIPPING),
+                'free_above' => (float) \App\Models\Setting::get('free_shipping_min', FREE_SHIPPING_MIN),
                 'estimated_days_min' => 5,
                 'estimated_days_max' => 7,
                 'has_tracking' => 0,
             ],
             [
                 'id' => 0,
-                'name' => 'Express Shipping',
+                'name' => \App\Models\Setting::get('express_shipping_label', 'Express Shipping'),
                 'slug' => 'express',
                 'description' => 'Estimated delivery in 2-3 business days.',
-                'base_rate' => EXPRESS_SHIPPING,
+                'base_rate' => (float) \App\Models\Setting::get('express_shipping_cost', EXPRESS_SHIPPING),
                 'free_above' => null,
                 'estimated_days_min' => 2,
                 'estimated_days_max' => 3,
@@ -322,10 +322,12 @@ class CheckoutController extends Controller
         } catch (\Exception $e) {
         }
 
-        if ($subtotal >= FREE_SHIPPING_MIN) {
+        $freeMin = (float) \App\Models\Setting::get('free_shipping_min', FREE_SHIPPING_MIN);
+        $stdCost = (float) \App\Models\Setting::get('shipping_cost', STANDARD_SHIPPING);
+        if ($subtotal >= $freeMin) {
             return 0;
         }
 
-        return (float)STANDARD_SHIPPING;
+        return $stdCost;
     }
 }

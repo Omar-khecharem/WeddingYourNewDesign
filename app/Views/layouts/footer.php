@@ -107,6 +107,11 @@ $isAdmin = \App\Helpers\Session::has('user') && (\App\Helpers\Session::get('user
 <!-- ============================================ -->
 <!-- GLOBAL JAVASCRIPT -->
 <!-- ============================================ -->
+<style>
+.btn-added { background-color: #16a34a !important; border-color: #16a34a !important; }
+.btn-added svg, .btn-added i { animation: btnAddedPop 0.3s ease; }
+@keyframes btnAddedPop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+</style>
 <script>
 <?php
 $wishlistProductIds = [];
@@ -121,30 +126,131 @@ if (\App\Helpers\Session::has('user')) {
 }
 ?>
 window._wishlistIds = <?= json_encode(array_map('intval', $wishlistProductIds)) ?>;
+// Every page load: sync cart token + count from localStorage to cookie
+(function() {
+    try {
+        var t = localStorage.getItem('cart_token');
+        if (t && document.cookie.indexOf('cart_token=') === -1) {
+            document.cookie = 'cart_token=' + encodeURIComponent(t) + '; path=/; max-age=' + (30*24*60*60) + '; samesite=Lax';
+        }
+    } catch(e) {}
+    try {
+        var savedCount = localStorage.getItem('cart_count');
+        if (savedCount !== null) {
+            var count = parseInt(savedCount, 10);
+            updateCartCount(count);
+        }
+    } catch(e) {}
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '<?= url('cart/count') ?>', true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            try {
+                var d = JSON.parse(xhr.responseText);
+                if (typeof d.count === 'number') {
+                    updateCartCount(d.count);
+                    try { localStorage.setItem('cart_count', d.count); } catch(e) {}
+                }
+            } catch(e) {}
+        }
+    };
+    xhr.send();
+})();
+var _addToCartBtn = null;
+var _addToCartOrigHTML = null;
+
+function getCartToken() {
+    return localStorage.getItem('cart_token') || '';
+}
+function setCartToken(token) {
+    if (!token) return;
+    localStorage.setItem('cart_token', token);
+    document.cookie = 'cart_token=' + encodeURIComponent(token) + '; path=/; max-age=' + (30 * 24 * 60 * 60) + '; samesite=Lax';
+}
+function removeCartToken() {
+    localStorage.removeItem('cart_token');
+    document.cookie = 'cart_token=; path=/; max-age=0';
+}
+
 function toggleMobileMenu() {
     document.querySelector('.nav-links .flex.items-center.gap-6').classList.toggle('hidden');
 }
 function addToCart(productId, quantity, variantId) {
     quantity = quantity || 1;
+    var btn = document.activeElement && document.activeElement.closest('button');
+    if (!btn) {
+        var buttons = document.querySelectorAll('button');
+        for (var i = 0; i < buttons.length; i++) {
+            var oc = buttons[i].getAttribute('onclick') || '';
+            if (oc.indexOf('addToCart(' + productId) !== -1) {
+                btn = buttons[i];
+                break;
+            }
+        }
+    }
+    if (btn) {
+        _addToCartBtn = btn;
+        _addToCartOrigHTML = btn.innerHTML;
+        btn.disabled = true;
+    }
+    var token = getCartToken();
     var params = 'action=add_to_cart&product_id=' + productId + '&quantity=' + quantity + '&_csrf_token=<?= \App\Helpers\Session::csrfToken() ?>';
+    if (token) params += '&cart_token=' + encodeURIComponent(token);
     if (variantId) params += '&variant_id=' + variantId;
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '<?= url('cart/add') ?>', true);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function() {
-        console.log('addToCart response:', xhr.status, xhr.responseText.substring(0, 500));
         try {
             var d = JSON.parse(xhr.responseText);
-            if (d.success) { showToast(d.message, 'success'); updateCartCount(d.cart_count); updateCartTotal(d.cart_total); }
-            else { showToast(d.message || 'Error', 'error'); }
+            if (d.success) {
+                showToast(d.message, 'success');
+                updateCartCount(d.cart_count);
+                try { localStorage.setItem('cart_count', d.cart_count); } catch(e) {}
+                updateCartTotal(d.cart_total);
+                if (d.cart_token) setCartToken(d.cart_token);
+                if (_addToCartBtn) {
+                    _addToCartBtn.classList.add('btn-added');
+                    _addToCartBtn.innerHTML = '<i class=\"fa-solid fa-check\"></i> Added';
+                    setTimeout(function() {
+                        if (_addToCartBtn) {
+                            _addToCartBtn.classList.remove('btn-added');
+                            _addToCartBtn.innerHTML = _addToCartOrigHTML;
+                            _addToCartBtn.disabled = false;
+                        }
+                        _addToCartBtn = null;
+                        _addToCartOrigHTML = null;
+                    }, 2500);
+                }
+            } else {
+                showToast(d.message || 'Error', 'error');
+                if (_addToCartBtn) {
+                    _addToCartBtn.innerHTML = _addToCartOrigHTML;
+                    _addToCartBtn.disabled = false;
+                }
+                _addToCartBtn = null;
+                _addToCartOrigHTML = null;
+            }
         } catch(e) {
-            console.error('addToCart JSON parse error:', e.message, 'Status:', xhr.status);
-            console.error('Raw response:', xhr.responseText.substring(0, 1000));
             showToast('Failed to add to cart.', 'error');
+            if (_addToCartBtn) {
+                _addToCartBtn.innerHTML = _addToCartOrigHTML;
+                _addToCartBtn.disabled = false;
+            }
+            _addToCartBtn = null;
+            _addToCartOrigHTML = null;
         }
     };
-    xhr.onerror = function() { console.error('addToCart network error'); showToast('Failed to add to cart.', 'error'); };
+    xhr.onerror = function() {
+        showToast('Failed to add to cart.', 'error');
+        if (_addToCartBtn) {
+            _addToCartBtn.innerHTML = _addToCartOrigHTML;
+            _addToCartBtn.disabled = false;
+        }
+        _addToCartBtn = null;
+        _addToCartOrigHTML = null;
+    };
     xhr.send(params);
 }
 function addToWishlist(productId) {
@@ -201,7 +307,7 @@ function updateCompareCount(count) {
 }
 function updateCartCount(count) {
     var badges = document.querySelectorAll('.cart-count, .cart-count-mobile');
-    badges.forEach(function(b) { b.textContent = count; b.style.display = count > 0 ? 'flex' : 'none'; });
+    badges.forEach(function(b) { b.textContent = count; b.style.display = 'flex'; });
 }
 function updateCartTotal(total) {
     if (total === undefined) return;
@@ -290,7 +396,9 @@ function buyNow(productId) {
     var qty = 1;
     var qtyInput = document.getElementById('qtyInput');
     if (qtyInput) qty = parseInt(qtyInput.value) || 1;
+    var token = getCartToken();
     var params = 'action=add_to_cart&product_id=' + productId + '&quantity=' + qty + '&_csrf_token=<?= \App\Helpers\Session::csrfToken() ?>';
+    if (token) params += '&cart_token=' + encodeURIComponent(token);
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '<?= url('cart/add') ?>', true);
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -299,6 +407,7 @@ function buyNow(productId) {
         try {
             var d = JSON.parse(xhr.responseText);
             if (d.success) {
+                if (d.cart_token) setCartToken(d.cart_token);
                 window.location.href = '<?= url('checkout') ?>';
             } else {
                 showToast(d.message || 'Error', 'error');
@@ -325,6 +434,16 @@ function showToast(message, type) {
 document.addEventListener('click', function(e) {
     if (e.target.closest('[onclick*="remove"]')) e.target.closest('.fixed.top-24').remove();
 });
+// Capture phase: prevent ALL anchor navigation for addToCart buttons
+document.addEventListener('click', function(e) {
+    var btn = e.target.closest('button');
+    if (btn) {
+        var oc = btn.getAttribute('onclick') || '';
+        if (oc.indexOf('addToCart(') !== -1 || oc.indexOf('addToCompare(') !== -1 || oc.indexOf('toggleWishlist(') !== -1 || oc.indexOf('toggleCompare(') !== -1) {
+            e.preventDefault();
+        }
+    }
+}, true);
 </script>
 
 <div id="privacy-banner" class="fixed bottom-0 left-0 right-0 z-[99999] bg-white border-t border-premium-warm-gray shadow-lg" style="display:none">

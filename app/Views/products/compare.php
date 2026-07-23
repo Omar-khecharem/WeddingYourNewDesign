@@ -73,7 +73,7 @@ $count = $count ?? 0;
                                 <div class="w-32 h-32 mx-auto rounded-lg overflow-hidden bg-premium-warm-gray">
                                     <img src="<?= e(!empty($product['primary_image']) ? uploadUrl($product['primary_image'], 'products') : asset('images/placeholder.png')) ?>"
                                          alt="<?= e($product['name']) ?>"
-                                         class="w-full h-full object-cover"
+                                         class="w-full h-full object-contain p-1"
                                          loading="lazy">
                                 </div>
                             </td>
