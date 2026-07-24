@@ -25,6 +25,7 @@ require __DIR__ . DS . 'header.php';
 <?php
 $navbarData = [
     'cartCount' => $cartCount ?? 0,
+    'cartTotal' => $cartTotal ?? 0,
     'wishlistCount' => $wishlistCount ?? 0,
     'compareCount' => $compareCount ?? 0,
     'isLoggedIn' => $isLoggedIn ?? false,

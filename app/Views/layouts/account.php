@@ -5,6 +5,7 @@ require __DIR__ . DS . 'header.php';
 // Navbar
 echo \App\Core\View::include('layouts.navbar', [
     'cartCount' => $cartCount ?? 0,
+    'cartTotal' => $cartTotal ?? 0,
     'wishlistCount' => $wishlistCount ?? 0,
     'compareCount' => $compareCount ?? 0,
     'isLoggedIn' => $isLoggedIn ?? false,

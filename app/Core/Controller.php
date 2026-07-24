@@ -48,6 +48,7 @@ abstract class Controller
         } catch (\Exception $e) {
             $this->viewData['cartCount'] = Session::get('cart.count', 0);
         }
+        $this->viewData['cartTotal'] = Session::get('cart.total', 0);
         $this->viewData['wishlistCount'] = Session::get('wishlist.count', 0);
         // Compute compare count from DB
         try {

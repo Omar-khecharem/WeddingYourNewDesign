@@ -24,7 +24,7 @@ $appTagline = \App\Models\Setting::get('site_tagline', APP_TAGLINE);
 $facebookUrl = \App\Models\Setting::get('social_facebook', SOCIAL_FACEBOOK);
 $instagramUrl = \App\Models\Setting::get('social_instagram', SOCIAL_INSTAGRAM);
 $youtubeUrl = \App\Models\Setting::get('social_youtube', SOCIAL_YOUTUBE);
-$cartTotal = \App\Helpers\Session::get('cart.total', 0.00);
+$cartTotal = $cartTotal ?? \App\Helpers\Session::get('cart.total', 0.00);
 
 $categoriesMenu = [];
 $subcategoriesBar = [];

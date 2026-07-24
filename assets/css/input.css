@@ -163,8 +163,8 @@
   .icon-btn-premium:hover { background: #F0EAE3; color: #B8845A; }
   .badge-premium {
     position: absolute;
-    top: -6px;
-    right: -2px;
+    top: -10px;
+    right: -10px;
     background: #B8845A;
     color: white;
     font-size: 9px;
