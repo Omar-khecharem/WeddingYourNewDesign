@@ -15,6 +15,7 @@ use App\Controllers\Admin\PageController;
 use App\Controllers\Admin\BlogController;
 use App\Controllers\Admin\ContactController;
 use App\Controllers\Admin\HomePageController;
+use App\Controllers\Admin\FaqController;
 use App\Middleware\AdminMiddleware;
 
 // Admin login (outside middleware group - no auth required)
@@ -412,4 +413,12 @@ Router::group('/13091998', ['middleware' => [AdminMiddleware::class]], function 
     Router::get('/contacts/{id}', [ContactController::class, 'show'])->name('admin.contacts.show');
     Router::post('/contacts/{id}/reply', [ContactController::class, 'reply'])->name('admin.contacts.reply');
     Router::post('/contacts/delete', [ContactController::class, 'destroy'])->name('admin.contacts.delete');
+
+    // FAQ
+    Router::get('/faqs', [FaqController::class, 'index'])->name('admin.faqs');
+    Router::get('/faqs/create', [FaqController::class, 'create'])->name('admin.faqs.create');
+    Router::post('/faqs', [FaqController::class, 'store'])->name('admin.faqs.store');
+    Router::get('/faqs/edit/{id}', [FaqController::class, 'edit'])->name('admin.faqs.edit');
+    Router::post('/faqs/update/{id}', [FaqController::class, 'update'])->name('admin.faqs.update');
+    Router::post('/faqs/delete', [FaqController::class, 'destroy'])->name('admin.faqs.delete');
 });

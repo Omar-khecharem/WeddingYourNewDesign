@@ -154,13 +154,12 @@ $end = min($page * $perPage, $total);
     <!-- ============ MAIN CONTENT ============ -->
     <div class="flex-1 min-w-0">
 
-      <!-- Results bar -->
+      <!-- Sort bar (kept outside dynamic container) -->
       <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-premium-warm-gray">
-        <p class="text-sm text-premium-taupe">
+        <p class="text-sm text-premium-taupe" id="products-count-static">
           Showing <?= $start ?>–<?= $end ?> of <?= $total ?> results
         </p>
         <div class="flex items-center gap-3">
-          <!-- View toggle -->
           <div class="flex items-center border border-premium-warm-gray rounded overflow-hidden">
             <button onclick="setView('grid')" id="view-grid" class="p-1.5 text-xs bg-white hover:bg-premium-ivory transition-colors border-r border-premium-warm-gray" title="Grid view">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
@@ -169,7 +168,6 @@ $end = min($page * $perPage, $total);
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
             </button>
           </div>
-          <!-- Per page -->
           <div class="flex items-center gap-1.5">
             <span class="text-xs text-premium-taupe">Show</span>
             <select name="per_page" onchange="var p=new URLSearchParams(location.search);p.set('per_page',this.value);p.delete('page');location.search=p.toString()" class="text-xs border border-premium-warm-gray rounded px-2 py-1.5 bg-white">
@@ -178,7 +176,6 @@ $end = min($page * $perPage, $total);
               <?php endforeach; ?>
             </select>
           </div>
-          <!-- Sort -->
           <select name="sort" onchange="var p=new URLSearchParams(location.search);p.set('sort',this.value);p.delete('page');location.search=p.toString()" class="text-xs border border-premium-warm-gray rounded px-2 py-1.5 bg-white">
             <option value="newest" <?= $sortBy === 'newest' ? 'selected' : '' ?>>Default sorting</option>
             <option value="price_asc" <?= $sortBy === 'price_asc' ? 'selected' : '' ?>>Price low to high</option>
@@ -190,111 +187,54 @@ $end = min($page * $perPage, $total);
         </div>
       </div>
 
-      <!-- Products grid -->
-      <?php if (!empty($productList)): ?>
-      <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4" id="product-grid">
-        <?php foreach ($productList as $product):
-          $pName = $product['name'] ?? '';
-          $pSlug = $product['slug'] ?? '';
-          $pImg = $product['image'] ?? $product['images'][0] ?? 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300';
-          $pCategory = $product['category_name'] ?? $product['category'] ?? 'BRIDE';
-          $pSubcategory = $product['subcategory_name'] ?? $product['subcategory'] ?? 'Bridal Patashi / Mukut';
-          $pTags = $product['tags'] ?? ($product['tag'] ?? '');
-          $pRegular = $product['regular_price'] ?? $product['price'] ?? 0;
-          $pSale = $product['sale_price'] ?? $pRegular;
-          $pDiscount = $product['discount_percent'] ?? ($pRegular > 0 ? round((1 - $pSale / $pRegular) * 100) : 0);
-          $pStock = $product['stock_status'] ?? 'in_stock';
-          $pId = $product['id'] ?? 0;
-          $rAvg = $productRatings[$pId]['average'] ?? 0;
-          $rTot = $productRatings[$pId]['total'] ?? 0;
-        ?>
-        <a href="<?= url('product/' . e($pSlug)) ?>" class="bg-white border border-premium-warm-gray rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow flex flex-col group/card product-card">
-          <div class="relative overflow-hidden bg-premium-ivory" style="padding-bottom:100%">
-            <?php if ($pDiscount > 0): ?>
-            <span class="absolute top-2 left-2 bg-premium-burgundy text-white text-[10px] font-black px-2 py-0.5 rounded-md z-10">-<?= $pDiscount ?>%</span>
-            <?php endif; ?>
-              <img src="<?= e($pImg) ?>" alt="<?= e($pName) ?>" class="absolute inset-0 w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500" loading="lazy">
-            <!-- Hover overlay buttons -->
-            <div class="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1.5 p-2 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 product-card-actions">
-              <button onclick="event.preventDefault();addToCart(<?= $pId ?>, 1)" class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-premium-mink hover:bg-premium-crimson hover:text-white transition-colors shadow" title="Cart">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
-              </button>
-              <button onclick="event.preventDefault();" class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-premium-mink hover:bg-premium-crimson hover:text-white transition-colors shadow hidden sm:flex" title="Quick view">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-              </button>
-              <button data-compare="<?= $pId ?>" onclick="event.preventDefault();addToCompare(<?= $pId ?>)" class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-premium-mink hover:bg-premium-crimson hover:text-white transition-colors shadow hidden sm:flex" title="Compare">
-                <svg class="w-3.5 h-3.5" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
-              </button>
-              <button data-wishlist="<?= $pId ?>" onclick="event.preventDefault();toggleWishlist(<?= $pId ?>)" class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-premium-mink hover:bg-premium-crimson hover:text-white transition-colors shadow" title="Wishlist">
-                <svg class="w-3.5 h-3.5" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-              </button>
-            </div>
-          </div>
-          <div class="p-3 flex flex-col gap-1.5 flex-1 product-card-body">
-            <div class="product-info-main flex flex-col flex-1 min-h-0 gap-1">
-              <div class="space-y-1">
-                <h3 class="text-xs font-bold text-premium-charcoal uppercase tracking-wide leading-tight line-clamp-2"><?= e($pName) ?></h3>
-                <p class="text-[10px] text-premium-taupe font-medium flex flex-wrap gap-x-1">
-                  <span><?= e($pCategory) ?></span><span class="text-premium-stone">,</span>
-                  <span><?= e($pSubcategory) ?></span>
-                  <?php if ($pTags): ?><span class="text-premium-stone">,</span><span><?= e(is_array($pTags) ? implode(', ', $pTags) : $pTags) ?></span><?php endif; ?>
-                </p>
-                <div class="flex items-center gap-1">
-                  <?= renderStars($rAvg) ?>
-                  <?php if ($rTot > 0): ?><span class="text-[10px] text-premium-taupe">(<?= $rTot ?>)</span><?php endif; ?>
-                </div>
-                <span class="text-[10px] text-premium-mink font-bold flex items-center gap-1">
-                  <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> In stock
-                </span>
-              </div>
-              <div class="flex items-center gap-2 mt-auto">
-                <span class="text-sm font-black text-premium-crimson">₹<?= number_format($pSale, 2) ?></span>
-                <?php if ($pDiscount > 0): ?>
-                <span class="text-[10px] text-premium-stone line-through">₹<?= number_format($pRegular, 2) ?></span>
-                <?php endif; ?>
-              </div>
-            </div>
-            <div class="product-info-actions">
-              <button onclick="event.preventDefault();addToCart(<?= $pId ?>, 1)" class="list-cart-btn" title="Add to Cart">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM15.75 14.25a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM5.106 5.25H20.25l-2.614 7.276A1.5 1.5 0 0116.2 13.5H7.5a1.5 1.5 0 01-1.436-1.044L5.106 5.25z"/></svg>
-                <span>Add to Cart</span>
-              </button>
-              <button onclick="event.preventDefault();addToCart(<?= $pId ?>, 1);setTimeout(function(){window.location.href='<?= url('checkout') ?>'},500)" class="list-buy-btn" title="Buy Now">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
-                <span>Buy Now</span>
-              </button>
-            </div>
-          </div>
-        </a>
-        <?php endforeach; ?>
+      <!-- Dynamic content container (replaced on AJAX pagination) -->
+      <div id="products-container">
+        <?= \App\Core\View::include('products._grid', [
+          'products' => $products ?? [],
+          'total' => $total ?? 0,
+          'page' => $page ?? 1,
+          'perPage' => $perPage ?? 12,
+          'totalPages' => $totalPages ?? 1,
+          'productRatings' => $productRatings ?? [],
+          'filters' => $filters ?? [],
+          'sortBy' => $sortBy ?? 'newest',
+        ]) ?>
       </div>
 
-      <!-- Load More -->
-      <?php if ($page < $totalPages): ?>
-      <div class="text-center mt-8">
-        <a href="<?= url('products?' . http_build_query(array_merge($_GET, ['page' => $page + 1]))) ?>" class="inline-flex items-center gap-2 bg-premium-burgundy hover:bg-premium-cabernet text-white font-bold text-sm px-8 py-3 rounded-full transition-colors shadow-md">
-          Load more products
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-        </a>
-      </div>
-      <?php endif; ?>
-
-      <?php else: ?>
-      <div class="text-center py-20">
-        <div class="text-5xl text-premium-stone mb-4">
-          <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-        </div>
-        <h2 class="text-lg font-bold text-premium-mink mb-2">No products found</h2>
-        <p class="text-sm text-premium-taupe mb-6">Try adjusting your search or filter criteria.</p>
-        <a href="<?= url('products') ?>" class="inline-block bg-premium-burgundy hover:bg-premium-cabernet text-white text-sm font-bold px-6 py-2.5 rounded-full transition-colors">View All Products</a>
-      </div>
-      <?php endif; ?>
     </div>
 
   </div>
 </div>
 
 <style>
+/* Loading shimmer for AJAX pagination */
+#products-container.is-loading { position: relative; min-height: 300px; }
+#products-container.is-loading #product-grid { opacity: 0.3; pointer-events: none; }
+#products-container.is-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.5);
+  z-index: 5;
+}
+#products-container.is-loading #pagination-nav { opacity: 0.4; pointer-events: none; }
+.pag-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #9E6F46;
+  font-size: 13px;
+  font-weight: 600;
+}
+.pag-loading .spinner {
+  width: 18px; height: 18px;
+  border: 2.5px solid #E8D5C8;
+  border-top-color: #B8845A;
+  border-radius: 50%;
+  animation: pag-spin 0.6s linear infinite;
+}
+@keyframes pag-spin { to { transform: rotate(360deg); } }
+
 .product-card.list-view-card { flex-direction: row !important; }
 .product-card.list-view-card > .relative { width: 220px; min-width: 220px; height: 220px; flex-shrink: 0; border-radius: 0; padding-bottom: 0 !important; }
 .product-card.list-view-card > .relative .product-card-actions { opacity: 1 !important; background: linear-gradient(to top, rgba(0,0,0,0.6), transparent) !important; padding: 10px !important; gap: 8px !important; }
@@ -329,6 +269,78 @@ $end = min($page * $perPage, $total);
 }
 </style>
 <script>
+/* ───────────────────────────────────────────
+   Smooth AJAX Pagination
+   ─────────────────────────────────────────── */
+(function(){
+  var container = document.getElementById('products-container');
+  if (!container) return;
+
+  container.addEventListener('click', function(e) {
+    var link = e.target.closest('.page-link');
+    if (!link) return;
+    e.preventDefault();
+
+    var url = link.getAttribute('href');
+    if (!url) return;
+
+    // Abort if already loading
+    if (container.classList.contains('is-loading')) return;
+
+    // Show loading state
+    container.classList.add('is-loading');
+
+    // Update URL without reload
+    var pageParam = new URLSearchParams(link.search).get('page');
+    var newParams = new URLSearchParams(location.search);
+    if (pageParam) newParams.set('page', pageParam);
+    var newUrl = location.pathname + '?' + newParams.toString();
+    history.pushState({ page: pageParam }, '', newUrl);
+
+    // Also update the static results count placeholder
+    var countEl = document.getElementById('products-count-static');
+    if (countEl) countEl.textContent = 'Loading…';
+
+    // Fetch partial via AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.onload = function() {
+      container.classList.remove('is-loading');
+      if (xhr.status >= 200 && xhr.status < 300) {
+        // Replace container content
+        container.innerHTML = xhr.responseText;
+
+        // Restore view mode preference
+        var saved = localStorage.getItem('productView');
+        if (saved === 'list' && window.applyView) {
+          window.applyView('list');
+        }
+
+        // Update static count from new results bar
+        var newCount = container.querySelector('#results-count');
+        if (newCount && countEl) {
+          countEl.textContent = newCount.textContent;
+        }
+
+        // Scroll to top of products section smoothly
+        var header = document.querySelector('.flex-1');
+        if (header) header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        // Fallback: full page load on error
+        location.href = url;
+      }
+    };
+    xhr.onerror = function() { location.href = url; };
+    xhr.send();
+  });
+
+  // Handle back/forward browser navigation
+  window.addEventListener('popstate', function(e) {
+    location.reload();
+  });
+})();
+
 /* Category step carousel */
 (function() {
   var track = document.getElementById('catTrackProd');
