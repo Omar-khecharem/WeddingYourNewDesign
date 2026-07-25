@@ -86,6 +86,7 @@
                     ['url' => url('13091998/deals'), 'label' => 'Best Deals', 'icon' => 'fa-percent'],
                     ['url' => url('13091998/category-cards'), 'label' => 'Section Cards', 'icon' => 'fa-layer-group'],
                     ['url' => url('13091998/gallery'), 'label' => 'Gallery', 'icon' => 'fa-camera'],
+                    ['url' => url('13091998/faqs'), 'label' => 'FAQ', 'icon' => 'fa-circle-question'],
 
                 ];
                 ?>

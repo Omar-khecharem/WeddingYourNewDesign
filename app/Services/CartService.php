@@ -38,6 +38,15 @@ class CartService
     }
 
     /**
+     * Get cart total directly from DB (session-independent)
+     */
+    public function getTotal(): float
+    {
+        $cart = $this->getCart();
+        return (float)($cart['total'] ?? 0);
+    }
+
+    /**
      * Get current cart
      */
     public function getCart(): array
@@ -422,6 +431,7 @@ class CartService
         ]);
 
         $cartId = (int)$pdo->lastInsertId();
+        Session::set('cart.id', $cartId);
 
         return $cartId;
     }
@@ -431,6 +441,7 @@ class CartService
      */
     private function getCartId(): ?int
     {
+        $cartId = Session::get('cart.id');
         $userId = Session::get('user.id');
         $pdo = $this->db->getConnection();
 
@@ -439,9 +450,13 @@ class CartService
             $stmt->execute([':user_id' => $userId]);
             $result = $stmt->fetch();
             if ($result) {
-                return (int)$result['id'];
+                $cartId = (int)$result['id'];
+                Session::set('cart.id', $cartId);
+                return $cartId;
             }
         }
+
+        if ($cartId) return (int)$cartId;
 
         $token = $this->readGuestToken();
         if ($token) {
@@ -449,8 +464,22 @@ class CartService
             $stmt->execute([':token' => $token]);
             $result = $stmt->fetch();
             if ($result) {
+                $cartId = (int)$result['id'];
+                Session::set('cart.id', $cartId);
                 $this->setGuestTokenCookie($token);
-                return (int)$result['id'];
+                return $cartId;
+            }
+        }
+
+        $sid = session_id();
+        if ($sid) {
+            $stmt = $pdo->prepare("SELECT id FROM sg_carts WHERE session_id = :sid ORDER BY id DESC LIMIT 1");
+            $stmt->execute([':sid' => $sid]);
+            $result = $stmt->fetch();
+            if ($result) {
+                $cartId = (int)$result['id'];
+                Session::set('cart.id', $cartId);
+                return $cartId;
             }
         }
 

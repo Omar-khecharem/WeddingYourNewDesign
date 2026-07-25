@@ -332,6 +332,49 @@
   }
   .animate-fade-in-up { animation: fadeInUp 0.6s ease-out both; }
 
+  .faq-trigger { -webkit-tap-highlight-color: transparent; }
+  .faq-item {
+    transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
+    border: 1px solid rgba(232, 213, 200, 0.5);
+    box-shadow: 0 2px 12px rgba(184, 132, 90, 0.06);
+    border-radius: 16px;
+    background: #FFFFFF;
+  }
+  .faq-item:hover {
+    border-color: rgba(212, 175, 55, 0.35);
+    box-shadow: 0 8px 32px rgba(184, 132, 90, 0.10);
+    transform: translateY(-1px);
+  }
+  .faq-item.is-open {
+    border-color: rgba(212, 175, 55, 0.50);
+    box-shadow: 0 12px 48px rgba(184, 132, 90, 0.14);
+    border-width: 1.5px;
+  }
+  .faq-item.is-open .faq-arrow {
+    background: #B8845A;
+    transform: rotate(180deg);
+    box-shadow: 0 2px 8px rgba(184, 132, 90, 0.25);
+  }
+  .faq-item.is-open .faq-arrow svg { color: #FFFFFF; }
+  .faq-item.is-open .faq-trigger { color: #9E6F46; }
+  .faq-body {
+    transition: max-height 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .faq-trigger { transition: color 0.3s ease; }
+  .faq-trigger:hover .faq-arrow {
+    background: #E8D5C8;
+    transform: rotate(0deg) scale(1.08);
+  }
+  .faq-trigger:hover .faq-arrow svg { color: #9E6F46; }
+  .faq-item.is-open .faq-trigger:hover .faq-arrow {
+    background: #B8845A;
+    transform: rotate(180deg) scale(1.08);
+    box-shadow: 0 2px 12px rgba(184, 132, 90, 0.30);
+  }
+  .faq-trigger:active { transform: scale(0.992); }
+  .faq-trigger:focus-visible { outline: 2px solid #B8845A; outline-offset: -2px; }
+  .faq-item + .faq-item { margin-top: 12px; }
+
   @media (max-width: 768px) {
     .section-title-premium { font-size: 24px; }
     .btn-primary-premium { padding: 12px 28px; font-size: 11px; }

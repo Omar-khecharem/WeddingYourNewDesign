@@ -10,6 +10,7 @@ $categoryCards = $categoryCards ?? [];
 $categoryCardProducts = $categoryCardProducts ?? [];
 $defaultCardFallback = $defaultCardFallback ?? [];
 $galleryItems = $galleryItems ?? [];
+$faqs = $faqs ?? [];
 $whatsappNumber = $whatsappNumber ?? '+919830136355';
 $videoShowcaseBg = $videoShowcaseBg ?? '';
 $heroSubtitle = $heroSubtitle ?? '';
@@ -221,7 +222,7 @@ $heroButtonLink = $heroButtonLink ?? '';
                 <svg class="w-4 h-4" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
               </button>
             </div>
-            <img class="w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-110" src="<?= e($pImg ?: 'https://placehold.co/400x400/FEF3C7/D4A847?text=WeddingYour') ?>" alt="<?= e($pName) ?>" loading="lazy">
+            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="<?= e($pImg ?: 'https://placehold.co/400x400/FEF3C7/D4A847?text=WeddingYour') ?>" alt="<?= e($pName) ?>" loading="lazy">
             <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
           </div>
           <div class="p-4">
@@ -247,7 +248,7 @@ $heroButtonLink = $heroButtonLink ?? '';
         <div class="bg-white rounded-2xl overflow-hidden border border-premium-warm-gray group">
           <div class="relative aspect-square overflow-hidden bg-premium-cream">
             <span class="absolute top-2.5 left-2.5 bg-premium-burgundy text-white text-[10px] font-bold px-2.5 py-1 rounded-full z-10 shadow-md">-<?= $product['discount_percent'] ?>%</span>
-            <img class="w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-110" src="https://placehold.co/400x400/FEF3C7/D4A847?text=WeddingYour" alt="<?= $product['name'] ?>" loading="lazy">
+            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://placehold.co/400x400/FEF3C7/D4A847?text=WeddingYour" alt="<?= $product['name'] ?>" loading="lazy">
           </div>
           <div class="p-4">
             <p class="text-[10px] text-premium-taupe font-semibold uppercase tracking-wider"><?= $product['category_name'] ?></p>
@@ -355,7 +356,7 @@ $heroButtonLink = $heroButtonLink ?? '';
                 </button>
               </div>
               <?php if ($pimg): ?>
-              <img src="<?= e($pimg) ?>" alt="<?= e($pn) ?>" class="w-full h-full object-contain p-2 transition-transform duration-700 group-hover:scale-110" loading="lazy">
+              <img src="<?= e($pimg) ?>" alt="<?= e($pn) ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
               <?php else: ?>
               <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-premium-blush to-premium-cream text-premium-champagne font-bold"><?= e(substr($pn,0,2)) ?></div>
               <?php endif; ?>
@@ -493,6 +494,39 @@ $heroButtonLink = $heroButtonLink ?? '';
       </div>
     </section>
 
+    <!-- ============================================================ -->
+    <!-- FAQ SECTION — Luxury Accordion                              -->
+    <!-- ============================================================ -->
+    <?php if (!empty($faqs)): ?>
+    <section class="py-16 sm:py-20 lg:py-24 relative overflow-hidden" itemscope itemtype="https://schema.org/FAQPage">
+      <div class="absolute inset-0 bg-gradient-to-b from-[#FDFCF9] via-white to-[#FDFCF9] pointer-events-none"></div>
+      <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-14 sm:mb-18">
+            <span class="inline-block text-premium-burgundy/80 text-[11px] sm:text-[12px] font-bold tracking-[0.32em] uppercase bg-premium-blush/50 px-6 py-2.5 rounded-full mb-6 border border-premium-champagne/20">Got Questions?</span>
+            <h2 class="font-playfair text-3xl sm:text-4xl lg:text-[46px] font-bold text-premium-charcoal leading-[1.12] tracking-tight">Frequently<br class="sm:hidden"> Asked Questions</h2>
+            <div class="w-20 h-[3px] bg-gradient-to-r from-premium-champagne/70 to-premium-burgundy/70 mx-auto mt-6 rounded-full"></div>
+          </div>
+          <div class="space-y-[14px] sm:space-y-4" id="faq-accordion">
+            <?php foreach ($faqs as $index => $faq): ?>
+            <div class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+              <button class="faq-trigger w-full flex items-center justify-between gap-5 px-7 sm:px-10 lg:px-12 py-[22px] sm:py-6 lg:py-7 text-left cursor-pointer bg-transparent border-none outline-none rounded-2xl" aria-expanded="false">
+                <span class="text-[17px] sm:text-[19px] lg:text-[21px] font-medium text-premium-charcoal leading-snug pr-4 flex-1 tracking-[0.01em]"><?= e($faq['question']) ?></span>
+                <span class="faq-arrow shrink-0 w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-premium-blush/80">
+                  <svg class="w-5 h-5 sm:w-[22px] sm:h-[22px] text-premium-mink/60" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+                </span>
+              </button>
+              <div class="faq-body" style="max-height:0;overflow:hidden">
+                <div class="px-7 sm:px-10 lg:px-12 pb-7 sm:pb-8 lg:pb-10 text-[15px] sm:text-base lg:text-[18px] text-premium-mink/90 leading-[1.8] sm:leading-[1.85] border-t border-premium-warm-gray/30 pt-5 sm:pt-6 lg:pt-7">
+                  <?= nl2br(e($faq['answer'])) ?>
+                </div>
+              </div>
+            </div>
+            <?php endforeach; ?>
+          </div>
+      </div>
+    </section>
+    <?php endif; ?>
+
   </main>
 </div>
 
@@ -529,5 +563,27 @@ upd();window.addEventListener('resize',upd);})();
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('[data-a]').forEach(function(el){ observer.observe(el); });
+})();
+
+/* FAQ Accordion — event delegation */
+(function(){
+  var acc=document.getElementById('faq-accordion');
+  console.log('[FAQ] accordion element:', acc);
+  if(!acc){console.warn('[FAQ] #faq-accordion not found');return;}
+  var items=acc.querySelectorAll('.faq-item');
+  console.log('[FAQ] items found:', items.length);
+  acc.addEventListener('click',function(e){
+    var btn=e.target.closest('.faq-trigger');
+    console.log('[FAQ] click - closest .faq-trigger:', btn);
+    if(!btn)return;
+    var item=btn.closest('.faq-item');
+    var body=item.querySelector('.faq-body');
+    var isOpen=item.classList.contains('is-open');
+    console.log('[FAQ] toggling item, currently open:', isOpen);
+    var siblings=item.parentElement.querySelectorAll('.faq-item.is-open');
+    for(var i=0;i<siblings.length;i++){var s=siblings[i];if(s!==item){s.classList.remove('is-open');var b=s.querySelector('.faq-body');if(b)b.style.maxHeight='0';var t=s.querySelector('.faq-trigger');if(t)t.setAttribute('aria-expanded','false');}}
+    if(isOpen){body.style.maxHeight='0';item.classList.remove('is-open');btn.setAttribute('aria-expanded','false');console.log('[FAQ] closed');}
+    else{item.classList.add('is-open');btn.setAttribute('aria-expanded','true');body.style.maxHeight=body.scrollHeight+'px';console.log('[FAQ] opened, maxHeight:', body.style.maxHeight);}
+  });
 })();
 </script>

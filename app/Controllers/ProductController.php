@@ -30,6 +30,19 @@ class ProductController extends Controller
 
         $page = $this->getPage();
         $result = Product::getFiltered($filters, $page, PAGINATION_PER_PAGE);
+
+        $productIds = array_column($result['products'] ?? [], 'id');
+        $ratings = Review::getBatchRatings($productIds);
+
+        // AJAX request → return only products partial (pagination, grid, results bar)
+        if ($this->isAjax()) {
+            return $this->partial('products._grid', array_merge($result, [
+                'filters'       => $filters,
+                'sortBy'        => $filters['sort'],
+                'productRatings'=> $ratings,
+            ]));
+        }
+
         $filterOptions = Product::getFilterOptions();
 
         $title = 'All Products';
@@ -64,9 +77,6 @@ class ProductController extends Controller
             $pdo = \App\Core\Database::getInstance()->getConnection();
             $subcategories = $pdo->query("SELECT sc.id, sc.name, sc.slug, sc.image, sc.category_id, c.slug AS cat_slug FROM sg_subcategories sc JOIN sg_categories c ON c.id = sc.category_id WHERE sc.status = 1 ORDER BY c.sort_order, sc.sort_order, sc.name")->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\Exception $e) {}
-
-        $productIds = array_column($result['products'] ?? [], 'id');
-        $ratings = Review::getBatchRatings($productIds);
 
         return $this->view('products.index', array_merge($result, [
             'filterOptions' => $filterOptions,
